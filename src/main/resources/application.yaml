@@ -4,3 +4,7 @@ spring:
     url: jdbc:mariadb://localhost:3306/INSSA?serverTimezone=Asia/Seoul
     username: INSSA
     password: INSSA
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
