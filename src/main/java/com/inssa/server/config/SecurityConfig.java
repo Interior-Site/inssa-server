@@ -1,4 +1,4 @@
-package com.inssa.api.config;
+package com.inssa.server.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,7 +23,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             /* swagger v3 */
             "/v3/api-docs/**",
-            "/swagger-ui/**"
+            "/swagger-ui/**",
+
+            "/api/v1/**"
     };
 
     /**

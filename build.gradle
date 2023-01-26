@@ -22,6 +22,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
+    // mybatis
+    implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '2.2.2'
+
     // lombok
     implementation 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
