@@ -1,12 +1,12 @@
-package com.inssa.api.service;
+package com.inssa.server.api.board.service;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class BoardService {
-	
-	public void insertBoard() {
-		
-	}
+
+    public void insertBoard() {
+
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.inssa.api.config;
+package com.inssa.server.config;
 
 import java.util.Arrays;
 import java.util.List;

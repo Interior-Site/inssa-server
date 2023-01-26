@@ -1,4 +1,4 @@
-package com.inssa.api;
+package com.inssa.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
