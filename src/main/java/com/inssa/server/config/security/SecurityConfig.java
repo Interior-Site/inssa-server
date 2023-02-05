@@ -47,9 +47,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .authorizeRequests()
                 .antMatchers(PERMIT_URL_ARRAY).permitAll()
-                .anyRequest().authenticated()
-            .and()
-                .addFilterBefore(jwtTokenBaseAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // UsernamePasswordAuthenticationFilter 앞에 커스텀 필터 추가
+                .anyRequest().authenticated();
+//            .and()
+//                .addFilterBefore(jwtTokenBaseAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // UsernamePasswordAuthenticationFilter 앞에 커스텀 필터 추가
     }
 
     private JwtTokenBaseAuthenticationFilter jwtTokenBaseAuthenticationFilter() {
