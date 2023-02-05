@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Service("jwtService")
 public class JwtService {
 
     private final String AUTHORITIES_KEY = "auth";
@@ -29,7 +29,7 @@ public class JwtService {
 
     public JwtService(@Value("${jwt.secret}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+//        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     @Value("${jwt.token-validity-in-seconds}")
