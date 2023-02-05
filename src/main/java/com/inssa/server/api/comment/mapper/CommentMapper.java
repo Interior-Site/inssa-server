@@ -1,4 +1,8 @@
 package com.inssa.server.api.comment.mapper;
 
-public interface CommentMapper {
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface CommentMapper
+{
 }
