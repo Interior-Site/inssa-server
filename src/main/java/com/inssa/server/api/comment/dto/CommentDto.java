@@ -18,6 +18,6 @@ public class CommentDto {
     private int boardNo; // 게시글번호
     private int userNo; // 작성자번호
 
-// 테스트
+// 테스트테스트
 
 }
