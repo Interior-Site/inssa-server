@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Timestamp;
 
 @Repository
-@Data
+@Data // 자동으로 getter, setter, toString 등
 public class CommentDto {
 
     private int commentNo; // 댓글번호
@@ -18,6 +18,6 @@ public class CommentDto {
     private int boardNo; // 게시글번호
     private int userNo; // 작성자번호
 
-// 이제진짜될거임
+
 
 }
