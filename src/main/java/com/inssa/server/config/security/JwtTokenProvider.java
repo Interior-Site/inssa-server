@@ -1,9 +1,9 @@
-package com.inssa.server.config.security.service;
+package com.inssa.server.config.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,25 +11,27 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 
-@Service("jwtService")
-public class JwtService {
+@Component
+public class JwtTokenProvider {
 
     private final String AUTHORITIES_KEY = "auth";
-    private String secretKey = "secretKey";
+    private String secretKey = "inssasecretkeyqhwrfjlekqiomkxckl";
     private Key key;
 
-    public JwtService(@Value("${jwt.secret}") String secretKey) {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-//        this.key = Keys.hmacShaKeyFor(keyBytes);
+    public JwtTokenProvider() {
+        // secretKey 로드
+        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     @Value("${jwt.token-validity-in-seconds}")
@@ -53,6 +55,7 @@ public class JwtService {
 
     // 토큰에 담긴 정보로 Authentication 객체 반환
     public Authentication getAuthentication(String token) {
+        // 토큰 정보 해석
         Claims claims = Jwts
                 .parserBuilder()
                 .setSigningKey(key)
@@ -67,5 +70,20 @@ public class JwtService {
         User principal = new User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+    }
+
+    // Request의 Header에서 token 값을 가져오기
+    public String resolveToken(HttpServletRequest request) {
+        return request.getHeader("X-AUTH-TOKEN");
+    }
+
+    // 유효한 토큰인지 확인
+    public boolean validateToken(String jwtToken) {
+        try {
+            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(jwtToken);
+            return !claims.getBody().getExpiration().before(new Date());
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
