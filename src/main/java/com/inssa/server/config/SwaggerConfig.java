@@ -30,7 +30,7 @@ public class SwaggerConfig {
 			.securitySchemes(Arrays.asList(apiKey()))
 			.useDefaultResponseMessages(false)
 			.select()
-			.apis(RequestHandlerSelectors.basePackage("com.inssa.api.controller"))
+			.apis(RequestHandlerSelectors.basePackage("com.inssa.server.api"))
 			.paths(PathSelectors.any())
 			.build()
 			.apiInfo(apiInfo());
