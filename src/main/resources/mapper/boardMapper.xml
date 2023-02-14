@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.inssa.server.api.board.mapper.BoardMapper">
+    <insert id="insertBoard" >
+        INSERT INTO BOARD
+                (BOARD_NO,
+                 BOARD_NAME,
+                 BOARD_GUBUN,
+                 BOARD_TITLE,
+                 BOARD_CONTENT,
+                 BOARD_REGDATE,
+                 BOARD_CHGDATE,
+                 BOARD_STATUS,
+                 BOARD_VIEW,
+                 BOARD_NOTICE,
+                 USER_NO)
+        VALUES (
+<!--                #{boardNo}  시퀀스 생성 후 생성된 시퀀스로 수정해야함-->
+                #{boardName},
+                #{boardGubun},
+                #{boardTitle},
+                #{boardContent},
+                now(),
+                now(),
+                #{boardStatus},
+                #{boardView},
+                #{boardNotice},
+                #{userNo}
+        )
+    </insert>
+
+</mapper>
