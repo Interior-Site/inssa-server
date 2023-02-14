@@ -1,16 +1,26 @@
 package com.inssa.server.api.board.dto;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter @Setter
+import java.util.Date;
+
+
+@Getter @Setter @Data
 public class BoardDto {
 
     public int boardNo;
+    public String boardName;
+    public String boardGubun;
     public String boardTitle;
     public String boardContent;
     public String boardStatus;
-//    public Date boardDate;
+    public Date boardRegDate;
+    public Date boardChgDate;
+    public int boardView;
+    public String boardNotice;
+    public int userNo;
 
 
 }
