@@ -1,8 +1,9 @@
 package com.inssa.server.api.comment.mapper;
 
+import com.inssa.server.api.comment.dto.CommentDto;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface CommentMapper
-{
+public interface CommentMapper {
+    CommentDto selectList(int commentNo);
 }
