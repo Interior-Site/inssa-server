@@ -23,9 +23,15 @@ public class BoardController {
     public ApiResponse insertBoard(@RequestBody BoardDto board) {
 
         ApiResponse response = new ApiResponse();
-
         response = boardService.insertBoard(board);
+        return response;
+    }
 
+    @GetMapping(value="/select") @ApiOperation(value="게시글조회")
+    public ApiResponse selectBoard(@RequestParam int boardNo) {
+
+        ApiResponse response = new ApiResponse();
+        response = boardService.selectBoard(boardNo);
         return response;
     }
 
