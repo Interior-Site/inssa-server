@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class BoardService {
 
     private final BoardDao boardDao;
-    private final BoardDto board;
+
 
     public ApiResponse insertBoard(BoardDto board) {
 
