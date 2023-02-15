@@ -12,11 +12,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentService {
 
-    @Autowired
     private final CommentDao commentdao;
 
-    public List<CommentDto> selectList(int commentNo){
-        return commentdao.selectList(commentNo);
+    public List<CommentDto> selectList(int boardNo){
+        return commentdao.selectList(boardNo);
     }
 
 }
