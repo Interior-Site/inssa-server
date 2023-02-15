@@ -33,4 +33,11 @@
         )
     </insert>
 
+    <select id="selectBoard" resultType="com.inssa.server.api.board.dto.BoardDto">
+        SELECT *
+        FROM BOARD
+        WHERE BOARD_NO = #{boardNo}
+        AND BOARD_STATUS = 'Y'
+    </select>
+
 </mapper>

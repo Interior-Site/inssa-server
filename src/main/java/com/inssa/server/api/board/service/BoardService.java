@@ -8,6 +8,8 @@ import com.inssa.server.common.StatusCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service("BoardService")
 @RequiredArgsConstructor
@@ -18,7 +20,6 @@ public class BoardService {
     public ApiResponse insertBoard(BoardDto board) {
 
         ApiResponse response = new ApiResponse();
-
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
@@ -32,6 +33,24 @@ public class BoardService {
         response.setStatusCode(statusCode);
         response.setResponseMessage(message);
 
+        return response;
+    }
+
+    public ApiResponse selectBoard(int boardNo) {
+
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+
+        List<BoardDto> resultList = boardDao.selectBoard(boardNo);
+
+        if(!resultList.isEmpty()) {
+            statusCode = StatusCode.SUCCESS;
+            message = ResponseMessage.SUCCESS;
+        }
+
+        response.setStatusCode(statusCode);
+        response.setResponseMessage(message);
         return response;
     }
 
