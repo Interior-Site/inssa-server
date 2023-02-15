@@ -15,7 +15,6 @@ public class BoardService {
 
     private final BoardDao boardDao;
 
-
     public ApiResponse insertBoard(BoardDto board) {
 
         ApiResponse response = new ApiResponse();
@@ -23,8 +22,12 @@ public class BoardService {
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
-        BoardDto dto = new BoardDto();
-        dto = boardDao.insert(board);
+        int result = boardDao.insert(board);
+
+        if(result != 0) {
+            statusCode = StatusCode.SUCCESS;
+            message = ResponseMessage.SUCCESS;
+        }
 
         response.setStatusCode(statusCode);
         response.setResponseMessage(message);
