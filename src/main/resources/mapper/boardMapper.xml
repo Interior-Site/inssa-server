@@ -19,6 +19,7 @@
                  USER_NO)
         VALUES (
 <!--                #{boardNo}  시퀀스 생성 후 생성된 시퀀스로 수정해야함-->
+                #{boardNo},
                 #{boardName},
                 #{boardGubun},
                 #{boardTitle},

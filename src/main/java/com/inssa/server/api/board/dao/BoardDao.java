@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 @Repository @RequiredArgsConstructor
 public class BoardDao {
    private final BoardMapper boardMapper;
-   public BoardDto insert(BoardDto board) {
-      return boardMapper.insertBoard(board);
+   public int insert(BoardDto board) {
+      int result = boardMapper.insertBoard(board);
+      return result;
    }
 }
