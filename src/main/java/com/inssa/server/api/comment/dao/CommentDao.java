@@ -13,8 +13,8 @@ public class CommentDao {
 
     private final CommentMapper commentMapper;
 
-    public List<CommentDto> selectList(int commentNo){
-        return (List<CommentDto>) commentMapper.selectList(commentNo);
+    public List<CommentDto> selectList(int boardNo){
+        return (List<CommentDto>) commentMapper.selectList(boardNo);
     }
 
 }

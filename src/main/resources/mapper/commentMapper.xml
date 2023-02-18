@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="commentMapper">
+    <resultMap type="com.inssa.server.api.comment.dto.CommentDto" id="comment_rm">
+        <id column="COMMENT_NO" property="commentNo" />
+
+        <result column="COMMENT_CONTENT" property="commentContent" />
+        <result column="COMMENT_STATUS" property="commentStatus" />
+        <result column="COMMENT_DATE" property="commentRegDate" />
+        <result column="COMMENT_IMG" property="commentImg" />
+        <result column="BOARD_NO" property="boardNo" />
+        <result column="USER_ID" property="userId" />
+    </resultMap>
+
+    <!--  댓글 목록 조회  -->
+    <select id="selectList" parameterType="_int" resultMap="comment_rm">
+        SELECT COMMENT_NO
+        , COMMENT_CONTENT
+        , COMMENT_STATUS
+        , COMMENT_DATE
+        , COMMENT_IMG
+        , BOARD_NO
+        , USER_ID
+        FROM COMMENT
+        WHERE USER_ID = #{userId}
+        AND COMMENT_STATUS = 'Y'
+    </select>
+</mapper>
