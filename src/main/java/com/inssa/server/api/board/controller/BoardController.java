@@ -27,11 +27,35 @@ public class BoardController {
         return response;
     }
 
-    @GetMapping(value="/select") @ApiOperation(value="게시글조회")
-    public ApiResponse selectBoard(@RequestParam int boardNo) {
+    @GetMapping(value="/select") @ApiOperation(value="게시글 목록 조회")
+    public ApiResponse selectBoardList(@RequestParam int boardNo) {
 
         ApiResponse response = new ApiResponse();
         response = boardService.selectBoard(boardNo);
+        return response;
+    }
+
+    @GetMapping(value="/select/{boardNo}") @ApiOperation(value="게시글 상세 조회")
+    public ApiResponse selectBoardContent(@PathVariable int boardNo) {
+
+        ApiResponse response = new ApiResponse();
+        response = boardService.selectBoardNo(boardNo);
+        return response;
+    }
+
+    @GetMapping(value="/delete/{boardNo}") @ApiOperation(value="게시글삭제")
+    public ApiResponse deleteBoard(@RequestParam int boardNo) {
+
+        ApiResponse response = new ApiResponse();
+        response = boardService.deleteBoard(boardNo);
+        return response;
+    }
+
+    @GetMapping(value="/update/{boardNo}") @ApiOperation(value="게시글수정")
+    public ApiResponse updateBoard(@RequestParam int boardNo) {
+
+        ApiResponse response = new ApiResponse();
+        response = boardService.updateBoard(boardNo);
         return response;
     }
 
