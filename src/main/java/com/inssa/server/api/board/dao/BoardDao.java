@@ -15,8 +15,23 @@ public class BoardDao {
       return result;
    }
 
+   public List<BoardDto> selectBoardList(){
+      List<BoardDto> result = boardMapper.selectBoardList();
+      return result;
+   }
+
    public List<BoardDto> selectBoard(int boardNo){
       List<BoardDto> result = boardMapper.selectBoard(boardNo);
+      return result;
+   }
+
+   public List<BoardDto> deleteBoard(int boardNo){
+      List<BoardDto> result = boardMapper.deleteBoard(boardNo);
+      return result;
+   }
+
+   public List<BoardDto> updateBoard(int boardNo){
+      List<BoardDto> result = boardMapper.updateBoard(boardNo);
       return result;
    }
 }

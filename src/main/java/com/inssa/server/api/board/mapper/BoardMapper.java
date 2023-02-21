@@ -9,5 +9,11 @@ import java.util.List;
 public interface BoardMapper {
     int insertBoard(BoardDto board);
 
+    List<BoardDto> selectBoardList();
+
     List<BoardDto> selectBoard(int boardNo);
+
+    List<BoardDto> deleteBoard(int boardNo);
+
+    List<BoardDto> updateBoard(int boardNo);
 }
