@@ -23,4 +23,6 @@ public interface BoardMapper {
     Pagination searchListCount(BoardDto dto);
 
     int updateView(int boardNo);
+
+    List<BoardDto> updateLike(BoardDto dto);
 }

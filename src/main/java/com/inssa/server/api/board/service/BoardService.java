@@ -2,6 +2,7 @@ package com.inssa.server.api.board.service;
 
 import com.inssa.server.api.board.dao.BoardDao;
 import com.inssa.server.api.board.dto.BoardDto;
+import com.inssa.server.api.board.dto.LikeDto;
 import com.inssa.server.common.ApiResponse;
 import com.inssa.server.common.Pagination;
 import com.inssa.server.common.ResponseMessage;
@@ -130,18 +131,31 @@ public class BoardService {
 
     public Pagination getPaging(BoardDto board, Pagination page) {
 
-        ApiResponse response = new ApiResponse();
-
         // 1) 검색이 적용된 게시글 수 조회
         Pagination selectPg = boardDao.searchListCount(board);
 
         //System.out.println(selectPg);
 
         // 2) 계산이 완료된 Pagination 객체 생성 후 반환
-//        return new Pagination(pg.getCurrentPage(), selectPg.getListCount(),
-//                pg.getBoardType(), selectPg.getBoardName());
+//        return new Pagination(pg.getCurrentPage(), selectPg.getListCount());
 
         return selectPg;
+    }
+
+    @Transactional public ApiResponse updateLike(BoardDto board) {
+
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+
+        List<BoardDto> resultList = boardDao.updateLike(board);
+
+        if(!resultList.isEmpty()) {
+            statusCode = StatusCode.SUCCESS;
+            message = board.boardNo + " 번호의 게시글 좋아요 " +ResponseMessage.SUCCESS;
+        }
+
+        return response;
     }
 
 
