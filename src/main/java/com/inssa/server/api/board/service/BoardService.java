@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -59,11 +60,14 @@ public class BoardService {
         return response;
     }
 
-    public ApiResponse selectBoardNo(int boardNo) {
+    public ApiResponse selectBoardNo(int boardNo, HttpServletRequest request) {
 
         ApiResponse response = new ApiResponse();
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
+
+        BoardDto dto = new BoardDto();
+        dto.setUrl(request.getRequestURL().toString());
 
         List<BoardDto> resultList = boardDao.selectBoard(boardNo);
 

@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @RequestMapping("/api/v1/board")
 @RestController
@@ -40,10 +42,10 @@ public class BoardController {
     }
 
     @GetMapping(value="/select/{boardNo}") @ApiOperation(value="게시글 상세 조회")
-    public ApiResponse selectBoardContent(@PathVariable int boardNo) {
+    public ApiResponse selectBoardContent(@PathVariable int boardNo, HttpServletRequest request) {
 
         ApiResponse response = new ApiResponse();
-        response = boardService.selectBoardNo(boardNo);
+        response = boardService.selectBoardNo(boardNo, request);
         return response;
     }
 
