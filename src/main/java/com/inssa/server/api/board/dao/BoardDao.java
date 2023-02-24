@@ -51,4 +51,9 @@ public class BoardDao {
       int result  = boardMapper.updateView(boardNo);
       return result;
    }
+
+   @Transactional public List<BoardDto> updateLike(BoardDto dto) {
+      List<BoardDto> resultList = boardMapper.updateLike(dto);
+      return resultList;
+   }
 }

@@ -19,6 +19,8 @@ public class BoardDto {
     public Date boardRegDate;
     public Date boardChgDate;
     public int boardView;
+    public String boardLike;
+    public String boardZzim;
     public String boardNotice;
     public int userNo;
 

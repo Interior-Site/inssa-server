@@ -155,4 +155,32 @@
         WHERE BOARD_NO = #{boardNo}
     </update>
 
+    <!-- 후기 게시판일 경우만 해당!! 별점 평가 -->
+    <update id="updateStar" parameterType="com.inssa.server.api.board.dto.BoardDto">
+        UPDATE BOARD
+        SET
+        BOARD_STAR = #{boardStar}
+        WHERE BOARD_NO = #{boardNo}
+        AND USER_NO = #{userNo}
+        AND BOARD_GUBUN = 'R'
+    </update>
+
+    <!-- 게시판 좋아요  -->
+    <update id="updateLike" parameterType="com.inssa.server.api.board.dto.BoardDto">
+        UPDATE BOARD
+        SET
+        BOARD_LIKE = #{boardLike}
+        WHERE BOARD_NO = #{boardNo}
+        AND USER_NO = #{userNo}
+    </update>
+
+    <!-- 게시판 찜  -->
+    <update id="updateZzim" parameterType="com.inssa.server.api.board.dto.BoardDto">
+        UPDATE BOARD
+        SET
+        BOARD_ZZIM = #{boardZzim}
+        WHERE BOARD_NO = #{boardNo}
+        AND USER_NO = #{userNo}
+    </update>
+
 </mapper>
