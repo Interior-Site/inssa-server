@@ -2,7 +2,9 @@ package com.inssa.server.api.board.service;
 
 import com.inssa.server.api.board.dao.BoardDao;
 import com.inssa.server.api.board.dto.BoardDto;
+import com.inssa.server.api.board.dto.LikeDto;
 import com.inssa.server.common.ApiResponse;
+import com.inssa.server.common.Pagination;
 import com.inssa.server.common.ResponseMessage;
 import com.inssa.server.common.StatusCode;
 import lombok.RequiredArgsConstructor;
@@ -68,6 +70,9 @@ public class BoardService {
         if(!resultList.isEmpty()) {
             statusCode = StatusCode.SUCCESS;
             message = boardNo + " 번호의 게시글 조회 " + ResponseMessage.SUCCESS;
+
+            // 조회 성공일 때마다 조회수 + 1
+            boardDao.updateView(boardNo);
         }
 
         response.setStatusCode(statusCode);
@@ -107,5 +112,52 @@ public class BoardService {
 
         return response;
     }
+
+    public ApiResponse searchBoardList(BoardDto dto) {
+
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+
+        List<BoardDto> resultList = boardDao.searchBoardList(dto);
+
+        if(!resultList.isEmpty()) {
+            statusCode = StatusCode.SUCCESS;
+            message = dto.boardNo + " 번호의 게시글 검색 " +ResponseMessage.SUCCESS;
+        }
+
+        return response;
+    }
+
+    public Pagination getPaging(BoardDto board, Pagination page) {
+
+        // 1) 검색이 적용된 게시글 수 조회
+        Pagination selectPg = boardDao.searchListCount(board);
+
+        //System.out.println(selectPg);
+
+        // 2) 계산이 완료된 Pagination 객체 생성 후 반환
+//        return new Pagination(pg.getCurrentPage(), selectPg.getListCount());
+
+        return selectPg;
+    }
+
+    @Transactional public ApiResponse updateLike(BoardDto board) {
+
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+
+        List<BoardDto> resultList = boardDao.updateLike(board);
+
+        if(!resultList.isEmpty()) {
+            statusCode = StatusCode.SUCCESS;
+            message = board.boardNo + " 번호의 게시글 좋아요 " +ResponseMessage.SUCCESS;
+        }
+
+        return response;
+    }
+
+
 
 }
