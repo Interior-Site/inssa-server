@@ -2,8 +2,12 @@ package com.inssa.server.api.board.controller;
 
 
 import com.inssa.server.api.board.dto.BoardDto;
+import com.inssa.server.api.board.dto.LikeDto;
 import com.inssa.server.api.board.service.BoardService;
 import com.inssa.server.common.ApiResponse;
+import com.inssa.server.common.Pagination;
+import com.inssa.server.common.ResponseMessage;
+import com.inssa.server.common.StatusCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +60,51 @@ public class BoardController {
 
         ApiResponse response = new ApiResponse();
         response = boardService.updateBoard(boardNo);
+        return response;
+    }
+
+    @GetMapping(value="/select/searchBoard") @ApiOperation(value="게시글 검색")
+    public ApiResponse searchBoardList(@RequestParam("filter") String filter, @RequestParam("searchWord") String searchWord,
+                                       @RequestParam("category") String category,Pagination page) {
+        ApiResponse response = new ApiResponse();
+
+        BoardDto dto = new BoardDto();
+        dto.setFilter(filter);
+        dto.setSearchWord(searchWord);
+        dto.setCategory(category);
+
+        Pagination paging = new Pagination();
+        paging.setCurrentPage(page.getCurrentPage());
+
+        if(searchWord != null) {
+            paging = boardService.getPaging(dto, paging);
+            response = boardService.searchBoardList(dto);
+        } else {
+
+        }
+        return response;
+
+    }
+
+    @PostMapping(value="/updateLike") @ApiOperation(value="게시글 좋아요 ")
+    public ApiResponse updateLike(@RequestBody LikeDto like) {
+        ApiResponse response = new ApiResponse();
+
+        BoardDto board = new BoardDto();
+        board.setBoardNo(like.getBoardNo());
+        board.setUserNo(like.getUserNo());
+        board.setBoardLike(like.getLike());
+
+        String likeYn = like.getLike();
+
+        if(likeYn.equals("Y") || likeYn.equals("N") ) {
+            response = boardService.updateLike(board);
+        } else {
+            response.setResponseMessage(ResponseMessage.FAIL);
+            response.setStatusCode(StatusCode.FAIL);
+            response.putData("result","");
+        }
+
         return response;
     }
 
