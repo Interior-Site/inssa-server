@@ -3,6 +3,7 @@ package com.inssa.server.api.board.service;
 import com.inssa.server.api.board.dao.BoardDao;
 import com.inssa.server.api.board.dto.BoardDto;
 import com.inssa.server.common.ApiResponse;
+import com.inssa.server.common.Pagination;
 import com.inssa.server.common.ResponseMessage;
 import com.inssa.server.common.StatusCode;
 import lombok.RequiredArgsConstructor;
@@ -68,6 +69,9 @@ public class BoardService {
         if(!resultList.isEmpty()) {
             statusCode = StatusCode.SUCCESS;
             message = boardNo + " 번호의 게시글 조회 " + ResponseMessage.SUCCESS;
+
+            // 조회 성공일 때마다 조회수 + 1
+            boardDao.updateView(boardNo);
         }
 
         response.setStatusCode(statusCode);
@@ -107,5 +111,39 @@ public class BoardService {
 
         return response;
     }
+
+    public ApiResponse searchBoardList(BoardDto dto) {
+
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+
+        List<BoardDto> resultList = boardDao.searchBoardList(dto);
+
+        if(!resultList.isEmpty()) {
+            statusCode = StatusCode.SUCCESS;
+            message = dto.boardNo + " 번호의 게시글 검색 " +ResponseMessage.SUCCESS;
+        }
+
+        return response;
+    }
+
+    public Pagination getPaging(BoardDto board, Pagination page) {
+
+        ApiResponse response = new ApiResponse();
+
+        // 1) 검색이 적용된 게시글 수 조회
+        Pagination selectPg = boardDao.searchListCount(board);
+
+        //System.out.println(selectPg);
+
+        // 2) 계산이 완료된 Pagination 객체 생성 후 반환
+//        return new Pagination(pg.getCurrentPage(), selectPg.getListCount(),
+//                pg.getBoardType(), selectPg.getBoardName());
+
+        return selectPg;
+    }
+
+
 
 }

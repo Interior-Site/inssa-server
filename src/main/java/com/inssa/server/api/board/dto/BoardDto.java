@@ -22,5 +22,12 @@ public class BoardDto {
     public String boardNotice;
     public int userNo;
 
+    // 검색필터
+    public String searchWord; // 검색어
+    public String category;// 검색 게시글 카테고리
+    public String filter; // 검색 필터 조건
+
+
+
 
 }

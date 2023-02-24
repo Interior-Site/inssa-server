@@ -1,6 +1,7 @@
 package com.inssa.server.api.board.mapper;
 
 import com.inssa.server.api.board.dto.BoardDto;
+import com.inssa.server.common.Pagination;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -16,4 +17,10 @@ public interface BoardMapper {
     List<BoardDto> deleteBoard(int boardNo);
 
     List<BoardDto> updateBoard(int boardNo);
+
+    List<BoardDto> searchBoardList(BoardDto dto);
+
+    Pagination searchListCount(BoardDto dto);
+
+    int updateView(int boardNo);
 }
