@@ -13,4 +13,8 @@ public class UserDao {
     public UserDto findByEmail(String username) {
         return userMapper.findByEmail(username);
     }
+
+    public int register(UserDto user) {
+        return userMapper.register(user);
+    }
 }
