@@ -17,6 +17,7 @@ public class UserDto implements UserDetails {
     private Long id;
     private String email;
     private String password;
+    private String nickname;
     private List<String> roles = new ArrayList<>();
 
     @Override
@@ -49,5 +50,13 @@ public class UserDto implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Builder
+    public UserDto(Long id, String email, String password, String nickname) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
     }
 }

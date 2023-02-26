@@ -12,4 +12,9 @@
          WHERE EMAIL = #{username}
     </select>
 
+    <select id="register" parameterType="com.inssa.server.api.user.dto.UserDto">
+        INSERT INTO USERS (EMAIL, PASSWORD, NICKNAME)
+        VALUES (#{email}, #{password}, #{nickname})
+    </select>
+
 </mapper>
