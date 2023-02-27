@@ -4,17 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.inssa.server.api.user.mapper.UserMapper">
-    <select id="findByEmail" resultType="com.inssa.server.api.user.dto.UserDto">
-        SELECT ID
-             , EMAIL
+    <select id="findByUserId" resultType="com.inssa.server.api.user.dto.UserDto">
+        SELECT USER_ID
              , PASSWORD
           FROM USER
-         WHERE EMAIL = #{username}
+         WHERE USER_ID = #{userId}
     </select>
 
-    <select id="register" parameterType="com.inssa.server.api.user.dto.UserDto">
-        INSERT INTO USER (EMAIL, PASSWORD, NICKNAME)
-        VALUES (#{email}, #{password}, #{nickname})
-    </select>
+    <insert id="register" parameterType="com.inssa.server.api.user.dto.UserRegisterRequestDto">
+        INSERT INTO USER (USER_ID, EMAIL, PASSWORD, NICKNAME, PHONE, STATUS, IMG, REGDATE, SOCIAL, TYPE)
+        VALUES (#{userId}, #{email}, #{password}, #{nickname}, #{phone}, 'Y', #{img}, NOW(), 'I', #{type})
+    </insert>
 
 </mapper>

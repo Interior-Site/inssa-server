@@ -1,6 +1,7 @@
 package com.inssa.server.api.user.dao;
 
 import com.inssa.server.api.user.dto.UserDto;
+import com.inssa.server.api.user.dto.UserRegisterRequestDto;
 import com.inssa.server.api.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -10,11 +11,11 @@ import org.springframework.stereotype.Repository;
 public class UserDao {
     private final UserMapper userMapper;
 
-    public UserDto findByEmail(String username) {
-        return userMapper.findByEmail(username);
+    public UserDto findByUserId(String userId) {
+        return userMapper.findByUserId(userId);
     }
 
-    public int register(UserDto user) {
+    public int register(UserRegisterRequestDto user) {
         return userMapper.register(user);
     }
 }
