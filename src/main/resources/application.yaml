@@ -4,6 +4,10 @@ spring:
     url: jdbc:log4jdbc:mariadb://localhost:3306/INSSA?serverTimezone=Asia/Seoul
     username: INSSA
     password: INSSA
+    resource: C:\Users\images
+    resource-path: file
+    upload-path: /upload
+
 
   mvc:
     pathmatch:
@@ -16,6 +20,7 @@ jwt:
   header:
   secret:
   token-validity-in-seconds: 86400
+
 
 logging:
   level:

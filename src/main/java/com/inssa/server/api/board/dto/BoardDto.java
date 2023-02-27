@@ -23,6 +23,7 @@ public class BoardDto {
     public String boardZzim;
     public String boardNotice;
     public String userId;
+    public String boardImg;
 
     public String url;
 
