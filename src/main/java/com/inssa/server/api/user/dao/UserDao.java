@@ -18,4 +18,8 @@ public class UserDao {
     public int register(UserRegisterRequestDto user) {
         return userMapper.register(user);
     }
+
+    public int existsUserId(String userId) {
+        return userMapper.existsUserId(userId);
+    }
 }
