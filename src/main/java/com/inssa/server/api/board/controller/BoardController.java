@@ -94,7 +94,7 @@ public class BoardController {
 
         BoardDto board = new BoardDto();
         board.setBoardNo(like.getBoardNo());
-        board.setUserNo(like.getUserNo());
+        board.setUserId(like.getUserId());
         board.setBoardLike(like.getLike());
 
         String likeYn = like.getLike();

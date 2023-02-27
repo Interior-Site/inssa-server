@@ -11,13 +11,12 @@ public class ApiResponse {
 
     private int statusCode;
     private String responseMessage;
-    private Map<String, Object> data;
+    private Map<String, Object> data = new HashMap<String, Object>();
 
 
     public void ApiResponse() {
         this.statusCode = 0;
         this.responseMessage = "";
-        this.data = new HashMap<String, Object>();
     }
 
     public void ApiResponse(int status, String responseMessage, Map<String, Object> dataMap) {
