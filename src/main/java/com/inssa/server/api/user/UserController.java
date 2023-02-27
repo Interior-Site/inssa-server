@@ -8,6 +8,7 @@ import com.inssa.server.common.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,6 +40,7 @@ public class UserController {
     @Operation(summary = "changeUserInfo", description = "회원 정보 변경 API")
     @PutMapping("/info")
     public ApiResponse changeUserInfo(@RequestBody UserChangeInfoRequestDto request) {
+        request.setUserId(SecurityContextHolder.getContext().getAuthentication().getName());
         return userService.changeUserInfo(request);
     }
 
@@ -46,5 +48,12 @@ public class UserController {
     @PutMapping("/password/change")
     public ApiResponse changePassword(@RequestBody UserRequestDto request) {
         return userService.changePassword(request);
+    }
+
+    @Operation(summary = "checkPassword", description = "비밀번호 확인 API")
+    @PostMapping("/password/check")
+    public Boolean checkPassword(@RequestBody UserRequestDto request) {
+        request.setUserId(SecurityContextHolder.getContext().getAuthentication().getName());
+        return userService.checkPassword(request);
     }
 }
