@@ -30,7 +30,7 @@ public class UserController {
 
     @Tag(name = "user")
     @Operation(summary = "register", description = "사용자 회원가입 API")
-    @PutMapping("/register")
+    @PostMapping("/register")
     public ApiResponse register(@RequestBody UserRegisterRequestDto request) {
         return userService.register(request);
     }

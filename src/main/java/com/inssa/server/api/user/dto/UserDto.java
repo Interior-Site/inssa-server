@@ -12,9 +12,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-@Builder
 public class UserDto implements UserDetails {
-    private Long id;
+    private String userId;
     private String email;
     private String password;
     private String nickname;
@@ -50,13 +49,5 @@ public class UserDto implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Builder
-    public UserDto(Long id, String email, String password, String nickname) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
     }
 }

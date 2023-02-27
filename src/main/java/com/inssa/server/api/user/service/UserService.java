@@ -26,8 +26,8 @@ public class UserService implements UserDetailsService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDto user = userDao.findByEmail(username);
+    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        UserDto user = userDao.findByUserId(userId);
 
         if(user == null) {
             throw new UsernameNotFoundException("해당 유저가 없습니다");
@@ -37,17 +37,17 @@ public class UserService implements UserDetailsService {
     }
 
     public String login(UserLoginRequestDto request) {
-        UserDto user = userDao.findByEmail(request.getEmail());
+        UserDto user = userDao.findByUserId(request.getUserId());
 
         if(user == null) {
             throw new IllegalArgumentException("해당 유저가 없습니다");
         }
 
-        if(!passwordEncoder.matches(user.getPassword(), request.getPassword())) {
+        if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
         }
 
-        return jwtTokenProvider.createToken(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        return jwtTokenProvider.createToken(new UsernamePasswordAuthenticationToken(user.getUserId(), user.getPassword()));
     }
 
     @Transactional
@@ -56,15 +56,9 @@ public class UserService implements UserDetailsService {
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
-        String encodePassword = passwordEncoder.encode(request.getPassword());
+        request.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        UserDto user = UserDto.builder()
-                .email(request.getEmail())
-                .nickname(request.getNickname())
-                .password(encodePassword)
-                .build();
-
-        int result = userDao.register(user);
+        int result = userDao.register(request);
 
         if(result > 0) {
             statusCode = StatusCode.SUCCESS;
