@@ -1,7 +1,7 @@
 package com.inssa.server.api.user;
 
 import com.inssa.server.api.user.dto.UserChangeInfoRequestDto;
-import com.inssa.server.api.user.dto.UserLoginRequestDto;
+import com.inssa.server.api.user.dto.UserRequestDto;
 import com.inssa.server.api.user.dto.UserRegisterRequestDto;
 import com.inssa.server.api.user.service.UserService;
 import com.inssa.server.common.ApiResponse;
@@ -20,7 +20,7 @@ public class UserController {
 
     @Operation(summary = "login", description = "사용자 로그인 API")
     @PostMapping("/login")
-    public String login(@RequestBody UserLoginRequestDto request) {
+    public String login(@RequestBody UserRequestDto request) {
         return userService.login(request);
     }
 
@@ -37,9 +37,14 @@ public class UserController {
     }
 
     @Operation(summary = "changeUserInfo", description = "회원 정보 변경 API")
-    @PostMapping("/info")
+    @PutMapping("/info")
     public ApiResponse changeUserInfo(@RequestBody UserChangeInfoRequestDto request) {
         return userService.changeUserInfo(request);
     }
-    
+
+    @Operation(summary = "changePassword", description = "비밀번호 변경 API")
+    @PutMapping("/password/change")
+    public ApiResponse changePassword(@RequestBody UserRequestDto request) {
+        return userService.changePassword(request);
+    }
 }
