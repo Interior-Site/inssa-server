@@ -1,5 +1,6 @@
 package com.inssa.server.api.user.dao;
 
+import com.inssa.server.api.user.dto.UserChangeInfoRequestDto;
 import com.inssa.server.api.user.dto.UserDto;
 import com.inssa.server.api.user.dto.UserRegisterRequestDto;
 import com.inssa.server.api.user.mapper.UserMapper;
@@ -21,5 +22,9 @@ public class UserDao {
 
     public int existsUserId(String userId) {
         return userMapper.existsUserId(userId);
+    }
+
+    public int changeUserInfo(UserChangeInfoRequestDto request) {
+        return userMapper.changeUserInfo(request);
     }
 }
