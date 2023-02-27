@@ -23,6 +23,9 @@ public class BoardDto {
     public String boardZzim;
     public String boardNotice;
     public String userId;
+    public String boardImg;
+
+    public String url;
 
     // 검색필터
     public String searchWord; // 검색어

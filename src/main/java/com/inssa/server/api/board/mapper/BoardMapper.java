@@ -25,4 +25,8 @@ public interface BoardMapper {
     int updateView(int boardNo);
 
     List<BoardDto> updateLike(BoardDto dto);
+
+    List<BoardDto> updateZzim(BoardDto dto);
+
+    List<BoardDto> updateStar(BoardDto dto);
 }
