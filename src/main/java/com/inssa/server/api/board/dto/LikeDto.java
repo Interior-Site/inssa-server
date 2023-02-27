@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter @Setter
 public class LikeDto {
 
-    public int userNo;
+    public String userId;
 
     public int boardNo;
     public String like;
