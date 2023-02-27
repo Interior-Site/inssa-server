@@ -126,4 +126,14 @@ public class UserService implements UserDetailsService {
 
         return response;
     }
+
+    public Boolean checkPassword(UserRequestDto request) {
+        UserDto user = userDao.findByUserId(request.getUserId());
+
+        if(user == null) {
+            throw new IllegalArgumentException("사용자가 존재하지 않습니다.");
+        }
+
+        return passwordEncoder.matches(request.getPassword(), user.getPassword());
+    }
 }
