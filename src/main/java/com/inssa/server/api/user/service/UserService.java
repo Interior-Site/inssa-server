@@ -71,4 +71,18 @@ public class UserService implements UserDetailsService {
 
         return response;
     }
+
+    public Boolean existsUserId(String userId) {
+        if(userId == null || userId.equals("")) {
+            throw new IllegalArgumentException("아이디를 입력해 주세요");
+        }
+
+        int result = userDao.existsUserId(userId);
+
+        if(result > 0) {
+            return true;
+        }
+
+        return false;
+    }
 }

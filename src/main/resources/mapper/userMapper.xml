@@ -16,4 +16,10 @@
         VALUES (#{userId}, #{email}, #{password}, #{nickname}, #{phone}, 'Y', #{img}, NOW(), 'I', #{type})
     </insert>
 
+    <select id="existsUserId" resultType="_int">
+        SELECT COUNT(*)
+          FROM USER
+         WHERE USER_ID = #{userId}
+    </select>
+
 </mapper>

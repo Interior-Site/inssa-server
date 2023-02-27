@@ -9,4 +9,6 @@ public interface UserMapper {
     UserDto findByUserId(String userId);
 
     int register(UserRegisterRequestDto user);
+
+    int existsUserId(String userId);
 }

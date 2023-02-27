@@ -34,5 +34,12 @@ public class UserController {
     public ApiResponse register(@RequestBody UserRegisterRequestDto request) {
         return userService.register(request);
     }
+
+    @Tag(name = "user")
+    @Operation(summary = "existsUserId", description = "아이디 중복 확인 API")
+    @PostMapping("/exists/{userId}")
+    public Boolean existsUserId(@PathVariable String userId) {
+        return userService.existsUserId(userId);
+    }
     
 }
