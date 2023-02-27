@@ -106,6 +106,7 @@ public class UserService implements UserDetailsService {
         return response;
     }
 
+    @Transactional
     public ApiResponse changePassword(UserRequestDto request) {
         ApiResponse response = new ApiResponse();
         int statusCode = StatusCode.FAIL;
@@ -137,6 +138,7 @@ public class UserService implements UserDetailsService {
         return passwordEncoder.matches(request.getPassword(), user.getPassword());
     }
 
+    @Transactional
     public Boolean leave(String userId) {
         int result = userDao.leave(userId);
 
