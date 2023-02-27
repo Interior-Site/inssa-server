@@ -29,5 +29,5 @@ jobs:
       - name: Build with Gradle
         run: |
           ./gradlew -version
-          ./gradlew :api:build -x test
+          ./gradlew build -x test
         shell: bash
