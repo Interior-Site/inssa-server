@@ -22,7 +22,7 @@ public class BoardDto {
     public String boardLike;
     public String boardZzim;
     public String boardNotice;
-    public int userNo;
+    public String userId;
 
     // 검색필터
     public String searchWord; // 검색어
