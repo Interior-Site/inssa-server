@@ -1,6 +1,7 @@
 package com.inssa.server.api.user.service;
 
 import com.inssa.server.api.user.dao.UserDao;
+import com.inssa.server.api.user.dto.UserChangeInfoRequestDto;
 import com.inssa.server.api.user.dto.UserDto;
 import com.inssa.server.api.user.dto.UserLoginRequestDto;
 import com.inssa.server.api.user.dto.UserRegisterRequestDto;
@@ -63,7 +64,7 @@ public class UserService implements UserDetailsService {
         if(result > 0) {
             statusCode = StatusCode.SUCCESS;
             message = ResponseMessage.SUCCESS;
-            response.putData("email", request.getEmail());
+            response.putData("userId", request.getUserId());
         }
 
         response.setStatusCode(statusCode);
@@ -84,5 +85,25 @@ public class UserService implements UserDetailsService {
         }
 
         return false;
+    }
+
+    @Transactional
+    public ApiResponse changeUserInfo(UserChangeInfoRequestDto request) {
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+
+        int result = userDao.changeUserInfo(request);
+
+        if(result > 0) {
+            statusCode = StatusCode.SUCCESS;
+            message = ResponseMessage.SUCCESS;
+            response.putData("userId", request.getUserId());
+        }
+
+        response.setStatusCode(statusCode);
+        response.setResponseMessage(message);
+
+        return response;
     }
 }

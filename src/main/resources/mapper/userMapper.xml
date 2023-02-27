@@ -22,4 +22,23 @@
          WHERE USER_ID = #{userId}
     </select>
 
+    <update id="changeUserInfo" parameterType="com.inssa.server.api.user.dto.UserChangeInfoRequestDto">
+        UPDATE USER
+        <set>
+            <if test="email != null and email != ''">
+                EMAIL = #{email},
+            </if>
+            <if test="nickname != null and nickname != ''">
+                NICKNAME = #{nickname},
+            </if>
+            <if test="phone != null and phone != ''">
+                PHONE = #{phone},
+            </if>
+            <if test="img != null and img != ''">
+                IMG = #{img},
+            </if>
+        </set>
+         WHERE USER_ID = #{userId}
+    </update>
+
 </mapper>

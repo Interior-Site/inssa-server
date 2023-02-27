@@ -1,5 +1,6 @@
 package com.inssa.server.api.user.mapper;
 
+import com.inssa.server.api.user.dto.UserChangeInfoRequestDto;
 import com.inssa.server.api.user.dto.UserDto;
 import com.inssa.server.api.user.dto.UserRegisterRequestDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -11,4 +12,6 @@ public interface UserMapper {
     int register(UserRegisterRequestDto user);
 
     int existsUserId(String userId);
+
+    int changeUserInfo(UserChangeInfoRequestDto request);
 }
