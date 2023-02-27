@@ -1,8 +1,11 @@
 package com.inssa.server.api.board.controller;
 
 
+import com.inssa.server.api.board.UploadFile;
 import com.inssa.server.api.board.dto.BoardDto;
 import com.inssa.server.api.board.dto.LikeDto;
+import com.inssa.server.api.board.dto.StarDto;
+import com.inssa.server.api.board.dto.ZzimDto;
 import com.inssa.server.api.board.service.BoardService;
 import com.inssa.server.common.ApiResponse;
 import com.inssa.server.common.Pagination;
@@ -12,9 +15,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 
 @RequestMapping("/api/v1/board")
@@ -25,11 +31,24 @@ import javax.servlet.http.HttpServletRequest;
 public class BoardController {
 
     private final BoardService boardService;
+    @Autowired private UploadFile uploadFile;
+
+
     @PostMapping(value="/insert") @ApiOperation(value = "게시글 작성")
-    public ApiResponse insertBoard(@RequestBody BoardDto board) {
+    public ApiResponse insertBoard(@RequestBody BoardDto board, MultipartFile files) throws IOException {
 
         ApiResponse response = new ApiResponse();
+
+        if(files.isEmpty()) {
+            String img = "";
+            board.setBoardImg(img);
+        } else {
+            String img = uploadFile.fileUpload(files);
+            board.setBoardImg(img);
+        }
+
         response = boardService.insertBoard(board);
+
         return response;
     }
 
@@ -58,10 +77,16 @@ public class BoardController {
     }
 
     @GetMapping(value="/update/{boardNo}") @ApiOperation(value="게시글수정")
-    public ApiResponse updateBoard(@RequestParam int boardNo) {
+    public ApiResponse updateBoard(@RequestParam BoardDto board, MultipartFile files) throws IOException {
 
         ApiResponse response = new ApiResponse();
-        response = boardService.updateBoard(boardNo);
+
+        if(!files.isEmpty()) {
+            String img = uploadFile.fileUpload(files);
+            board.setBoardImg(img);
+        }
+
+        response = boardService.updateBoard(board);
         return response;
     }
 
@@ -110,5 +135,44 @@ public class BoardController {
         return response;
     }
 
+    @PostMapping(value="/updateZzim") @ApiOperation(value="게시글 찜하기")
+    public ApiResponse updateZzim(@RequestBody ZzimDto zzim) {
+        ApiResponse response = new ApiResponse();
+
+        BoardDto board = new BoardDto();
+        board.setBoardNo(zzim.getBoardNo());
+        board.setUserId(zzim.getUserId());
+        board.setBoardZzim(zzim.getZzim());
+
+        String ZzimYn = zzim.getZzim();
+
+        if(ZzimYn.equals("Y") || ZzimYn.equals("N") ) {
+            response = boardService.updateZzim(board);
+        } else {
+            response.setResponseMessage(ResponseMessage.FAIL);
+            response.setStatusCode(StatusCode.FAIL);
+            response.putData("result","");
+        }
+
+        return response;
+    }
+
+    public ApiResponse updateStar(@RequestBody StarDto star) {
+        ApiResponse response = new ApiResponse();
+
+        BoardDto board = new BoardDto();
+        board.setBoardNo(star.getBoardNo());
+        board.setUserId(star.getUserId());
+        board.setBoardGubun(star.getBoardGubun());
+
+        if(star.getBoardGubun().equals("R")) {
+            response = boardService.updateStar(board);
+        } else {  // 후기 게시판이 아닐 경우
+            response.setStatusCode(StatusCode.FAIL);
+            response.setResponseMessage(ResponseMessage.FAIL);
+        }
+
+        return response;
+    }
 }
 

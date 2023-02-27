@@ -101,12 +101,13 @@ public class BoardService {
         return response;
     }
 
-    @Transactional public ApiResponse updateBoard(int boardNo) {
+    @Transactional public ApiResponse updateBoard(BoardDto dto) {
 
         ApiResponse response = new ApiResponse();
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
+        int boardNo = dto.getBoardNo();
         List<BoardDto> resultList = boardDao.updateBoard(boardNo);
 
         if(!resultList.isEmpty()) {
@@ -162,6 +163,36 @@ public class BoardService {
         return response;
     }
 
+    @Transactional public ApiResponse updateZzim(BoardDto board) {
 
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+
+        List<BoardDto> resultList = boardDao.updateZzim(board);
+
+        if(!resultList.isEmpty()) {
+            statusCode = StatusCode.SUCCESS;
+            message = board.boardNo + " 번호의 게시글 좋아요 " +ResponseMessage.SUCCESS;
+        }
+
+        return response;
+    }
+
+    @Transactional public ApiResponse updateStar(BoardDto board) {
+        ApiResponse response = new ApiResponse();
+
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+
+        List<BoardDto> resultList =  boardDao.updateStar(board);
+
+        if(!resultList.isEmpty()) {
+            statusCode = StatusCode.SUCCESS;
+            message = board.boardNo + " 번호의 게시글 좋아요 " +ResponseMessage.SUCCESS;
+        }
+
+        return response;
+    }
 
 }
