@@ -56,4 +56,11 @@ public class UserController {
         request.setUserId(SecurityContextHolder.getContext().getAuthentication().getName());
         return userService.checkPassword(request);
     }
+
+    @Operation(summary = "leave", description = "회원 탈퇴 API")
+    @PutMapping("/leave")
+    public Boolean leave() {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.leave(userId);
+    }
 }

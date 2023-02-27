@@ -17,4 +17,6 @@ public interface UserMapper {
     int changeUserInfo(UserChangeInfoRequestDto request);
 
     int changePassword(UserRequestDto request);
+
+    int leave(String userId);
 }

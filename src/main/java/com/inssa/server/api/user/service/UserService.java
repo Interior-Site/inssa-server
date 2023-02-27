@@ -136,4 +136,13 @@ public class UserService implements UserDetailsService {
 
         return passwordEncoder.matches(request.getPassword(), user.getPassword());
     }
+
+    public Boolean leave(String userId) {
+        int result = userDao.leave(userId);
+
+        if(result > 0) {
+            return true;
+        }
+        return false;
+    }
 }
