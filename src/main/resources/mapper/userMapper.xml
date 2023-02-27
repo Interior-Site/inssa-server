@@ -47,4 +47,11 @@
          WHERE USER_ID = #{userId}
     </update>
 
+    <update id="leave" parameterType="string">
+        UPDATE USER
+           SET STATUS = 'N',
+               QUIT = now()
+         WHERE USER_ID = #{userId}
+    </update>
+
 </mapper>

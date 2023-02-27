@@ -32,4 +32,8 @@ public class UserDao {
     public int changePassword(UserRequestDto request) {
         return userMapper.changePassword(request);
     }
+
+    public int leave(String userId) {
+        return userMapper.leave(userId);
+    }
 }
