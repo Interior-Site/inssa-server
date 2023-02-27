@@ -3,7 +3,7 @@ package com.inssa.server.api.user.service;
 import com.inssa.server.api.user.dao.UserDao;
 import com.inssa.server.api.user.dto.UserChangeInfoRequestDto;
 import com.inssa.server.api.user.dto.UserDto;
-import com.inssa.server.api.user.dto.UserLoginRequestDto;
+import com.inssa.server.api.user.dto.UserRequestDto;
 import com.inssa.server.api.user.dto.UserRegisterRequestDto;
 import com.inssa.server.common.ApiResponse;
 import com.inssa.server.common.ResponseMessage;
@@ -11,7 +11,6 @@ import com.inssa.server.common.StatusCode;
 import com.inssa.server.config.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,7 +36,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public String login(UserLoginRequestDto request) {
+    public String login(UserRequestDto request) {
         UserDto user = userDao.findByUserId(request.getUserId());
 
         if(user == null) {
@@ -94,6 +93,27 @@ public class UserService implements UserDetailsService {
         String message = ResponseMessage.FAIL;
 
         int result = userDao.changeUserInfo(request);
+
+        if(result > 0) {
+            statusCode = StatusCode.SUCCESS;
+            message = ResponseMessage.SUCCESS;
+            response.putData("userId", request.getUserId());
+        }
+
+        response.setStatusCode(statusCode);
+        response.setResponseMessage(message);
+
+        return response;
+    }
+
+    public ApiResponse changePassword(UserRequestDto request) {
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+
+        request.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        int result = userDao.changePassword(request);
 
         if(result > 0) {
             statusCode = StatusCode.SUCCESS;

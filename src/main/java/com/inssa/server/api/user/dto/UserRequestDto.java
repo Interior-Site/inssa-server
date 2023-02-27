@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Schema(description = "사용자 로그인 API request")
-public class UserLoginRequestDto {
+public class UserRequestDto {
     @Schema(description = "아이디")
     private String userId;
     @Schema(description = "패스워드")
