@@ -17,4 +17,8 @@ public class CommentDao {
         return (List<CommentDto>) commentMapper.selectList(boardNo);
     }
 
+    public int insertComment(CommentDto comment) {
+        int result = commentMapper.insertComment(comment);
+        return result;
+    }
 }
