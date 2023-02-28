@@ -1,20 +1,17 @@
 package com.inssa.server.api.board.controller;
 
-
 import com.inssa.server.api.board.UploadFile;
 import com.inssa.server.api.board.dto.BoardDto;
 import com.inssa.server.api.board.dto.LikeDto;
 import com.inssa.server.api.board.dto.StarDto;
 import com.inssa.server.api.board.dto.ZzimDto;
-import com.inssa.server.api.board.service.BoardService;
+import com.inssa.server.api.board.service.AskService;
+
 import com.inssa.server.common.ApiResponse;
 import com.inssa.server.common.Pagination;
 import com.inssa.server.common.ResponseMessage;
 import com.inssa.server.common.StatusCode;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,16 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+public class AskController {
 
-@RequestMapping("/api/v1/board")
-@RestController
-@RequiredArgsConstructor
-@Api(tags="Board")
-@Slf4j
-public class BoardController {
-
-    private final BoardService boardService;
-    @Autowired private UploadFile uploadFile;
+    @Autowired
+    private UploadFile uploadFile;
+    private AskService askService;
 
 
     @PostMapping(value="/insert") @ApiOperation(value = "게시글 작성")
@@ -47,7 +39,7 @@ public class BoardController {
             board.setBoardImg(img);
         }
 
-        response = boardService.insertBoard(board);
+        response = askService.insertBoard(board);
 
         return response;
     }
@@ -56,7 +48,7 @@ public class BoardController {
     public ApiResponse selectBoardList(@RequestParam int boardNo) {
 
         ApiResponse response = new ApiResponse();
-        response = boardService.selectBoard(boardNo);
+        response = askService.selectBoard(boardNo);
         return response;
     }
 
@@ -64,7 +56,7 @@ public class BoardController {
     public ApiResponse selectBoardContent(@PathVariable int boardNo, HttpServletRequest request) {
 
         ApiResponse response = new ApiResponse();
-        response = boardService.selectBoardNo(boardNo, request);
+        response = askService.selectBoardNo(boardNo, request);
         return response;
     }
 
@@ -72,7 +64,7 @@ public class BoardController {
     public ApiResponse deleteBoard(@RequestParam int boardNo) {
 
         ApiResponse response = new ApiResponse();
-        response = boardService.deleteBoard(boardNo);
+        response = askService.deleteBoard(boardNo);
         return response;
     }
 
@@ -86,13 +78,13 @@ public class BoardController {
             board.setBoardImg(img);
         }
 
-        response = boardService.updateBoard(board);
+        response = askService.updateBoard(board);
         return response;
     }
 
     @GetMapping(value="/select/searchBoard") @ApiOperation(value="게시글 검색")
     public ApiResponse searchBoardList(@RequestParam("filter") String filter, @RequestParam("searchWord") String searchWord,
-                                       @RequestParam("category") String category,Pagination page) {
+                                       @RequestParam("category") String category, Pagination page) {
         ApiResponse response = new ApiResponse();
 
         BoardDto dto = new BoardDto();
@@ -104,14 +96,12 @@ public class BoardController {
         paging.setCurrentPage(page.getCurrentPage());
 
         if(searchWord != null) {
-            paging = boardService.getPaging(dto, paging);
-            response = boardService.searchBoardList(dto);
+            paging = askService.getPaging(dto, paging);
+            response = askService.searchBoardList(dto);
         } else {
 
         }
         return response;
-
     }
 
 }
-
