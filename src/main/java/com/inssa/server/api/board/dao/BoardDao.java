@@ -52,18 +52,4 @@ public class BoardDao {
       return result;
    }
 
-   @Transactional public List<BoardDto> updateLike(BoardDto dto) {
-      List<BoardDto> resultList = boardMapper.updateLike(dto);
-      return resultList;
-   }
-
-   @Transactional public List<BoardDto> updateZzim(BoardDto dto) {
-      List<BoardDto> resultList = boardMapper.updateZzim(dto);
-      return resultList;
-   }
-
-   @Transactional public List<BoardDto> updateStar(BoardDto dto) {
-      List<BoardDto> resultList = boardMapper.updateStar(dto);
-      return resultList;
-   }
 }
