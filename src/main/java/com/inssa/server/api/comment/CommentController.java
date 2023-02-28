@@ -2,13 +2,12 @@ package com.inssa.server.api.comment;
 
 import com.inssa.server.api.comment.dto.CommentDto;
 import com.inssa.server.api.comment.service.CommentService;
+import com.inssa.server.common.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,4 +25,11 @@ public class CommentController {
     public List<CommentDto> selectList(int boardNo){
         return commentService.selectList(boardNo);
     }
+
+    @Operation(summary = "insertComment", description = "댓글 등록 API")
+    @PostMapping("/insertComment")
+    public ApiResponse insertComment(@RequestBody CommentDto comment){
+        return commentService.insertComment(comment);
+    }
+
 }
