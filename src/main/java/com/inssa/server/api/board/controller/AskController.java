@@ -53,18 +53,18 @@ public class AskController {
     }
 
     @GetMapping(value="/select/{boardNo}") @ApiOperation(value="게시글 상세 조회")
-    public ApiResponse selectBoardContent(@PathVariable int boardNo, HttpServletRequest request) {
+    public ApiResponse selectBoardContent(@PathVariable int boardNo, @RequestParam String userId, HttpServletRequest request) {
 
         ApiResponse response = new ApiResponse();
-        response = askService.selectBoardNo(boardNo, request);
+        response = askService.selectBoardNo(boardNo, userId, request);
         return response;
     }
 
     @GetMapping(value="/delete/{boardNo}") @ApiOperation(value="게시글삭제")
-    public ApiResponse deleteBoard(@RequestParam int boardNo) {
+    public ApiResponse deleteBoard(@RequestParam int boardNo, @RequestParam String userId) {
 
         ApiResponse response = new ApiResponse();
-        response = askService.deleteBoard(boardNo);
+        response = askService.deleteBoard(boardNo, userId);
         return response;
     }
 

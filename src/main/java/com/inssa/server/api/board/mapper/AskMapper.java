@@ -24,4 +24,8 @@ public interface AskMapper {
     Pagination searchListCount(BoardDto dto);
 
     int updateView(int boardNo);
+
+    List<BoardDto> updateLike(BoardDto dto);
+
+    List<BoardDto> updateZzim(BoardDto dto);
 }

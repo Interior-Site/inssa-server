@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 @Mapper
-public interface BoardMapper {
+public interface CommuMapper {
     int insertBoard(BoardDto board);
 
     List<BoardDto> selectBoardList();
@@ -23,4 +23,8 @@ public interface BoardMapper {
     Pagination searchListCount(BoardDto dto);
 
     int updateView(int boardNo);
+
+    List<BoardDto> updateLike(BoardDto dto);
+
+    List<BoardDto> updateZzim(BoardDto dto);
 }

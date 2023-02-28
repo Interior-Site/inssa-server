@@ -55,4 +55,14 @@ public class AskDao {
         int result  = mapper.updateView(boardNo);
         return result;
     }
+
+    @Transactional public List<BoardDto> updateLike(BoardDto dto) {
+        List<BoardDto> resultList = mapper.updateLike(dto);
+        return resultList;
+    }
+
+    @Transactional public List<BoardDto> updateZzim(BoardDto dto) {
+        List<BoardDto> resultList = mapper.updateZzim(dto);
+        return resultList;
+    }
 }

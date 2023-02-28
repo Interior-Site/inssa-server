@@ -108,10 +108,6 @@
         WHERE BOARD_STATUS = 'Y'
         AND BOARD_GUBUN = 'A'
         <choose>
-            <when test="filter != null and type.equals('boardGubun')">
-                AND boardGubun = #{boardGubun} <!-- 데이터를 어떤값으로 받느냐에 따라 수정 필요 -->
-            </when>
-
             <when test="filter != null and type.equals('searchWord')">
                 AND searchWord LIKE CONCAT('%', #{boardTitle}, '%')
             </when>
@@ -137,13 +133,9 @@
         FROM
             SELECT COUNT(*) CNT
             FROM BOARD
-            WHERE BOARD_GUBUN = #{boardGubun}
+            WHERE BOARD_GUBUN = 'A'
             AND BOARD_STATUS = 'Y'
             <choose>
-                <when test="filter != null and type.equals('boardGubun')">
-                    AND boardGubun = #{boardGubun} <!-- 데이터를 어떤값으로 받느냐에 따라 수정 필요 -->
-                </when>
-
                 <when test="filter != null and type.equals('searchWord')">
                     AND searchWord LIKE CONCAT('%', #{boardTitle}, '%')
                 </when>
@@ -169,6 +161,24 @@
         SET
         BOARD_VIEW = BOARD_VIEW + 1
         WHERE BOARD_NO = #{boardNo}
+    </update>
+
+    <!-- 게시판 좋아요  -->
+    <update id="updateLike" parameterType="com.inssa.server.api.board.dto.BoardDto">
+        UPDATE BOARD
+        SET
+        BOARD_LIKE = #{boardLike}
+        WHERE BOARD_NO = #{boardNo}
+        AND USER_NO = #{userNo}
+    </update>
+
+    <!-- 게시판 찜  -->
+    <update id="updateZzim" parameterType="com.inssa.server.api.board.dto.BoardDto">
+        UPDATE BOARD
+        SET
+        BOARD_ZZIM = #{boardZzim}
+        WHERE BOARD_NO = #{boardNo}
+        AND USER_NO = #{userNo}
     </update>
 
 </mapper>
