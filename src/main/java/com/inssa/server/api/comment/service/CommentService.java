@@ -24,7 +24,7 @@ public class CommentService {
 
     public ApiResponse insertComment(CommentDto comment) {
         ApiResponse response = new ApiResponse();
-        int statusCode = StatusCode.FAIL;
+        int statusCode = StatusCode.FAIL; // FAIL : 400, SUCCESS : 200
         String message = ResponseMessage.FAIL;
 
         int result = commentdao.insertComment(comment);
