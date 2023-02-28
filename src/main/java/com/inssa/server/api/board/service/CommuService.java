@@ -1,6 +1,6 @@
 package com.inssa.server.api.board.service;
 
-import com.inssa.server.api.board.dao.ReviewDao;
+import com.inssa.server.api.board.dao.CommuDao;
 import com.inssa.server.api.board.dto.BoardDto;
 import com.inssa.server.api.user.dao.UserDao;
 import com.inssa.server.api.user.dto.UserDto;
@@ -8,6 +8,7 @@ import com.inssa.server.common.ApiResponse;
 import com.inssa.server.common.Pagination;
 import com.inssa.server.common.ResponseMessage;
 import com.inssa.server.common.StatusCode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,11 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class ReviewService {
 
-    private ReviewDao reviewDao;
-    private UserDao userDao;
+@Service("BoardService")
+@RequiredArgsConstructor
+public class CommuService {
+
+    private final CommuDao boardDao;
+    private final UserDao userDao;
 
     // 게시글 작성 (-> 회원만 작성 가능)
     public ApiResponse insertBoard(BoardDto board) {
@@ -33,7 +36,7 @@ public class ReviewService {
         UserDto user = userDao.findByUserId(userId);
 
         if(user != null) { // 회원일 경우
-            int result = reviewDao.insert(board);
+            int result = boardDao.insert(board);
 
             if(result != 0) {
                 statusCode = StatusCode.SUCCESS;
@@ -55,7 +58,7 @@ public class ReviewService {
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
-        List<BoardDto> resultList = reviewDao.selectBoardList();
+        List<BoardDto> resultList = boardDao.selectBoardList();
 
         if(!resultList.isEmpty()) {
             statusCode = StatusCode.SUCCESS;
@@ -84,14 +87,14 @@ public class ReviewService {
         UserDto user = userDao.findByUserId(userId);
 
         if(user != null) { // 회원일 경우
-            resultList = reviewDao.selectBoard(boardNo);
+            resultList = boardDao.selectBoard(boardNo);
 
             if(!resultList.isEmpty()) {
                 statusCode = StatusCode.SUCCESS;
                 message = boardNo + " 번호의 게시글 조회 " + ResponseMessage.SUCCESS;
 
                 // 조회 성공일 때마다 조회수 + 1
-                reviewDao.updateView(boardNo);
+                boardDao.updateView(boardNo);
             }
         }
 
@@ -101,10 +104,8 @@ public class ReviewService {
         return response;
     }
 
-
     // 게시글 삭제 (-> 회원만 '본인'이 작성한 게시글에 한하여 가능)
-    @Transactional
-    public ApiResponse deleteBoard(int boardNo, String userId) {
+    @Transactional public ApiResponse deleteBoard(int boardNo, String userId) {
 
         ApiResponse response = new ApiResponse();
         int statusCode = StatusCode.FAIL;
@@ -116,7 +117,7 @@ public class ReviewService {
         UserDto user = userDao.findByUserId(userId);
 
         if(user != null) { // 회원일 경우
-            resultList = reviewDao.deleteBoard(boardNo);
+            resultList = boardDao.deleteBoard(boardNo);
 
             if(!resultList.isEmpty()) {
                 statusCode = StatusCode.SUCCESS;
@@ -145,7 +146,7 @@ public class ReviewService {
 
         if(user != null) { //회원일 경우
             int boardNo = dto.getBoardNo();
-            resultList = reviewDao.updateBoard(boardNo);
+            resultList = boardDao.updateBoard(boardNo);
 
             if(!resultList.isEmpty()) {
                 statusCode = StatusCode.SUCCESS;
@@ -165,7 +166,7 @@ public class ReviewService {
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
-        List<BoardDto> resultList = reviewDao.searchBoardList(dto);
+        List<BoardDto> resultList = boardDao.searchBoardList(dto);
 
         if(!resultList.isEmpty()) {
             statusCode = StatusCode.SUCCESS;
@@ -177,11 +178,11 @@ public class ReviewService {
         return response;
     }
 
-    // 게시글 검색 (-> 전체회원(회원/비회원) 모두 가능)
+    // 게시판 페이징 처리를 위한 기능
     public Pagination getPaging(BoardDto board, Pagination page) {
 
         // 1) 검색이 적용된 게시글 수 조회
-        Pagination selectPg = reviewDao.searchListCount(board);
+        Pagination selectPg = boardDao.searchListCount(board);
 
         //System.out.println(selectPg);
 
@@ -191,81 +192,4 @@ public class ReviewService {
         return selectPg;
     }
 
-    // 게시판 좋아요 기능(-> 회원만 해당 기능 실행 가능)
-    @Transactional public ApiResponse updateLike(BoardDto board) {
-
-        ApiResponse response = new ApiResponse();
-        int statusCode = StatusCode.FAIL;
-        String message = ResponseMessage.FAIL;
-        List<BoardDto> resultList = new ArrayList<>();
-
-        // 회원 or 비회원 체크
-        String userId = board.getUserId();
-        UserDto user = userDao.findByUserId(userId);
-
-        if(user != null) { // 회원일 경우
-            resultList = reviewDao.updateLike(board);
-
-            if(!resultList.isEmpty()) {
-                statusCode = StatusCode.SUCCESS;
-                message = board.boardNo + " 번호의 게시글 좋아요 " +ResponseMessage.SUCCESS;
-            }
-        }
-        response.setStatusCode(statusCode);
-        response.setResponseMessage(message);
-        response.putData("boardList",resultList);
-        return response;
-    }
-
-    // 게시판 찜하기 기능(-> 회원만 해당 기능 실행 가능)
-    @Transactional public ApiResponse updateZzim(BoardDto board) {
-
-        ApiResponse response = new ApiResponse();
-        int statusCode = StatusCode.FAIL;
-        String message = ResponseMessage.FAIL;
-        List<BoardDto> resultList = new ArrayList<>();
-
-        // 회원 or 비회원 체크
-        String userId = board.getUserId();
-        UserDto user = userDao.findByUserId(userId);
-
-        if(user != null) { // 회원일 경우
-            resultList = reviewDao.updateZzim(board);
-
-            if(!resultList.isEmpty()) {
-                statusCode = StatusCode.SUCCESS;
-                message = board.boardNo + " 번호의 게시글 좋아요 " +ResponseMessage.SUCCESS;
-            }
-        }
-        response.setStatusCode(statusCode);
-        response.setResponseMessage(message);
-        response.putData("boardList",resultList);
-        return response;
-    }
-
-    // 후기 게시글 별점 평가 (-> 회원만 해당 기능 실행 가능)
-    @Transactional public ApiResponse updateStar(BoardDto board) {
-        ApiResponse response = new ApiResponse();
-
-        int statusCode = StatusCode.FAIL;
-        String message = ResponseMessage.FAIL;
-        List<BoardDto> resultList = new ArrayList<>();
-
-        // 회원 or 비회원 체크
-        String userId = board.getUserId();
-        UserDto user = userDao.findByUserId(userId);
-
-        if(user != null) { // 회원일 경우
-            resultList = reviewDao.updateStar(board);
-
-            if(!resultList.isEmpty()) {
-                statusCode = StatusCode.SUCCESS;
-                message = board.boardNo + " 번호의 게시글 좋아요 " +ResponseMessage.SUCCESS;
-            }
-        }
-        response.setStatusCode(statusCode);
-        response.setResponseMessage(message);
-        response.putData("boardList",resultList);
-        return response;
-    }
 }
