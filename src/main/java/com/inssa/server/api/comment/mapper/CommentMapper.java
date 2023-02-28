@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface CommentMapper {
     List<CommentDto> selectList(int commentNo);
+
+    int insertComment(CommentDto comment);
 }

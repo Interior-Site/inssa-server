@@ -31,5 +31,9 @@ public class CommentController {
     public ApiResponse insertComment(@RequestBody CommentDto comment){
         return commentService.insertComment(comment);
     }
+    
+    // 댓글 수정
+    
+    // 댓글 삭제
 
 }
