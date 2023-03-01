@@ -22,8 +22,9 @@ public class CommentController {
     @Tag(name = "comment")
     @Operation(summary = "selectList", description = "댓글 목록 조회 API") // 스웨거
     @PostMapping("/selectList")
-    public List<CommentDto> selectList(int boardNo){
-        return commentService.selectList(boardNo);
+    public List<CommentDto> selectList(int commentNo){
+        List<CommentDto> cList = commentService.selectList(commentNo);
+        return cList;
     }
 
     @Operation(summary = "insertComment", description = "댓글 등록 API")
