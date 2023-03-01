@@ -21,28 +21,28 @@ import java.io.IOException;
 
 public class AskController {
 
-    @Autowired
-    private UploadFile uploadFile;
+//    @Autowired
+//    private UploadFile uploadFile;
     private AskService askService;
 
 
-    @PostMapping(value="/insert") @ApiOperation(value = "게시글 작성")
-    public ApiResponse insertBoard(@RequestBody BoardDto board, MultipartFile files) throws IOException {
-
-        ApiResponse response = new ApiResponse();
-
-        if(files.isEmpty()) {
-            String img = "";
-            board.setBoardImg(img);
-        } else {
-            String img = uploadFile.fileUpload(files);
-            board.setBoardImg(img);
-        }
-
-        response = askService.insertBoard(board);
-
-        return response;
-    }
+//    @PostMapping(value="/insert") @ApiOperation(value = "게시글 작성")
+//    public ApiResponse insertBoard(@RequestBody BoardDto board, MultipartFile files) throws IOException {
+//
+//        ApiResponse response = new ApiResponse();
+//
+//        if(files.isEmpty()) {
+//            String img = "";
+//            board.setBoardImg(img);
+//        } else {
+//            String img = uploadFile.fileUpload(files);
+//            board.setBoardImg(img);
+//        }
+//
+//        response = askService.insertBoard(board);
+//
+//        return response;
+//    }
 
     @GetMapping(value="/select") @ApiOperation(value="게시글 목록 조회")
     public ApiResponse selectBoardList(@RequestParam int boardNo) {
@@ -68,19 +68,19 @@ public class AskController {
         return response;
     }
 
-    @GetMapping(value="/update/{boardNo}") @ApiOperation(value="게시글수정")
-    public ApiResponse updateBoard(@RequestParam BoardDto board, MultipartFile files) throws IOException {
-
-        ApiResponse response = new ApiResponse();
-
-        if(!files.isEmpty()) {
-            String img = uploadFile.fileUpload(files);
-            board.setBoardImg(img);
-        }
-
-        response = askService.updateBoard(board);
-        return response;
-    }
+//    @GetMapping(value="/update/{boardNo}") @ApiOperation(value="게시글수정")
+//    public ApiResponse updateBoard(@RequestParam BoardDto board, MultipartFile files) throws IOException {
+//
+//        ApiResponse response = new ApiResponse();
+//
+//        if(!files.isEmpty()) {
+//            String img = uploadFile.fileUpload(files);
+//            board.setBoardImg(img);
+//        }
+//
+//        response = askService.updateBoard(board);
+//        return response;
+//    }
 
     @GetMapping(value="/select/searchBoard") @ApiOperation(value="게시글 검색")
     public ApiResponse searchBoardList(@RequestParam("filter") String filter, @RequestParam("searchWord") String searchWord,

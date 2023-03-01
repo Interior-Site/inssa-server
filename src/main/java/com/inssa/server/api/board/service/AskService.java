@@ -96,6 +96,8 @@ public class AskService {
                 // 조회 성공일 때마다 조회수 + 1
                 askDao.updateView(boardNo);
             }
+
+
         }
 
         response.setStatusCode(statusCode);
