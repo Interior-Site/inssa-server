@@ -14,7 +14,8 @@ public class CommentDao {
     private final CommentMapper commentMapper;
 
     public List<CommentDto> selectList(int boardNo){
-        return (List<CommentDto>) commentMapper.selectList(boardNo);
+        List<CommentDto> result = commentMapper.selectList(boardNo);
+        return result;
     }
 
     public int insertComment(CommentDto comment) {

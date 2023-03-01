@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface CommentMapper {
-    List<CommentDto> selectList(int commentNo);
+    List<CommentDto> selectList(int boardNo);
 
     int insertComment(CommentDto comment);
 }

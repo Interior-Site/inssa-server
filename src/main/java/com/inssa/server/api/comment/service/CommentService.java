@@ -18,8 +18,24 @@ public class CommentService {
 
     private final CommentDao commentdao;
 
-    public List<CommentDto> selectList(int boardNo){
-        return commentdao.selectList(boardNo);
+    public ApiResponse selectList(int boardNo){
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+
+        // DAO에서 result에 담긴 댓글목록
+        List<CommentDto> commentList = commentdao.selectList(boardNo);
+
+        if(!commentList.isEmpty()){
+            statusCode = StatusCode.SUCCESS;
+            message = boardNo + "번 게시글 댓글 목록 조회" + ResponseMessage.SUCCESS;
+        }
+
+
+        response.setStatusCode(statusCode);
+        response.setResponseMessage(message);
+        response.putData("result", commentList);
+        return response;
     }
 
     public ApiResponse insertComment(CommentDto comment) {
@@ -42,4 +58,8 @@ public class CommentService {
 
         return response;
     }
+
+
+
+
 }
