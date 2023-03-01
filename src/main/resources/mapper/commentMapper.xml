@@ -23,9 +23,9 @@
         , COMMENT_DATE
         , COMMENT_IMG
         , BOARD_NO
-        , USER_ID
+      <!--  , USER_ID -->
         FROM COMMENT
-        WHERE USER_ID = #{userId}
+        WHERE BOARD_NO = #{boardNo}
         AND COMMENT_STATUS = 'Y'
     </select>
 </mapper>
