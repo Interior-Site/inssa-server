@@ -22,8 +22,10 @@ public class BoardDto {
     public String boardLike;
     public String boardZzim;
     public String boardNotice;
+
     public String userId;
     public String boardImg;
+    public String boardCategory;
 
     public String url;
 
