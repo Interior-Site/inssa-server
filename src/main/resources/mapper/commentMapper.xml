@@ -23,9 +23,28 @@
         , COMMENT_DATE
         , COMMENT_IMG
         , BOARD_NO
-        , USER_ID
+      <!--  , USER_ID -->
         FROM COMMENT
-        WHERE USER_ID = #{userId}
+        WHERE BOARD_NO = #{boardNo}
         AND COMMENT_STATUS = 'Y'
     </select>
+
+    <insert id="insertComment">
+        INSERT INTO COMMENT
+            ( COMMENT_NO,
+                COMMENT_CONTENT,
+                COMMENT_STATUS,
+                COMMENT_DATE,
+                COMMENT_IMG,
+                BOARD_NO,
+                USER_NO )
+        VALUES
+        ( #{commentNo},
+            #{commentContent},
+            DEFAULT,
+            DEFAULT,
+            #{commentImg},
+            #{boardNo},
+            #{userNo} );
+    </insert>
 </mapper>
