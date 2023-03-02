@@ -17,7 +17,7 @@ public class UserRegisterRequestDto {
     @Schema(description = "핸드폰 번호", example = "010-1234-5678")
     private String phone;
     @Schema(description = "프로필 사진 경로")
-    private String img;
-    @Schema(description = "회원 타입", example = "G/C/Z")
-    private String type;
+    private String profile;
+    @Schema(description = "회원 타입", example = "admin/user")
+    private String role;
 }
