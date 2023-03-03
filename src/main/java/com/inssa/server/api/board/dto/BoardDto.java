@@ -1,10 +1,13 @@
 package com.inssa.server.api.board.dto;
 
 
+import com.inssa.server.common.Files;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Getter @Setter
@@ -24,7 +27,9 @@ public class BoardDto {
     public String boardNotice;
 
     public String userId;
-    public String boardImg;
+    public List<MultipartFile> requestImg; // 사용자가 첨부한 이미지
+    public List<Files> boardImg; // 사용자가 첨부한 이미지를 저장
+
     public String boardCategory;
 
     public String url;

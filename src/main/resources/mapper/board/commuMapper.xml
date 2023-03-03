@@ -7,6 +7,11 @@
 
     <sql id = "boardColumns">
         BOARD_NO,
+        BOARD_TYPE_NO,
+        CATEGORY_NO,
+        PARENT_BOARD_NO,
+        TITLE,
+        CONTENT,
         BOARD_NAME,
         BOARD_GUBUN,
         BOARD_TITLE,

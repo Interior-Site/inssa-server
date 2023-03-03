@@ -1,22 +1,24 @@
 package com.inssa.server.api.board.controller;
 
 
-import com.inssa.server.api.board.UploadFile;
+
 import com.inssa.server.api.board.dto.BoardDto;
 import com.inssa.server.api.board.service.CommuService;
 import com.inssa.server.common.ApiResponse;
+import com.inssa.server.common.FileStore;
+import com.inssa.server.common.Files;
 import com.inssa.server.common.Pagination;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+
+import java.util.List;
 
 
 @RequestMapping("/api/v1/board")
@@ -29,24 +31,22 @@ public class CommuController {
     private final CommuService commuService;
 //    @Autowired private UploadFile uploadFile;
 
+    private FileStore fileStore;
 
-//    @PostMapping(value="/insert") @ApiOperation(value = "게시글 작성")
-//    public ApiResponse insertBoard(@RequestBody BoardDto board, MultipartFile files) throws IOException {
-//
-//        ApiResponse response = new ApiResponse();
-//
-//        if(files.isEmpty()) {
-//            String img = "";
-//            board.setBoardImg(img);
-//        } else {
-//            String img = uploadFile.fileUpload(files);
-//            board.setBoardImg(img);
-//        }
-//
-//        response = commuService.insertBoard(board);
-//
-//        return response;
-//    }
+
+    @PostMapping(value="/insert") @ApiOperation(value = "게시글 작성")
+    public ApiResponse insertBoard(@RequestBody BoardDto board) throws IOException {
+
+        ApiResponse response = new ApiResponse();
+
+        List<Files> imageFiles = fileStore.storeFiles(board.getRequestImg());
+
+        board.setBoardImg(imageFiles);
+
+        response = commuService.insertBoard(board);
+
+        return response;
+    }
 
     @GetMapping(value="/select") @ApiOperation(value="게시글 목록 조회")
     public ApiResponse selectBoardList(@RequestParam int boardNo) {
@@ -72,19 +72,19 @@ public class CommuController {
         return response;
     }
 
-//    @GetMapping(value="/update/{boardNo}") @ApiOperation(value="게시글수정")
-//    public ApiResponse updateBoard(@RequestParam BoardDto board, MultipartFile files) throws IOException {
-//
-//        ApiResponse response = new ApiResponse();
-//
+    @GetMapping(value="/update/{boardNo}") @ApiOperation(value="게시글수정")
+    public ApiResponse updateBoard(@RequestParam BoardDto board, MultipartFile files) throws IOException {
+
+        ApiResponse response = new ApiResponse();
+
 //        if(!files.isEmpty()) {
 //            String img = uploadFile.fileUpload(files);
 //            board.setBoardImg(img);
 //        }
-//
-//        response = commuService.updateBoard(board);
-//        return response;
-//    }
+
+        response = commuService.updateBoard(board);
+        return response;
+    }
 
     @GetMapping(value="/select/searchBoard") @ApiOperation(value="게시글 검색")
     public ApiResponse searchBoardList(@RequestParam("filter") String filter, @RequestParam("searchWord") String searchWord,
