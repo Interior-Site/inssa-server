@@ -23,7 +23,7 @@
         , COMMENT_DATE
         , COMMENT_IMG
         , BOARD_NO
-      <!--  , USER_ID -->
+        , USER_ID
         FROM COMMENT
         WHERE BOARD_NO = #{boardNo}
         AND COMMENT_STATUS = 'Y'
@@ -37,7 +37,7 @@
                 COMMENT_DATE,
                 COMMENT_IMG,
                 BOARD_NO,
-                USER_NO )
+                USER_ID )
         VALUES
         ( #{commentNo},
             #{commentContent},
@@ -45,6 +45,6 @@
             DEFAULT,
             #{commentImg},
             #{boardNo},
-            #{userNo} );
+            #{userId} );
     </insert>
 </mapper>
