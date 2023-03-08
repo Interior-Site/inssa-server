@@ -22,4 +22,12 @@ public class CommentDao {
         int result = commentMapper.insertComment(comment);
         return result;
     }
+
+    public int updateComment(CommentDto comment) {
+        int result = commentMapper.updateComment(comment);
+        return result;
+    }
+
+
+
 }

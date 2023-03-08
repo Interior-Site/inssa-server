@@ -3,6 +3,7 @@ package com.inssa.server.api.comment;
 import com.inssa.server.api.comment.dto.CommentDto;
 import com.inssa.server.api.comment.service.CommentService;
 import com.inssa.server.common.ApiResponse;
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +32,15 @@ public class CommentController {
     public ApiResponse insertComment(@RequestBody CommentDto comment){
         return commentService.insertComment(comment);
     }
-    
+
+
     // 댓글 수정
-    
+    @Operation(summary = "updateComment", description = "댓글 수정 API")
+    @PostMapping("/updateComment")
+    public ApiResponse updateComment(@RequestBody CommentDto comment){
+        return commentService.updateComment(comment);
+    }
+
     // 댓글 삭제
 
 }
