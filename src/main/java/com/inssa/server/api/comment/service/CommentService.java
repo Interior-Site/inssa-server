@@ -60,6 +60,22 @@ public class CommentService {
     }
 
 
+    public ApiResponse updateComment(CommentDto comment) {
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL; // FAIL : 400, SUCCESS : 200
+        String message = ResponseMessage.FAIL;
 
+        int result = commentdao.updateComment(comment);
 
+        if(result > 0){
+            statusCode = StatusCode.SUCCESS;
+            message = ResponseMessage.SUCCESS;
+            response.putData("userId", comment);
+
+        }
+        response.setStatusCode(statusCode);
+        response.setResponseMessage(message);
+
+        return response;
+    }
 }

@@ -10,4 +10,6 @@ public interface CommentMapper {
     List<CommentDto> selectList(int boardNo);
 
     int insertComment(CommentDto comment);
+
+    int updateComment(CommentDto comment);
 }
