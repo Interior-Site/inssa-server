@@ -2,6 +2,7 @@ package com.inssa.server.api.board.service;
 
 import com.inssa.server.api.board.dao.ReviewDao;
 import com.inssa.server.api.board.dto.BoardDto;
+import com.inssa.server.api.board.dto.LikeDto;
 import com.inssa.server.api.user.dao.UserDao;
 import com.inssa.server.api.user.dto.UserDto;
 import com.inssa.server.common.ApiResponse;
@@ -204,6 +205,16 @@ public class ReviewService {
         UserDto user = userDao.findByUserId(userId);
 
         if(user != null) { // 회원일 경우
+
+            // 좋아요 여부 확인
+            LikeDto like = reviewDao.likeCheck(board.getLikeNo());
+
+            if(like == null) { // 좋아요 기능을 실행했을 경우
+                board.setLikeCount(1);
+            } else { // 좋아요를 취소했을 경우
+                board.setLikeCount(0);
+            }
+
             resultList = reviewDao.updateLike(board);
 
             if(!resultList.isEmpty()) {
@@ -241,6 +252,7 @@ public class ReviewService {
         response.setResponseMessage(message);
         response.putData("boardList",resultList);
         return response;
+
     }
 
     // 후기 게시글 별점 평가 (-> 회원만 해당 기능 실행 가능)

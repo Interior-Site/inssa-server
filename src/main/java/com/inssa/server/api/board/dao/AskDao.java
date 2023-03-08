@@ -1,9 +1,12 @@
 package com.inssa.server.api.board.dao;
 
 import com.inssa.server.api.board.dto.BoardDto;
+import com.inssa.server.api.board.dto.LikeDto;
 import com.inssa.server.api.board.mapper.AskMapper;
+import com.inssa.server.common.Files;
 import com.inssa.server.common.Pagination;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,8 +43,10 @@ public class AskDao {
         return result;
     }
 
-    public List<BoardDto> searchBoardList(BoardDto dto){
-        List<BoardDto> result = mapper.searchBoardList(dto);
+    public List<BoardDto> searchBoardList(BoardDto dto, Pagination page){
+        int offset = (page.getCurrentPage() - 1) * page.getLimit();
+        RowBounds rowBounds = new RowBounds(offset, page.getLimit());
+        List<BoardDto> result = mapper.searchBoardList(dto, rowBounds);
         return result;
     }
 
@@ -64,5 +69,15 @@ public class AskDao {
     @Transactional public List<BoardDto> updateZzim(BoardDto dto) {
         List<BoardDto> resultList = mapper.updateZzim(dto);
         return resultList;
+    }
+
+    public LikeDto likeCheck(int likeNo) {
+        LikeDto like = mapper.likeCheck(likeNo);
+        return like;
+    }
+
+    public int insertImg(List<Files> files) {
+        int result = mapper.insertImg(files);
+        return result;
     }
 }

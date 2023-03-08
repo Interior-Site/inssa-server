@@ -12,5 +12,5 @@ public class StarDto {
 
     public int star;
 
-    public String boardGubun;
+    public int boardTypeNo;
 }

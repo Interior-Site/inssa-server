@@ -13,26 +13,24 @@ import java.util.List;
 @Getter @Setter
 public class BoardDto {
 
-    public int boardNo;
-    public String boardName;
-    public String boardGubun;
-    public String boardTitle;
-    public String boardContent;
-    public String boardStatus;
-    public Date boardRegDate;
-    public Date boardChgDate;
-    public int boardView;
-    public String boardLike;
-    public String boardZzim;
-    public String boardNotice;
+    public int boardNo;         // 게시판 번호
+    public int boardTypeNo;    // 게시판 구분 번호 ( 11:후기, 22:문의, 33:소통)
+    public int categoryNo;     // 카테고리 번호
+    public int parentBoardNo;  // 부모 게시글 번호
+    public String title;       // 게시글 제목
+    public String content;     // 게시글 내용
+    public Date createdDate;   // 게시글 작성일
+    public Date modifiedDate;  // 게시글 수정일
+    public boolean deleteAt;   // 삭제 여부
+    public int viewCount;      // 조회수
+    public int likeCount;      // 좋아요 수
+    public boolean noticeAt;   // 공지사항 여부
 
-    public String userId;
+    public String userId;      // 사용자 ID
     public List<MultipartFile> requestImg; // 사용자가 첨부한 이미지
     public List<Files> boardImg; // 사용자가 첨부한 이미지를 저장
-
-    public String boardCategory;
-
     public String url;
+    public int likeNo;
 
     // 검색필터
     public String searchWord; // 검색어

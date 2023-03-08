@@ -27,7 +27,7 @@ public class AskController {
 
 
 //    @PostMapping(value="/insert") @ApiOperation(value = "게시글 작성")
-//    public ApiResponse insertBoard(@RequestBody BoardDto board, MultipartFile files) throws IOException {
+//    public ApiResponse insertBoard(@RequestBody BoardDto board, List<MultipartFile> files) throws IOException {
 //
 //        ApiResponse response = new ApiResponse();
 //
@@ -38,8 +38,8 @@ public class AskController {
 //            String img = uploadFile.fileUpload(files);
 //            board.setBoardImg(img);
 //        }
-//
-//        response = askService.insertBoard(board);
+//        String filePath = "resources/board/images";
+//        response = askService.insertBoard(board, files, filePath);
 //
 //        return response;
 //    }
@@ -82,25 +82,39 @@ public class AskController {
 //        return response;
 //    }
 
-    @GetMapping(value="/select/searchBoard") @ApiOperation(value="게시글 검색")
-    public ApiResponse searchBoardList(@RequestParam("filter") String filter, @RequestParam("searchWord") String searchWord,
-                                       @RequestParam("category") String category, Pagination page) {
+    @GetMapping(value="/select/{}{categoryNo}") @ApiOperation(value="게시글 검색")
+    public ApiResponse searchBoardList(@RequestParam("filter") String filter, @RequestParam("searchWord") String searchWord, @PathVariable int categoryNo, @PathVariable int boardTypeNo, Pagination page, @RequestParam(value="cp", required=false, defaultValue = "1" ) int currentPg) {
         ApiResponse response = new ApiResponse();
 
         BoardDto dto = new BoardDto();
         dto.setFilter(filter);
         dto.setSearchWord(searchWord);
-        dto.setCategory(category);
+        dto.setCategory(String.valueOf(categoryNo));
 
         Pagination paging = new Pagination();
-        paging.setCurrentPage(page.getCurrentPage());
+        paging.setCurrentPage(currentPg);
+        paging.setBoardTypeNo(boardTypeNo);
 
         if(searchWord != null) {
             paging = askService.getPaging(dto, paging);
-            response = askService.searchBoardList(dto);
+            response = askService.searchBoardList(dto, paging);
         } else {
 
         }
+        return response;
+    }
+
+    @PostMapping(value="/updateLike") @ApiOperation(value="게시글 좋아요 ")
+    public ApiResponse updateLike(@RequestBody LikeDto like) {
+        ApiResponse response = new ApiResponse();
+
+        BoardDto board = new BoardDto();
+        board.setBoardNo(like.getBoardNo());
+        board.setUserId(like.getUserId());
+        board.setLikeNo(like.getLikeNo());
+
+        response = askService.updateLike(board);
+
         return response;
     }
 

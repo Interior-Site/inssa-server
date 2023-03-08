@@ -1,6 +1,7 @@
 package com.inssa.server.api.board.dao;
 
 import com.inssa.server.api.board.dto.BoardDto;
+import com.inssa.server.api.board.dto.LikeDto;
 import com.inssa.server.api.board.mapper.CommuMapper;
 import com.inssa.server.common.Pagination;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +61,11 @@ public class CommuDao {
    @Transactional public List<BoardDto> updateZzim(BoardDto dto) {
       List<BoardDto> resultList = commuMapper.updateZzim(dto);
       return resultList;
+   }
+
+   public LikeDto likeCheck(int likeNo) {
+      LikeDto like = commuMapper.likeCheck(likeNo);
+      return like;
    }
 
 }

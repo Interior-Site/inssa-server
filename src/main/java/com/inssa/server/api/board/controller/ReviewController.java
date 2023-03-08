@@ -1,6 +1,7 @@
 package com.inssa.server.api.board.controller;
 
 import com.inssa.server.api.board.UploadFile;
+import com.inssa.server.api.board.dao.ReviewDao;
 import com.inssa.server.api.board.dto.BoardDto;
 import com.inssa.server.api.board.dto.LikeDto;
 import com.inssa.server.api.board.dto.StarDto;
@@ -29,6 +30,8 @@ import java.io.IOException;
 public class ReviewController {
 
     private final ReviewService reviewService;
+
+    private ReviewDao reviewDao;
 
 //    @Autowired
 //    private UploadFile uploadFile;
@@ -120,17 +123,9 @@ public class ReviewController {
         BoardDto board = new BoardDto();
         board.setBoardNo(like.getBoardNo());
         board.setUserId(like.getUserId());
-        board.setBoardLike(like.getLike());
+        board.setLikeNo(like.getLikeNo());
 
-        String likeYn = like.getLike();
-
-        if(likeYn.equals("Y") || likeYn.equals("N") ) {
-            response = reviewService.updateLike(board);
-        } else {
-            response.setResponseMessage(ResponseMessage.FAIL);
-            response.setStatusCode(StatusCode.FAIL);
-            response.putData("result","");
-        }
+        response = reviewService.updateLike(board);
 
         return response;
     }
@@ -142,7 +137,6 @@ public class ReviewController {
         BoardDto board = new BoardDto();
         board.setBoardNo(zzim.getBoardNo());
         board.setUserId(zzim.getUserId());
-        board.setBoardZzim(zzim.getZzim());
 
         String ZzimYn = zzim.getZzim();
 
@@ -163,9 +157,9 @@ public class ReviewController {
         BoardDto board = new BoardDto();
         board.setBoardNo(star.getBoardNo());
         board.setUserId(star.getUserId());
-        board.setBoardGubun(star.getBoardGubun());
+        board.setBoardTypeNo(star.getBoardTypeNo());
 
-        if(star.getBoardGubun().equals("R")) {
+        if(star.getBoardTypeNo() == 11) {
             response = reviewService.updateStar(board);
         } else {  // 후기 게시판이 아닐 경우
             response.setStatusCode(StatusCode.FAIL);

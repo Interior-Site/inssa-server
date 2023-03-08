@@ -3,6 +3,7 @@ package com.inssa.server.api.board.controller;
 
 
 import com.inssa.server.api.board.dto.BoardDto;
+import com.inssa.server.api.board.dto.LikeDto;
 import com.inssa.server.api.board.service.CommuService;
 import com.inssa.server.common.ApiResponse;
 import com.inssa.server.common.FileStore;
@@ -107,6 +108,20 @@ public class CommuController {
         }
         return response;
 
+    }
+
+    @PostMapping(value="/updateLike") @ApiOperation(value="게시글 좋아요 ")
+    public ApiResponse updateLike(@RequestBody LikeDto like) {
+        ApiResponse response = new ApiResponse();
+
+        BoardDto board = new BoardDto();
+        board.setBoardNo(like.getBoardNo());
+        board.setUserId(like.getUserId());
+        board.setLikeNo(like.getLikeNo());
+
+        response = commuService.updateLike(board);
+
+        return response;
     }
 
 }
