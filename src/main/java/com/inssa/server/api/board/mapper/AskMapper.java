@@ -1,8 +1,11 @@
 package com.inssa.server.api.board.mapper;
 
 import com.inssa.server.api.board.dto.BoardDto;
+import com.inssa.server.api.board.dto.LikeDto;
+import com.inssa.server.common.Files;
 import com.inssa.server.common.Pagination;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
 
@@ -19,7 +22,7 @@ public interface AskMapper {
 
     List<BoardDto> updateBoard(int boardNo);
 
-    List<BoardDto> searchBoardList(BoardDto dto);
+    List<BoardDto> searchBoardList(BoardDto dto, RowBounds rowBounds);
 
     Pagination searchListCount(BoardDto dto);
 
@@ -28,4 +31,8 @@ public interface AskMapper {
     List<BoardDto> updateLike(BoardDto dto);
 
     List<BoardDto> updateZzim(BoardDto dto);
+
+    LikeDto likeCheck(int likeNo);
+
+    int insertImg(List<Files> files);
 }

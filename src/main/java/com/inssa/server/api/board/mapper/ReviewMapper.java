@@ -1,6 +1,7 @@
 package com.inssa.server.api.board.mapper;
 
 import com.inssa.server.api.board.dto.BoardDto;
+import com.inssa.server.api.board.dto.LikeDto;
 import com.inssa.server.common.Pagination;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -30,4 +31,6 @@ public interface ReviewMapper {
     List<BoardDto> updateZzim(BoardDto dto);
 
     List<BoardDto> updateStar(BoardDto dto);
+
+    LikeDto likeCheck(int likeNo);
 }

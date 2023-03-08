@@ -1,6 +1,7 @@
 package com.inssa.server.api.board.dao;
 
 import com.inssa.server.api.board.dto.BoardDto;
+import com.inssa.server.api.board.dto.LikeDto;
 import com.inssa.server.api.board.mapper.ReviewMapper;
 import com.inssa.server.common.Pagination;
 import lombok.RequiredArgsConstructor;
@@ -69,5 +70,10 @@ public class ReviewDao {
     @Transactional public List<BoardDto> updateStar(BoardDto dto) {
         List<BoardDto> resultList = mapper.updateStar(dto);
         return resultList;
+    }
+
+    public LikeDto likeCheck(int likeNo) {
+        LikeDto like = mapper.likeCheck(likeNo);
+        return like;
     }
 }

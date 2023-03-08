@@ -2,6 +2,7 @@ package com.inssa.server.api.board.service;
 
 import com.inssa.server.api.board.dao.CommuDao;
 import com.inssa.server.api.board.dto.BoardDto;
+import com.inssa.server.api.board.dto.LikeDto;
 import com.inssa.server.api.user.dao.UserDao;
 import com.inssa.server.api.user.dto.UserDto;
 import com.inssa.server.common.ApiResponse;
@@ -21,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommuService {
 
-    private final CommuDao boardDao;
+    private final CommuDao commuDao;
     private final UserDao userDao;
 
     // 게시글 작성 (-> 회원만 작성 가능)
@@ -36,7 +37,7 @@ public class CommuService {
         UserDto user = userDao.findByUserId(userId);
 
         if(user != null) { // 회원일 경우
-            int result = boardDao.insert(board);
+            int result = commuDao.insert(board);
 
             if(result != 0) {
                 statusCode = StatusCode.SUCCESS;
@@ -58,7 +59,7 @@ public class CommuService {
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
-        List<BoardDto> resultList = boardDao.selectBoardList();
+        List<BoardDto> resultList = commuDao.selectBoardList();
 
         if(!resultList.isEmpty()) {
             statusCode = StatusCode.SUCCESS;
@@ -87,14 +88,14 @@ public class CommuService {
         UserDto user = userDao.findByUserId(userId);
 
         if(user != null) { // 회원일 경우
-            resultList = boardDao.selectBoard(boardNo);
+            resultList = commuDao.selectBoard(boardNo);
 
             if(!resultList.isEmpty()) {
                 statusCode = StatusCode.SUCCESS;
                 message = boardNo + " 번호의 게시글 조회 " + ResponseMessage.SUCCESS;
 
                 // 조회 성공일 때마다 조회수 + 1
-                boardDao.updateView(boardNo);
+                commuDao.updateView(boardNo);
             }
         }
 
@@ -117,7 +118,7 @@ public class CommuService {
         UserDto user = userDao.findByUserId(userId);
 
         if(user != null) { // 회원일 경우
-            resultList = boardDao.deleteBoard(boardNo);
+            resultList = commuDao.deleteBoard(boardNo);
 
             if(!resultList.isEmpty()) {
                 statusCode = StatusCode.SUCCESS;
@@ -146,7 +147,7 @@ public class CommuService {
 
         if(user != null) { //회원일 경우
             int boardNo = dto.getBoardNo();
-            resultList = boardDao.updateBoard(boardNo);
+            resultList = commuDao.updateBoard(boardNo);
 
             if(!resultList.isEmpty()) {
                 statusCode = StatusCode.SUCCESS;
@@ -166,7 +167,7 @@ public class CommuService {
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
-        List<BoardDto> resultList = boardDao.searchBoardList(dto);
+        List<BoardDto> resultList = commuDao.searchBoardList(dto);
 
         if(!resultList.isEmpty()) {
             statusCode = StatusCode.SUCCESS;
@@ -182,7 +183,7 @@ public class CommuService {
     public Pagination getPaging(BoardDto board, Pagination page) {
 
         // 1) 검색이 적용된 게시글 수 조회
-        Pagination selectPg = boardDao.searchListCount(board);
+        Pagination selectPg = commuDao.searchListCount(board);
 
         //System.out.println(selectPg);
 
@@ -190,6 +191,41 @@ public class CommuService {
 //        return new Pagination(pg.getCurrentPage(), selectPg.getListCount());
 
         return selectPg;
+    }
+
+    @Transactional public ApiResponse updateLike(BoardDto board) {
+
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+        List<BoardDto> resultList = new ArrayList<>();
+
+        // 회원 or 비회원 체크
+        String userId = board.getUserId();
+        UserDto user = userDao.findByUserId(userId);
+
+        if(user != null) { // 회원일 경우
+
+            // 좋아요 여부 확인
+            LikeDto like = commuDao.likeCheck(board.getLikeNo());
+
+            if(like == null) { // 좋아요 기능을 실행했을 경우
+                board.setLikeCount(1);
+            } else { // 좋아요를 취소했을 경우
+                board.setLikeCount(0);
+            }
+
+            resultList = commuDao.updateLike(board);
+
+            if(!resultList.isEmpty()) {
+                statusCode = StatusCode.SUCCESS;
+                message = board.boardNo + " 번호의 게시글 좋아요 " +ResponseMessage.SUCCESS;
+            }
+        }
+        response.setStatusCode(statusCode);
+        response.setResponseMessage(message);
+        response.putData("boardList",resultList);
+        return response;
     }
 
 }

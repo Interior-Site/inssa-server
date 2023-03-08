@@ -8,7 +8,7 @@ public class Pagination {
 
     private int currentPage;
     private int listCount;
-
+    private int boardTypeNo;
     private int limit = 10; // 한 페이지에 보여질 게시글 수
     private int offset = 10; // 보여질 페이지 번호 개수
 
@@ -26,6 +26,14 @@ public class Pagination {
     public Pagination(int currentPage, int listCount) {
         this.currentPage = currentPage;
         this.listCount = listCount;
+
+        makePagination();
+    }
+
+    public Pagination(int currentPage, int listCount, int boardTypeNo) {
+        this.currentPage = currentPage;
+        this.listCount = listCount;
+        this.boardTypeNo = boardTypeNo;
 
         makePagination();
     }
