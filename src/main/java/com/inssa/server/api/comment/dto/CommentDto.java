@@ -17,7 +17,7 @@ public class CommentDto {
     private LocalDateTime commentRegDate; // 댓글 등록일
     private String commentImg; // 첨부파일
     private int boardNo; // 게시글번호
-    private int userId; // 작성자ID
+    private String userId; // 작성자ID
 
 
 
