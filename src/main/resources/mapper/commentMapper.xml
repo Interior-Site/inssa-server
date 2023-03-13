@@ -43,9 +43,18 @@
             (
             #{parentCommentNo}, <!--부모 댓글 번호 -->
             #{commentContent},
-            DEFAULT, <!-- 작성일 -->
-            DEFAULT, <!-- 수정일 -->
+            now(), <!-- 작성일 -->
+            now(), <!-- 수정일 -->
             #{boardNo},
             #{userId} );
     </insert>
+
+    <update id="updateComment">
+        UPDATE COMMENT
+        SET
+        CONTENT = #{content},
+        MODIFIED_DATE = NOW()
+        WHERE COMMENT_NO = #{commentNo}
+        AND USER_ID = #{userNo}
+    </update>
 </mapper>
