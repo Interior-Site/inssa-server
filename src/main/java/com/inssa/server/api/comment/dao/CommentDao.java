@@ -14,20 +14,19 @@ public class CommentDao {
     private final CommentMapper commentMapper;
 
     public List<CommentDto> selectList(int boardNo){
-        List<CommentDto> result = commentMapper.selectList(boardNo);
-        return result;
+        return commentMapper.selectList(boardNo);
     }
 
     public int insertComment(CommentDto comment) {
-        int result = commentMapper.insertComment(comment);
-        return result;
+        return commentMapper.insertComment(comment);
     }
 
     public int updateComment(CommentDto comment) {
-        int result = commentMapper.updateComment(comment);
-        return result;
+        return commentMapper.updateComment(comment);
     }
 
 
-
+    public int deleteComment(CommentDto comment) {
+        return commentMapper.deleteComment(comment);
+    }
 }

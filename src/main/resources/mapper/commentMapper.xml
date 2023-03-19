@@ -55,6 +55,13 @@
         CONTENT = #{content},
         MODIFIED_DATE = NOW()
         WHERE COMMENT_NO = #{commentNo}
-        AND USER_ID = #{userNo}
+        AND USER_ID = #{userId}
+    </update>
+
+    <update id="deleteComment">
+        UPDATE COMMENT
+        SET DELETE_AT = '1'
+        WHERE COMMENT_NO = #{commentNo}
+        AND USER_ID = #{userId}
     </update>
 </mapper>

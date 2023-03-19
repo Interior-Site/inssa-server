@@ -5,9 +5,7 @@ import com.inssa.server.api.comment.dto.CommentDto;
 import com.inssa.server.common.ApiResponse;
 import com.inssa.server.common.ResponseMessage;
 import com.inssa.server.common.StatusCode;
-import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -77,5 +75,25 @@ public class CommentService {
         response.setResponseMessage(message);
 
         return response;
+    }
+
+    public ApiResponse deleteComment(CommentDto comment) {
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL; // FAIL : 400, SUCCESS : 200
+        String message = ResponseMessage.FAIL;
+
+        int result = commentdao.deleteComment(comment);
+
+        if(result > 0){
+            statusCode = StatusCode.SUCCESS;
+            message = ResponseMessage.SUCCESS;
+            response.putData("commentNo", comment);
+
+        }
+        response.setStatusCode(statusCode);
+        response.setResponseMessage(message);
+
+        return response;
+
     }
 }
