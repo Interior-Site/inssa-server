@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.inssa.server.api.company.mapper.CompanyMapper">
+    <select id="findCompanyList" parameterType="com.inssa.server.common.Pagination" resultType="com.inssa.server.api.company.dto.CompanyDto">
+        SELECT COMPANY_NO
+             , REGISTRATION_NO
+             , COMPANY_NAME
+             , CONTACT_NUMBER
+             , STATUS
+             , APPROVAL
+             , RATING
+             , USER_ID
+          FROM COMPANY
+         ORDER BY COMPANY_NO desc
+         LIMIT #{limit}
+        OFFSET #{offset}
+    </select>
+</mapper>

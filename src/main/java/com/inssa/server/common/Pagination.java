@@ -1,5 +1,6 @@
 package com.inssa.server.common;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +22,14 @@ public class Pagination {
 
     public Pagination() {
 
+    }
+
+    public Pagination paging(int currentPage, int limit) {
+        this.currentPage = currentPage;
+        this.limit = limit;
+        this.offset = limit * (currentPage - 1);
+
+        return this;
     }
 
     public Pagination(int currentPage, int listCount) {
