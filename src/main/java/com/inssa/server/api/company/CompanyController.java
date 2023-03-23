@@ -1,7 +1,9 @@
 package com.inssa.server.api.company;
 
+import com.inssa.server.api.company.dto.CompanyChangeInfoRequestDto;
 import com.inssa.server.api.company.dto.CompanyDto;
 import com.inssa.server.api.company.service.CompanyService;
+import com.inssa.server.common.ApiResponse;
 import com.inssa.server.common.Pagination;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,5 +33,11 @@ public class CompanyController {
         Pagination paging = new Pagination().paging(page, size);
 
         return companyService.findCompanyList(paging);
+    }
+
+    @Operation(summary = "update company", description = "업체 수정 API")
+    @PutMapping("/info")
+    public ApiResponse changeCompanyInfo(@RequestBody CompanyChangeInfoRequestDto request) {
+        return companyService.changeCompanyInfo(request);
     }
 }
