@@ -18,4 +18,22 @@
          LIMIT #{limit}
         OFFSET #{offset}
     </select>
+
+    <update id="changeCompanyInfo" parameterType="com.inssa.server.api.company.dto.CompanyChangeInfoRequestDto">
+        UPDATE COMPANY
+        <set>
+            <if test="companyName != null and companyName != ''">
+                COMPANY_NAME = #{companyName}
+            </if>
+            <if test="contactNumber != null and contactNumber != ''">
+                CONTACT_NUMBER = #{contactNumber}
+            </if>
+            <if test="status != null and status != ''">
+                STATUS = #{status}
+            </if>
+            <if test="approval != null and approval != ''">
+                APPROVAL = #{approval}
+            </if>
+        </set>
+    </update>
 </mapper>
