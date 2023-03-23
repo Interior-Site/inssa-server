@@ -2,7 +2,6 @@ package com.inssa.server.api.company;
 
 import com.inssa.server.api.company.dto.CompanyDto;
 import com.inssa.server.api.company.service.CompanyService;
-import com.inssa.server.api.user.dto.UserRequestDto;
 import com.inssa.server.common.Pagination;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
