@@ -19,8 +19,9 @@ public class CommentController {
 
     //@Tag(name = "comment")
     @Operation(summary = "selectList", description = "댓글 목록 조회 API") // 스웨거
-    @GetMapping(value = "/selectList/{boardNo}")
-    public ApiResponse selectList(@PathVariable("boardNo") int boardNo){
+    @GetMapping("/selectList")
+    //@GetMapping(value = "/selectList/{boardNo}")
+    public ApiResponse selectList(@RequestParam int boardNo){
         return commentService.selectList(boardNo);
     }
 
