@@ -17,10 +17,10 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @Tag(name = "comment")
+    //@Tag(name = "comment")
     @Operation(summary = "selectList", description = "댓글 목록 조회 API") // 스웨거
-    @PostMapping("/selectList")
-    public ApiResponse selectList(int boardNo){
+    @GetMapping(value = "/selectList/{boardNo}")
+    public ApiResponse selectList(@PathVariable("boardNo") int boardNo){
         return commentService.selectList(boardNo);
     }
 
@@ -40,7 +40,7 @@ public class CommentController {
 
     // 댓글 삭제
     @Operation(summary = "deleteComment", description = "댓글 삭제 API")
-    @GetMapping(value="/deleteComment/{commentNo}")
+    @PostMapping(value="/deleteComment")
     public ApiResponse deleteComment(@RequestBody CommentDto comment){
         return commentService.deleteComment(comment);
     }
