@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -12,12 +13,11 @@ import java.time.LocalDateTime;
 public class CommentDto {
 
     private int commentNo; // 댓글번호
-    private int parentNo; // 부모 댓글 번호
-    private String commentContent; // 댓글내용
+    private int parentCommentNo; // 부모 댓글 번호
+    private String content; // 댓글내용
     private String commentStatus; // 댓글상태
-    private LocalDateTime commentRegDate; // 댓글 등록일
-    private LocalDateTime commentChgDate; // 댓글 수정일
-    private String commentImg; // 첨부파일
+    private Date commentRegDate; // 댓글 등록일
+    private Date commentChgDate; // 댓글 수정일
     private int boardNo; // 게시글번호
     private String userId; // 작성자ID
 
