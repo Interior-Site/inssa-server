@@ -3,14 +3,11 @@ package com.inssa.server.api.comment;
 import com.inssa.server.api.comment.dto.CommentDto;
 import com.inssa.server.api.comment.service.CommentService;
 import com.inssa.server.common.ApiResponse;
-import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController // 알아서 RequestBody에 해당하는 내용 json 포맷으로 반환
 @RequestMapping("/api/v1/comment")
@@ -18,12 +15,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentController {
 
-    private CommentService commentService;
+    private final CommentService commentService;
 
-    @Tag(name = "comment")
+    //@Tag(name = "comment")
     @Operation(summary = "selectList", description = "댓글 목록 조회 API") // 스웨거
-    @PostMapping("/selectList")
-    public ApiResponse selectList(int boardNo){
+    @GetMapping("/selectList")
+    //@GetMapping(value = "/selectList/{boardNo}")
+    public ApiResponse selectList(@RequestParam int boardNo){
         return commentService.selectList(boardNo);
     }
 
@@ -42,5 +40,10 @@ public class CommentController {
     }
 
     // 댓글 삭제
+    @Operation(summary = "deleteComment", description = "댓글 삭제 API")
+    @PostMapping(value="/deleteComment")
+    public ApiResponse deleteComment(@RequestBody CommentDto comment){
+        return commentService.deleteComment(comment);
+    }
 
 }
