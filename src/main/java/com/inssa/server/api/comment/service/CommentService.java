@@ -41,7 +41,16 @@ public class CommentService {
         int statusCode = StatusCode.FAIL; // FAIL : 400, SUCCESS : 200
         String message = ResponseMessage.FAIL;
 
-        int result = commentdao.insertComment(comment);
+        int result = 0;
+        Integer parentYn = comment.getParentCommentNo();
+
+        // 대댓글인 경우
+        if (null != parentYn) {
+            result = commentdao.insertReComment(comment);
+        } else{ // 댓글인 경우
+            result = commentdao.insertComment(comment);
+
+        }
 
         // 댓글 등록에 성공했다면
         if(result > 0){
