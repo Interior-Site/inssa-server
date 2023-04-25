@@ -21,4 +21,8 @@ public class CompanyDao {
     public int changeCompanyInfo(CompanyChangeInfoRequestDto request) {
         return companyMapper.changeCompanyInfo(request);
     }
+
+	public int deleteCompany(String companyNo) {
+		return companyMapper.deleteCompany(companyNo);
+	}
 }

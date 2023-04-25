@@ -36,4 +36,8 @@
             </if>
         </set>
     </update>
+
+  <delete id="deleteCompany" parameterType="string">
+    DELETE FROM COMPANY WHERE COMPANY_NO = #{companyNo}
+  </delete>
 </mapper>
