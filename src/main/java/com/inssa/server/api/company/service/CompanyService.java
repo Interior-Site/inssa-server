@@ -62,4 +62,7 @@ public class CompanyService {
         return response;
     }
 
+    public CompanyDto findCompany(String companyNo) {
+        return companyDao.findCompany(companyNo);
+    }
 }
