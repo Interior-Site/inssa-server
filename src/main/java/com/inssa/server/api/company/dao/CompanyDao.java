@@ -25,4 +25,8 @@ public class CompanyDao {
 	public int deleteCompany(String companyNo) {
 		return companyMapper.deleteCompany(companyNo);
 	}
+
+	public CompanyDto findCompany(String companyNo) {
+		return companyMapper.findCompany(companyNo);
+	}
 }

@@ -14,4 +14,6 @@ public interface CompanyMapper {
     int changeCompanyInfo(CompanyChangeInfoRequestDto request);
 
 	int deleteCompany(String companyNo);
+
+	CompanyDto findCompany(String companyNo);
 }

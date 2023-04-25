@@ -35,6 +35,12 @@ public class CompanyController {
         return companyService.findCompanyList(paging);
     }
 
+    @Operation(summary = "company", description = "업체 단건 조회 API")
+    @GetMapping("/company/{companyNo}")
+    public CompanyDto findCompany(@PathVariable String companyNo) {
+        return companyService.findCompany(companyNo);
+    }
+
     @Operation(summary = "update company", description = "업체 수정 API")
     @PutMapping("/company")
     public ApiResponse changeCompanyInfo(@RequestBody CompanyChangeInfoRequestDto request) {
