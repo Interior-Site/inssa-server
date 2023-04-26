@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/company")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class CompanyController {
@@ -22,7 +22,7 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @Operation(summary = "company list", description = "업체 조회 API")
-    @GetMapping("/list")
+    @GetMapping("/company/list")
     public List<CompanyDto> findCompanyList(
             @RequestParam
             @Parameter(description = "페이지 번호 (0부터 시작)", example = "0")
@@ -35,9 +35,21 @@ public class CompanyController {
         return companyService.findCompanyList(paging);
     }
 
+    @Operation(summary = "company", description = "업체 단건 조회 API")
+    @GetMapping("/company/{companyNo}")
+    public CompanyDto findCompany(@PathVariable String companyNo) {
+        return companyService.findCompany(companyNo);
+    }
+
     @Operation(summary = "update company", description = "업체 수정 API")
-    @PutMapping("/info")
+    @PutMapping("/company")
     public ApiResponse changeCompanyInfo(@RequestBody CompanyChangeInfoRequestDto request) {
         return companyService.changeCompanyInfo(request);
+    }
+
+    @Operation(summary = "delete company", description = "업체 삭제 API")
+    @DeleteMapping("/company/{companyNo}")
+    public ApiResponse deleteCompany(@PathVariable String companyNo) {
+        return companyService.deleteCompany(companyNo);
     }
 }

@@ -36,4 +36,21 @@
             </if>
         </set>
     </update>
+
+  <delete id="deleteCompany" parameterType="string">
+    DELETE FROM COMPANY WHERE COMPANY_NO = #{companyNo}
+  </delete>
+
+  <select id="findCompany" parameterType="string" resultType="com.inssa.server.api.company.dto.CompanyDto">
+    SELECT COMPANY_NO
+         , REGISTRATION_NO
+         , COMPANY_NAME
+         , CONTACT_NUMBER
+         , STATUS
+         , APPROVAL
+         , RATING
+         , USER_ID
+      FROM COMPANY
+     WHERE COMPANY_NO = #{companyNo}
+  </select>
 </mapper>
