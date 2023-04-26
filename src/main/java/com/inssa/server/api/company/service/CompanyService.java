@@ -41,4 +41,28 @@ public class CompanyService {
 
         return response;
     }
+
+    @Transactional
+	public ApiResponse deleteCompany(String companyNo) {
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+
+        int result = companyDao.deleteCompany(companyNo);
+
+        if(result > 0) {
+            statusCode = StatusCode.SUCCESS;
+            message = ResponseMessage.SUCCESS;
+            response.putData("companyNo", companyNo);
+        }
+
+        response.setStatusCode(statusCode);
+        response.setResponseMessage(message);
+
+        return response;
+    }
+
+    public CompanyDto findCompany(String companyNo) {
+        return companyDao.findCompany(companyNo);
+    }
 }
