@@ -1,7 +1,12 @@
 package com.inssa.server.api.user.data;
 
-import com.inssa.server.api.user.model.Users;
+import com.inssa.server.api.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<Users, Long> {
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByUserId(String userId);
+
+    Boolean existsByUserId(String userId);
 }
