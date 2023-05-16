@@ -9,14 +9,4 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper {
     UserDto findByUserId(String userId);
-
-    int register(UserRegisterRequestDto user);
-
-    int existsUserId(String userId);
-
-    int changeUserInfo(UserChangeInfoRequestDto request);
-
-    int changePassword(UserRequestDto request);
-
-    int leave(String userId);
 }

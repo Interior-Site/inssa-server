@@ -1,9 +1,11 @@
 package com.inssa.server.common;
 
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 
+@Component
 public class FileUploader {
     public String upload(Resource resource) {
         String filename = resource.getFilename();

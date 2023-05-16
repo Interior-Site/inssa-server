@@ -1,6 +1,6 @@
 package com.inssa.server.api.image;
 
-import com.inssa.server.api.image.dto.ImageDto;
+import com.inssa.server.api.image.model.Image;
 import com.inssa.server.api.image.service.ImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class ImageController {
 
     @Operation(summary = "upload", description = "이미지 업로드 API")
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE) // 들어오는 데이터 타입 지정
-    public List<ImageDto> uploadImage(@RequestPart(name = "file")List<MultipartFile> files) {
+    public List<Image> uploadImage(@RequestPart(name = "file")List<MultipartFile> files) {
         return imageService.uploadAndSave(files);
     }
 }

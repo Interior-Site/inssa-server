@@ -10,48 +10,4 @@
           FROM USER
          WHERE USER_ID = #{userId}
     </select>
-
-    <insert id="register" parameterType="com.inssa.server.api.user.dto.UserRegisterRequestDto">
-        INSERT INTO USER (USER_ID, EMAIL, PASSWORD, NICKNAME, PHONE, STATUS, PROFILE, CREATED_DATE, ROLE)
-        VALUES (#{userId}, #{email}, #{password}, #{nickname}, #{phone}, 'Y', #{profile}, NOW(), #{role})
-    </insert>
-
-    <select id="existsUserId" resultType="_int">
-        SELECT COUNT(*)
-          FROM USER
-         WHERE USER_ID = #{userId}
-    </select>
-
-    <update id="changeUserInfo" parameterType="com.inssa.server.api.user.dto.UserChangeInfoRequestDto">
-        UPDATE USER
-        <set>
-            <if test="email != null and email != ''">
-                EMAIL = #{email},
-            </if>
-            <if test="nickname != null and nickname != ''">
-                NICKNAME = #{nickname},
-            </if>
-            <if test="phone != null and phone != ''">
-                PHONE = #{phone},
-            </if>
-            <if test="img != null and img != ''">
-                PROFILE = #{profile},
-            </if>
-        </set>
-         WHERE USER_ID = #{userId}
-    </update>
-
-    <update id="changePassword" parameterType="com.inssa.server.api.user.dto.UserRequestDto">
-        UPDATE USER
-           SET PASSWORD = #{password}
-         WHERE USER_ID = #{userId}
-    </update>
-
-    <update id="leave" parameterType="string">
-        UPDATE USER
-           SET STATUS = 'N',
-               QUIT_DATE = now()
-         WHERE USER_ID = #{userId}
-    </update>
-
 </mapper>
