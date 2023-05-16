@@ -16,24 +16,4 @@ public class UserDao {
     public UserDto findByUserId(String userId) {
         return userMapper.findByUserId(userId);
     }
-
-    public int register(UserRegisterRequestDto user) {
-        return userMapper.register(user);
-    }
-
-    public int existsUserId(String userId) {
-        return userMapper.existsUserId(userId);
-    }
-
-    public int changeUserInfo(UserChangeInfoRequestDto request) {
-        return userMapper.changeUserInfo(request);
-    }
-
-    public int changePassword(UserRequestDto request) {
-        return userMapper.changePassword(request);
-    }
-
-    public int leave(String userId) {
-        return userMapper.leave(userId);
-    }
 }
