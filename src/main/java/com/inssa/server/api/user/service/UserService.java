@@ -1,16 +1,19 @@
 package com.inssa.server.api.user.service;
 
 import com.inssa.server.api.user.dao.UserDao;
-import com.inssa.server.api.user.dto.UserChangeInfoRequestDto;
-import com.inssa.server.api.user.dto.UserDto;
-import com.inssa.server.api.user.dto.UserRequestDto;
-import com.inssa.server.api.user.dto.UserRegisterRequestDto;
+import com.inssa.server.api.user.data.UserRepository;
+import com.inssa.server.api.user.dto.*;
+import com.inssa.server.api.user.model.EnumRole;
+import com.inssa.server.api.user.model.User;
 import com.inssa.server.common.ApiResponse;
 import com.inssa.server.common.ResponseMessage;
 import com.inssa.server.common.StatusCode;
 import com.inssa.server.config.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,30 +21,29 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+
 @Service("UserService")
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
-    private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final UserRepository userRepository;
+
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        UserDto user = userDao.findByUserId(userId);
+        User user = findByUserId(userId);
 
-        if(user == null) {
-            throw new UsernameNotFoundException("해당 유저가 없습니다");
-        }
+        // 로그인 유저의 권한 목록 주입
+        ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getRoleKey()));
 
-        return user;
+        return new org.springframework.security.core.userdetails.User(user.getUserId(), user.getPassword(), authorities);
     }
 
     public String login(UserRequestDto request) {
-        UserDto user = userDao.findByUserId(request.getUserId());
-
-        if(user == null) {
-            throw new IllegalArgumentException("해당 유저가 없습니다");
-        }
+        User user = findByUserId(request.getUserId());
 
         if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("잘못된 비밀번호입니다.");
@@ -56,14 +58,19 @@ public class UserService implements UserDetailsService {
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
-        request.setPassword(passwordEncoder.encode(request.getPassword()));
+        User registerUser = userRepository.save(User.builder()
+                                                    .userId(request.getUserId())
+                                                    .password(passwordEncoder.encode(request.getPassword().trim()))
+                                                    .email(request.getEmail())
+                                                    .nickname(request.getNickname())
+                                                    .phone(request.getPhone())
+                                                    .role(EnumRole.USER)
+                                                    .build());
 
-        int result = userDao.register(request);
-
-        if(result > 0) {
+        if(registerUser != null) {
             statusCode = StatusCode.SUCCESS;
             message = ResponseMessage.SUCCESS;
-            response.putData("userId", request.getUserId());
+            response.putData("userNo", registerUser.getId());
         }
 
         response.setStatusCode(statusCode);
@@ -77,28 +84,21 @@ public class UserService implements UserDetailsService {
             throw new IllegalArgumentException("아이디를 입력해 주세요");
         }
 
-        int result = userDao.existsUserId(userId);
-
-        if(result > 0) {
-            return true;
-        }
-
-        return false;
+        return userRepository.existsByUserId(userId);
     }
 
     @Transactional
-    public ApiResponse changeUserInfo(UserChangeInfoRequestDto request) {
+    public ApiResponse changeUserInfo(UserChangeInfoRequestDto request, String userId) {
         ApiResponse response = new ApiResponse();
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
-        int result = userDao.changeUserInfo(request);
+        User user = findByUserId(userId);
+        user.changeInfo(request.getEmail(), request.getNickname(), request.getPhone());
 
-        if(result > 0) {
-            statusCode = StatusCode.SUCCESS;
-            message = ResponseMessage.SUCCESS;
-            response.putData("userId", request.getUserId());
-        }
+        statusCode = StatusCode.SUCCESS;
+        message = ResponseMessage.SUCCESS;
+        response.putData("userNo", user.getId());
 
         response.setStatusCode(statusCode);
         response.setResponseMessage(message);
@@ -107,19 +107,18 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public ApiResponse changePassword(UserRequestDto request) {
+    public ApiResponse changePassword(UserPasswordRequestDto request, String userId) {
         ApiResponse response = new ApiResponse();
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
-        request.setPassword(passwordEncoder.encode(request.getPassword()));
-
-        int result = userDao.changePassword(request);
-
-        if(result > 0) {
+        User user = findByUserId(userId);
+        String pw = request.getPassword();
+        if (pw != null && !pw.trim().equals("")) {
+            user.changePassword(passwordEncoder.encode(pw.trim()));
             statusCode = StatusCode.SUCCESS;
             message = ResponseMessage.SUCCESS;
-            response.putData("userId", request.getUserId());
+            response.putData("userNo", user.getId());
         }
 
         response.setStatusCode(statusCode);
@@ -128,23 +127,30 @@ public class UserService implements UserDetailsService {
         return response;
     }
 
-    public Boolean checkPassword(UserRequestDto request) {
-        UserDto user = userDao.findByUserId(request.getUserId());
-
-        if(user == null) {
-            throw new IllegalArgumentException("사용자가 존재하지 않습니다.");
-        }
-
+    public Boolean checkPassword(UserPasswordRequestDto request, String userId) {
+        User user = findByUserId(userId);
         return passwordEncoder.matches(request.getPassword(), user.getPassword());
     }
 
     @Transactional
-    public Boolean leave(String userId) {
-        int result = userDao.leave(userId);
+    public ApiResponse leave(String userId) {
+        ApiResponse response = new ApiResponse();
 
-        if(result > 0) {
-            return true;
-        }
-        return false;
+        User user = findByUserId(userId);
+        response.putData("userNo", user.getId());
+        userRepository.delete(user);
+
+        int statusCode = StatusCode.SUCCESS;
+        String message = ResponseMessage.SUCCESS;
+
+        response.setStatusCode(statusCode);
+        response.setResponseMessage(message);
+
+        return response;
+    }
+
+    private User findByUserId(String userId) {
+        return userRepository.findByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("해당 유저가 없습니다. userId: " + userId));
     }
 }
