@@ -1,6 +1,5 @@
 package com.inssa.server.api.image.service;
 
-import com.inssa.server.api.image.dao.ImageDao;
 import com.inssa.server.api.image.data.ImageRepository;
 import com.inssa.server.api.image.model.Image;
 import com.inssa.server.common.FileUploader;
@@ -17,8 +16,6 @@ import java.util.List;
 public class ImageService {
 
     private final FileUploader fileUploader;
-    private final ImageDao imageDao;
-
     private final ImageRepository imageRepository;
 
     public List<Image> uploadAndSave(List<MultipartFile> files) {
