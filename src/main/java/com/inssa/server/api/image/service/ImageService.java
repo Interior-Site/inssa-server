@@ -1,7 +1,8 @@
 package com.inssa.server.api.image.service;
 
 import com.inssa.server.api.image.dao.ImageDao;
-import com.inssa.server.api.image.dto.ImageDto;
+import com.inssa.server.api.image.data.ImageRepository;
+import com.inssa.server.api.image.model.Image;
 import com.inssa.server.common.FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -18,17 +19,23 @@ public class ImageService {
     private final FileUploader fileUploader;
     private final ImageDao imageDao;
 
-    public List<ImageDto> uploadAndSave(List<MultipartFile> files) {
+    private final ImageRepository imageRepository;
+
+    public List<Image> uploadAndSave(List<MultipartFile> files) {
         List images = new ArrayList();
 
         for (MultipartFile file : files) {
             Resource resource = file.getResource();
             String uploadPath = fileUploader.upload(resource);
-            ImageDto image = new ImageDto(uploadPath);
-            imageDao.saveImage(image);
+
+            Image image = saveImageInfo(uploadPath, resource.getFilename());
             images.add(image);
         }
 
         return images;
+    }
+
+    private Image saveImageInfo(String uploadPath, String filename) {
+        return imageRepository.save(new Image(uploadPath, filename));
     }
 }
