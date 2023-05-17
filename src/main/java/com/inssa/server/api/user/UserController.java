@@ -1,6 +1,7 @@
 package com.inssa.server.api.user;
 
 import com.inssa.server.api.user.dto.UserChangeInfoRequestDto;
+import com.inssa.server.api.user.dto.UserPasswordRequestDto;
 import com.inssa.server.api.user.dto.UserRequestDto;
 import com.inssa.server.api.user.dto.UserRegisterRequestDto;
 import com.inssa.server.api.user.service.UserService;
@@ -40,26 +41,27 @@ public class UserController {
     @Operation(summary = "changeUserInfo", description = "회원 정보 변경 API")
     @PutMapping("/info")
     public ApiResponse changeUserInfo(@RequestBody UserChangeInfoRequestDto request) {
-        request.setUserId(SecurityContextHolder.getContext().getAuthentication().getName());
-        return userService.changeUserInfo(request);
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.changeUserInfo(request, userId);
     }
 
     @Operation(summary = "changePassword", description = "비밀번호 변경 API")
     @PutMapping("/password/change")
-    public ApiResponse changePassword(@RequestBody UserRequestDto request) {
-        return userService.changePassword(request);
+    public ApiResponse changePassword(@RequestBody UserPasswordRequestDto request) {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.changePassword(request, userId);
     }
 
     @Operation(summary = "checkPassword", description = "비밀번호 확인 API")
     @PostMapping("/password/check")
-    public Boolean checkPassword(@RequestBody UserRequestDto request) {
-        request.setUserId(SecurityContextHolder.getContext().getAuthentication().getName());
-        return userService.checkPassword(request);
+    public Boolean checkPassword(@RequestBody UserPasswordRequestDto request) {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.checkPassword(request, userId);
     }
 
     @Operation(summary = "leave", description = "회원 탈퇴 API")
     @PutMapping("/leave")
-    public Boolean leave() {
+    public ApiResponse leave() {
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         return userService.leave(userId);
     }

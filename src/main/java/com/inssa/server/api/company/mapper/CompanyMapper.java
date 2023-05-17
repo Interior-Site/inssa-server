@@ -12,4 +12,8 @@ public interface CompanyMapper {
     List<CompanyDto> findCompanyList(Pagination paging);
 
     int changeCompanyInfo(CompanyChangeInfoRequestDto request);
+
+	int deleteCompany(String companyNo);
+
+	CompanyDto findCompany(String companyNo);
 }
