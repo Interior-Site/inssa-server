@@ -8,6 +8,7 @@ services:
     volumes:
       - ./db/conf.d:/etc/mysql/conf.d
       - ./db/initdb.d:/docker-entrypoint-initdb.d
+      - ./db/mysql/:/var/lib/mysql
     env_file: .env
     environment:
       TZ: Asia/Seoul
