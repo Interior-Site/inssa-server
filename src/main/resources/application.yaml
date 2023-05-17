@@ -34,4 +34,4 @@ logging:
       audit: off
       resultset: off
       connection: off
-
+    root: info
