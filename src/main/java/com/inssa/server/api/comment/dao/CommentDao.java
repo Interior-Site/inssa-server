@@ -29,4 +29,8 @@ public class CommentDao {
     public int deleteComment(CommentDto comment) {
         return commentMapper.deleteComment(comment);
     }
+
+    public int insertReComment(CommentDto comment) {
+        return commentMapper.insertReComment(comment);
+    }
 }
