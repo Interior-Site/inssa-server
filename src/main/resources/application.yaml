@@ -26,6 +26,7 @@ jpa:
     ddl-auto: none
 
 logging:
+  config: classpath:logback-spring.xml
   level:
     jdbc:
       sqlonly: off
