@@ -3,16 +3,14 @@ version: "3"
 services:
   db:
     image: mariadb:10
+    container_name: inssa-db
     ports:
       - 3306:3306
     volumes:
-      - ./db/conf.d:/etc/mysql/conf.d
       - ./db/initdb.d:/docker-entrypoint-initdb.d
-      - ./db/mysql/:/var/lib/mysql
+      # - ./db/mysql/:/var/lib/mysql
     env_file: .env
     environment:
       TZ: Asia/Seoul
     restart: always
-
-networks:
-  backend:
+    network_mode: bridge
