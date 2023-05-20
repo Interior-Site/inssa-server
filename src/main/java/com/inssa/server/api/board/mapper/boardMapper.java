@@ -10,11 +10,11 @@ import org.apache.ibatis.session.RowBounds;
 import java.util.List;
 
 @Mapper
-public interface AskMapper {
+public interface boardMapper {
 
     int insertBoard(BoardDto board);
 
-    List<BoardDto> selectBoardList();
+    List<BoardDto> selectBoardList(int boardTypeNo);
 
     List<BoardDto> selectBoard(int boardNo);
 
@@ -26,7 +26,7 @@ public interface AskMapper {
 
     Pagination searchListCount(BoardDto dto);
 
-    int updateView(int boardNo);
+    int updateView(int boardNo, int boardTypeNo);
 
     List<BoardDto> updateLike(BoardDto dto);
 

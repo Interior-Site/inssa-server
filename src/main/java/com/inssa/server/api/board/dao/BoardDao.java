@@ -2,9 +2,11 @@ package com.inssa.server.api.board.dao;
 
 import com.inssa.server.api.board.dto.BoardDto;
 import com.inssa.server.api.board.dto.LikeDto;
-import com.inssa.server.api.board.mapper.ReviewMapper;
+import com.inssa.server.api.board.mapper.boardMapper;
+import com.inssa.server.common.Files;
 import com.inssa.server.common.Pagination;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,17 +14,17 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class ReviewDao {
+public class BoardDao {
 
-    private ReviewMapper mapper;
+    private final boardMapper mapper;
 
     public int insert(BoardDto board) {
         int result = mapper.insertBoard(board);
         return result;
     }
 
-    public List<BoardDto> selectBoardList(){
-        List<BoardDto> result = mapper.selectBoardList();
+    public List<BoardDto> selectBoardList(int boardTypeNo){
+        List<BoardDto> result = mapper.selectBoardList(boardTypeNo);
         return result;
     }
 
@@ -41,8 +43,10 @@ public class ReviewDao {
         return result;
     }
 
-    public List<BoardDto> searchBoardList(BoardDto dto){
-        List<BoardDto> result = mapper.searchBoardList(dto);
+    public List<BoardDto> searchBoardList(BoardDto dto, Pagination page){
+        int offset = (page.getCurrentPage() - 1) * page.getLimit();
+        RowBounds rowBounds = new RowBounds(offset, page.getLimit());
+        List<BoardDto> result = mapper.searchBoardList(dto, rowBounds);
         return result;
     }
 
@@ -52,8 +56,8 @@ public class ReviewDao {
     }
 
     @Transactional
-    public int updateView(int boardNo) {
-        int result  = mapper.updateView(boardNo);
+    public int updateView(int boardNo, int boardTypeNo) {
+        int result  = mapper.updateView(boardNo, boardTypeNo);
         return result;
     }
 
@@ -67,13 +71,13 @@ public class ReviewDao {
         return resultList;
     }
 
-    @Transactional public List<BoardDto> updateStar(BoardDto dto) {
-        List<BoardDto> resultList = mapper.updateStar(dto);
-        return resultList;
-    }
-
     public LikeDto likeCheck(int likeNo) {
         LikeDto like = mapper.likeCheck(likeNo);
         return like;
+    }
+
+    public int insertImg(List<Files> files) {
+        int result = mapper.insertImg(files);
+        return result;
     }
 }
