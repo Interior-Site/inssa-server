@@ -1,6 +1,6 @@
 package com.inssa.server.api.board.service;
 
-import com.inssa.server.api.board.dao.AskDao;
+import com.inssa.server.api.board.dao.BoardDao;
 import com.inssa.server.api.board.dto.BoardDto;
 import com.inssa.server.api.board.dto.LikeDto;
 import com.inssa.server.api.user.dao.UserDao;
@@ -21,11 +21,11 @@ import java.util.List;
 
 @Service("AskService")
 @RequiredArgsConstructor
-public class AskService {
+public class BoardService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final AskDao askDao;
+    private final BoardDao boardDao;
 
     private final UserDao userDao;
 
@@ -60,7 +60,7 @@ public class AskService {
 
             if(!fileList.isEmpty()) { // 이미 업로드된 이미지가 있을 때
 
-                int result = askDao.insertImg(fileList);
+                int result = boardDao.insertImg(fileList);
 
                 if(fileList.size() == result) {
 
@@ -77,7 +77,7 @@ public class AskService {
 
             }
 
-            int result = askDao.insert(board);
+            int result = boardDao.insert(board);
 
             if(result != 0) {
                 statusCode = StatusCode.SUCCESS;
@@ -89,17 +89,18 @@ public class AskService {
         response.setStatusCode(statusCode);
         response.setResponseMessage(message);
         response.putData("Board", board.toString());
+        response.putData("file", fileList);
         return response;
     }
 
     // 게시글 전체 목록 조회 (-> 전체회원(회원/비회원) 조회 가능)
-    public ApiResponse selectBoard(int boardNo) {
+    public ApiResponse selectBoard(int boardTypeNo) {
 
         ApiResponse response = new ApiResponse();
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
-        List<BoardDto> resultList = askDao.selectBoardList();
+        List<BoardDto> resultList = boardDao.selectBoardList(boardTypeNo);
 
         if(!resultList.isEmpty()) {
             statusCode = StatusCode.SUCCESS;
@@ -113,7 +114,7 @@ public class AskService {
     }
 
     // 게시글 상세 조회 (-> 회원만 조회 가능)
-    public ApiResponse selectBoardNo(int boardNo, String userId, HttpServletRequest request) {
+    public ApiResponse selectBoardNo(int boardNo, int boardTypeNo, String userId, HttpServletRequest request) {
 
         ApiResponse response = new ApiResponse();
         int statusCode = StatusCode.FAIL;
@@ -128,17 +129,19 @@ public class AskService {
         UserDto user = userDao.findByUserId(userId);
 
         if(user != null) { // 회원일 경우
-            resultList = askDao.selectBoard(boardNo);
+            resultList = boardDao.selectBoard(boardNo);
 
             if(!resultList.isEmpty()) {
                 statusCode = StatusCode.SUCCESS;
                 message = boardNo + " 번호의 게시글 조회 " + ResponseMessage.SUCCESS;
 
                 // 조회 성공일 때마다 조회수 + 1
-                askDao.updateView(boardNo);
+                boardDao.updateView(boardNo, boardTypeNo);
             }
-
-
+        } else { // 회원이 아닐경우
+            statusCode = 200;
+            message = null;
+            resultList = null;
         }
 
         response.setStatusCode(statusCode);
@@ -161,14 +164,18 @@ public class AskService {
         UserDto user = userDao.findByUserId(userId);
 
         if(user != null) { // 회원일 경우
-            resultList = askDao.deleteBoard(boardNo);
+            resultList = boardDao.deleteBoard(boardNo);
 
             if(!resultList.isEmpty()) {
                 statusCode = StatusCode.SUCCESS;
                 message = boardNo + " 번호의 게시글 삭제 " + ResponseMessage.SUCCESS;
             }
-
+        } else { // 회원이 아닐경우
+            statusCode = 200;
+            message = null;
+            resultList = null;
         }
+
         response.setStatusCode(statusCode);
         response.setResponseMessage(message);
         response.putData("boardList",resultList);
@@ -190,7 +197,7 @@ public class AskService {
 
         if(user != null) { //회원일 경우
             int boardNo = dto.getBoardNo();
-            resultList = askDao.updateBoard(boardNo);
+            resultList = boardDao.updateBoard(boardNo);
 
             if(!resultList.isEmpty()) {
                 statusCode = StatusCode.SUCCESS;
@@ -210,7 +217,7 @@ public class AskService {
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
-        List<BoardDto> resultList = askDao.searchBoardList(dto, page);
+        List<BoardDto> resultList = boardDao.searchBoardList(dto, page);
 
         if(!resultList.isEmpty()) {
             statusCode = StatusCode.SUCCESS;
@@ -226,7 +233,7 @@ public class AskService {
     public Pagination getPaging(BoardDto board, Pagination page) {
 
         // 1) 검색이 적용된 게시글 수 조회
-        Pagination selectPg = askDao.searchListCount(board);
+        Pagination selectPg = boardDao.searchListCount(board);
 
         //System.out.println(selectPg);
 
@@ -249,7 +256,7 @@ public class AskService {
         if(user != null) { // 회원일 경우
 
             // 좋아요 여부 확인
-            LikeDto like = askDao.likeCheck(board.getLikeNo());
+            LikeDto like = boardDao.likeCheck(board.getLikeNo());
 
             if(like == null) { // 좋아요 기능을 실행했을 경우
                 board.setLikeCount(1);
@@ -257,7 +264,7 @@ public class AskService {
                 board.setLikeCount(0);
             }
 
-            resultList = askDao.updateLike(board);
+            resultList = boardDao.updateLike(board);
 
             if(!resultList.isEmpty()) {
                 statusCode = StatusCode.SUCCESS;
@@ -283,7 +290,7 @@ public class AskService {
         UserDto user = userDao.findByUserId(userId);
 
         if(user != null) { // 회원일 경우
-            resultList = askDao.updateZzim(board);
+            resultList = boardDao.updateZzim(board);
 
             if(!resultList.isEmpty()) {
                 statusCode = StatusCode.SUCCESS;
