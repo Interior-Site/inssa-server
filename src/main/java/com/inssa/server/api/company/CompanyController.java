@@ -1,7 +1,7 @@
 package com.inssa.server.api.company;
 
 import com.inssa.server.api.company.dto.CompanyChangeInfoRequestDto;
-import com.inssa.server.api.company.dto.CompanyDto;
+import com.inssa.server.api.company.dto.CompanyResponseDto;
 import com.inssa.server.api.company.service.CompanyService;
 import com.inssa.server.common.ApiResponse;
 import com.inssa.server.common.Pagination;
@@ -23,21 +23,14 @@ public class CompanyController {
 
     @Operation(summary = "company list", description = "업체 조회 API")
     @GetMapping("/company/list")
-    public List<CompanyDto> findCompanyList(
-            @RequestParam
-            @Parameter(description = "페이지 번호 (0부터 시작)", example = "0")
-            int page,
-            @RequestParam
-            @Parameter(description = "조회 사이즈", example = "10")
-            int size) {
-        Pagination paging = new Pagination().paging(page, size);
-
-        return companyService.findCompanyList(paging);
+    public List<CompanyResponseDto> findTestCompanyList() {
+        // 페이징 처리 진행해야 함
+        return companyService.findCompanyList();
     }
 
     @Operation(summary = "company", description = "업체 단건 조회 API")
     @GetMapping("/company/{companyNo}")
-    public CompanyDto findCompany(@PathVariable String companyNo) {
+    public CompanyResponseDto findCompany(@PathVariable Long companyNo) {
         return companyService.findCompany(companyNo);
     }
 
@@ -49,7 +42,7 @@ public class CompanyController {
 
     @Operation(summary = "delete company", description = "업체 삭제 API")
     @DeleteMapping("/company/{companyNo}")
-    public ApiResponse deleteCompany(@PathVariable String companyNo) {
+    public ApiResponse deleteCompany(@PathVariable Long companyNo) {
         return companyService.deleteCompany(companyNo);
     }
 }

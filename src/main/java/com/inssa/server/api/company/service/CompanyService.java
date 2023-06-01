@@ -1,10 +1,10 @@
 package com.inssa.server.api.company.service;
 
-import com.inssa.server.api.company.dao.CompanyDao;
+import com.inssa.server.api.company.data.CompanyRepository;
 import com.inssa.server.api.company.dto.CompanyChangeInfoRequestDto;
-import com.inssa.server.api.company.dto.CompanyDto;
+import com.inssa.server.api.company.dto.CompanyResponseDto;
+import com.inssa.server.api.company.model.Company;
 import com.inssa.server.common.ApiResponse;
-import com.inssa.server.common.Pagination;
 import com.inssa.server.common.ResponseMessage;
 import com.inssa.server.common.StatusCode;
 import lombok.RequiredArgsConstructor;
@@ -16,25 +16,31 @@ import java.util.List;
 @Service("CompanyService")
 @RequiredArgsConstructor
 public class CompanyService {
-    private final CompanyDao companyDao;
+    private final CompanyRepository companyRepository;
 
-    public List<CompanyDto> findCompanyList(Pagination paging) {
-        return companyDao.findCompanyList(paging);
+    public List<CompanyResponseDto> findCompanyList() {
+        return companyRepository.findCompanyList();
+    }
+
+    public CompanyResponseDto findCompany(Long companyNo) {
+
+        Company company = findCompanyById(companyNo);
+
+        return new CompanyResponseDto(company);
     }
 
     @Transactional
     public ApiResponse changeCompanyInfo(CompanyChangeInfoRequestDto request) {
         ApiResponse response = new ApiResponse();
-        int statusCode = StatusCode.FAIL;
-        String message = ResponseMessage.FAIL;
+        int statusCode;
+        String message;
 
-        int result = companyDao.changeCompanyInfo(request);
+        Company company = findCompanyById(request.getCompanyNo());
+        company.update(request.getCompanyName(), request.getContactNumber(), request.getStatus(), request.getApproval());
 
-        if(result > 0) {
-            statusCode = StatusCode.SUCCESS;
-            message = ResponseMessage.SUCCESS;
-            response.putData("companyNo", request.getCompanyNo());
-        }
+        statusCode = StatusCode.SUCCESS;
+        message = ResponseMessage.SUCCESS;
+        response.putData("companyNo", request.getCompanyNo());
 
         response.setStatusCode(statusCode);
         response.setResponseMessage(message);
@@ -43,18 +49,18 @@ public class CompanyService {
     }
 
     @Transactional
-	public ApiResponse deleteCompany(String companyNo) {
+	public ApiResponse deleteCompany(Long companyNo) {
+        // 로그인한 유저가 해당 회사를 가지고 있는지 확인 로직 필요
+
         ApiResponse response = new ApiResponse();
-        int statusCode = StatusCode.FAIL;
-        String message = ResponseMessage.FAIL;
+        int statusCode;
+        String message;
 
-        int result = companyDao.deleteCompany(companyNo);
+        companyRepository.deleteById(companyNo);
 
-        if(result > 0) {
-            statusCode = StatusCode.SUCCESS;
-            message = ResponseMessage.SUCCESS;
-            response.putData("companyNo", companyNo);
-        }
+        statusCode = StatusCode.SUCCESS;
+        message = ResponseMessage.SUCCESS;
+        response.putData("companyNo", companyNo);
 
         response.setStatusCode(statusCode);
         response.setResponseMessage(message);
@@ -62,7 +68,8 @@ public class CompanyService {
         return response;
     }
 
-    public CompanyDto findCompany(String companyNo) {
-        return companyDao.findCompany(companyNo);
+    private Company findCompanyById(Long companyNo) {
+
+        return companyRepository.findById(companyNo).orElseThrow(() -> new IllegalArgumentException("해당하는 업체를 찾을 수 없습니다. companyNo: " + companyNo));
     }
 }
