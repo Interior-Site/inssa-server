@@ -1,6 +1,5 @@
 package com.inssa.server.common;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
