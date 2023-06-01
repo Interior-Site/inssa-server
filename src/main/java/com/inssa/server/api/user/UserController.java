@@ -2,8 +2,8 @@ package com.inssa.server.api.user;
 
 import com.inssa.server.api.user.dto.UserChangeInfoRequestDto;
 import com.inssa.server.api.user.dto.UserPasswordRequestDto;
-import com.inssa.server.api.user.dto.UserRequestDto;
 import com.inssa.server.api.user.dto.UserRegisterRequestDto;
+import com.inssa.server.api.user.dto.UserRequestDto;
 import com.inssa.server.api.user.service.UserService;
 import com.inssa.server.common.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

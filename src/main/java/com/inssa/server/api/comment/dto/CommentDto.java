@@ -1,12 +1,9 @@
 package com.inssa.server.api.comment.dto;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Repository
 @Data // 자동으로 getter, setter, toString 등

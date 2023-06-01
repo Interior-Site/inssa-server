@@ -1,6 +1,5 @@
 package com.inssa.server.api.user.dto;
 
-import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,8 +1,10 @@
 package com.inssa.server.api.user.service;
 
-import com.inssa.server.api.user.dao.UserDao;
 import com.inssa.server.api.user.data.UserRepository;
-import com.inssa.server.api.user.dto.*;
+import com.inssa.server.api.user.dto.UserChangeInfoRequestDto;
+import com.inssa.server.api.user.dto.UserPasswordRequestDto;
+import com.inssa.server.api.user.dto.UserRegisterRequestDto;
+import com.inssa.server.api.user.dto.UserRequestDto;
 import com.inssa.server.api.user.model.EnumRole;
 import com.inssa.server.api.user.model.User;
 import com.inssa.server.common.ApiResponse;
@@ -10,7 +12,6 @@ import com.inssa.server.common.ResponseMessage;
 import com.inssa.server.common.StatusCode;
 import com.inssa.server.config.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

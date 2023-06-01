@@ -3,7 +3,6 @@ package com.inssa.server.api.board.controller;
 import com.inssa.server.api.board.dto.BoardDto;
 import com.inssa.server.api.board.dto.LikeDto;
 import com.inssa.server.api.board.service.BoardService;
-
 import com.inssa.server.common.ApiResponse;
 import com.inssa.server.common.Pagination;
 import io.swagger.annotations.ApiOperation;
