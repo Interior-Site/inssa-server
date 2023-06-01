@@ -43,9 +43,9 @@ public class User {
     private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profileId", insertable = false, updatable = false)
+    @JoinColumn(name = "profileNo", insertable = false, updatable = false)
     private Image profile;
-    private Long profileId;
+    private Long profileNo;
 
     @CreatedDate
     private LocalDateTime createdDate;
