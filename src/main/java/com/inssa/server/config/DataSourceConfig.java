@@ -1,6 +1,7 @@
 package com.inssa.server.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.hibernate.dialect.MySQLDialect;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
@@ -16,9 +17,11 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 /**
@@ -94,7 +97,19 @@ public class DataSourceConfig {
     public LocalContainerEntityManagerFactoryBean jpaEntityManagerFactory(
             EntityManagerFactoryBuilder builder,
             @Qualifier("dataSource") DataSource dataSource) {
-        return builder.dataSource(dataSource).packages("com.inssa.server.api").build();
+        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
+        entityManagerFactoryBean.setDataSource(dataSource);
+        entityManagerFactoryBean.setPackagesToScan("com.inssa.server.api");
+
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        vendorAdapter.setDatabasePlatform(MySQLDialect.class.getName());
+        entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
+
+        Properties jpaProperties = new Properties();
+        jpaProperties.setProperty("hibernate.physical_naming_strategy", CustomNamingStrategy.class.getName());
+        entityManagerFactoryBean.setJpaProperties(jpaProperties);
+
+        return entityManagerFactoryBean;
     }
 
     /**
