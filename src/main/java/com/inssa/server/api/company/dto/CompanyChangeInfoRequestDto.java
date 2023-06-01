@@ -7,7 +7,7 @@ import lombok.Data;
 @Schema(description = "업체 수정 API request")
 public class CompanyChangeInfoRequestDto {
     @Schema(description = "업체 고유 번호")
-    private int companyNo;
+    private Long companyNo;
     @Schema(description = "업체명")
     private String companyName;
     @Schema(description = "업체 전화번호")
