@@ -3,8 +3,7 @@ package com.inssa.server.api.board.service;
 import com.inssa.server.api.board.dao.BoardDao;
 import com.inssa.server.api.board.dto.BoardDto;
 import com.inssa.server.api.board.dto.LikeDto;
-import com.inssa.server.api.user.dao.UserDao;
-import com.inssa.server.api.user.dto.UserDto;
+import com.inssa.server.api.user.data.UserRepository;
 import com.inssa.server.common.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -27,7 +26,7 @@ public class BoardService {
 
     private final BoardDao boardDao;
 
-    private final UserDao userDao;
+    private final UserRepository userRepository;
 
     // 게시글 작성 (-> 회원만 작성 가능)
     public ApiResponse insertBoard(BoardDto board, List<MultipartFile> boardImg, String filePath) {
@@ -38,11 +37,10 @@ public class BoardService {
 
         // 회원 or 비회원 체크
         String userId = board.getUserId();
-        UserDto user = userDao.findByUserId(userId);
 
         List<Files> fileList = new ArrayList<Files>();
 
-        if(user != null) { // 회원일 경우
+        if(userRepository.existsByUserId(userId)) { // 회원일 경우
 
             for(int i=0; i<boardImg.size(); i++) {
 
@@ -126,9 +124,8 @@ public class BoardService {
         dto.setUrl(request.getRequestURL().toString());
 
         // 회원 or 비회원 체크
-        UserDto user = userDao.findByUserId(userId);
 
-        if(user != null) { // 회원일 경우
+        if(userRepository.existsByUserId(userId)) { // 회원일 경우
             resultList = boardDao.selectBoard(boardNo);
 
             if(!resultList.isEmpty()) {
@@ -161,9 +158,8 @@ public class BoardService {
         List<BoardDto> resultList = new ArrayList<>();
 
         // 회원 or 비회원 체크
-        UserDto user = userDao.findByUserId(userId);
 
-        if(user != null) { // 회원일 경우
+        if(userRepository.existsByUserId(userId)) { // 회원일 경우
             resultList = boardDao.deleteBoard(boardNo);
 
             if(!resultList.isEmpty()) {
@@ -193,9 +189,8 @@ public class BoardService {
 
         // 회원 or 비회원 체크
         String userId = dto.getUserId();
-        UserDto user = userDao.findByUserId(userId);
 
-        if(user != null) { //회원일 경우
+        if(userRepository.existsByUserId(userId)) { //회원일 경우
             int boardNo = dto.getBoardNo();
             resultList = boardDao.updateBoard(boardNo);
 
@@ -251,9 +246,8 @@ public class BoardService {
 
         // 회원 or 비회원 체크
         String userId = board.getUserId();
-        UserDto user = userDao.findByUserId(userId);
 
-        if(user != null) { // 회원일 경우
+        if(userRepository.existsByUserId(userId)) { // 회원일 경우
 
             // 좋아요 여부 확인
             LikeDto like = boardDao.likeCheck(board.getLikeNo());
@@ -287,9 +281,8 @@ public class BoardService {
 
         // 회원 or 비회원 체크
         String userId = board.getUserId();
-        UserDto user = userDao.findByUserId(userId);
 
-        if(user != null) { // 회원일 경우
+        if(userRepository.existsByUserId(userId)) { // 회원일 경우
             resultList = boardDao.updateZzim(board);
 
             if(!resultList.isEmpty()) {
