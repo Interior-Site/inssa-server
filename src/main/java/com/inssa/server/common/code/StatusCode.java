@@ -1,4 +1,4 @@
-package com.inssa.server.common;
+package com.inssa.server.common.code;
 
 import lombok.Data;
 

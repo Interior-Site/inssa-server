@@ -1,4 +1,4 @@
-package com.inssa.server.common;
+package com.inssa.server.common.response;
 
 import lombok.Getter;
 import lombok.Setter;
