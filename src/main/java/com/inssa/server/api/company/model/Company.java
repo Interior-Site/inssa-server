@@ -1,6 +1,7 @@
 package com.inssa.server.api.company.model;
 
 import com.inssa.server.api.user.model.User;
+import com.inssa.server.common.entity.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -10,11 +11,11 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Company {
+public class Company extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_no")
-    private Long id;
+    private Long no;
 
     @Column(nullable = false)
     private String registrationNo;
