@@ -1,13 +1,13 @@
 package com.inssa.server.api.user.model;
 
 import com.inssa.server.api.image.model.Image;
+import com.inssa.server.common.entity.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -17,11 +17,11 @@ import java.time.LocalDateTime;
 @DynamicInsert
 @DynamicUpdate
 @Entity
-public class User {
+public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_no")
-    private Long id;
+    private Long no;
 
     @Column(nullable = false, unique = true)
     private String userId;
@@ -46,9 +46,6 @@ public class User {
     @JoinColumn(name = "profileNo", insertable = false, updatable = false)
     private Image profile;
     private Long profileNo;
-
-    @CreatedDate
-    private LocalDateTime createdDate;
 
     private LocalDateTime quitDate;
 
