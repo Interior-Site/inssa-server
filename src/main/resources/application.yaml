@@ -6,7 +6,7 @@ spring:
     password: INSSA123!@#
 #    resource: C:\Users\images
 #    resource-path: file
-#    upload-path: /upload
+#    upload-path: /upload`
 
   jpa:
     open-in-view: false
