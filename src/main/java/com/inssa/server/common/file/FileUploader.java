@@ -1,4 +1,4 @@
-package com.inssa.server.common;
+package com.inssa.server.common.file;
 
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
