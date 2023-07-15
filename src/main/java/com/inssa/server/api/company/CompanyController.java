@@ -3,7 +3,7 @@ package com.inssa.server.api.company;
 import com.inssa.server.api.company.dto.CompanyChangeInfoRequestDto;
 import com.inssa.server.api.company.dto.CompanyResponseDto;
 import com.inssa.server.api.company.service.CompanyService;
-import com.inssa.server.common.ApiResponse;
+import com.inssa.server.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

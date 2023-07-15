@@ -2,7 +2,7 @@ package com.inssa.server.api.image.service;
 
 import com.inssa.server.api.image.data.ImageRepository;
 import com.inssa.server.api.image.model.Image;
-import com.inssa.server.common.FileUploader;
+import com.inssa.server.common.file.FileUploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;

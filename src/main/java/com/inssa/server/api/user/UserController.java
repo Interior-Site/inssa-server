@@ -5,7 +5,7 @@ import com.inssa.server.api.user.dto.UserPasswordRequestDto;
 import com.inssa.server.api.user.dto.UserRegisterRequestDto;
 import com.inssa.server.api.user.dto.UserRequestDto;
 import com.inssa.server.api.user.service.UserService;
-import com.inssa.server.common.ApiResponse;
+import com.inssa.server.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
