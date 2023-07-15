@@ -2,9 +2,9 @@ package com.inssa.server.api.comment.service;
 
 import com.inssa.server.api.comment.dao.CommentDao;
 import com.inssa.server.api.comment.dto.CommentDto;
-import com.inssa.server.common.ApiResponse;
-import com.inssa.server.common.ResponseMessage;
-import com.inssa.server.common.StatusCode;
+import com.inssa.server.common.response.ApiResponse;
+import com.inssa.server.common.response.ResponseMessage;
+import com.inssa.server.common.code.StatusCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

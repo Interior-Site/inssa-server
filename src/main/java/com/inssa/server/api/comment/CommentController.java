@@ -2,7 +2,7 @@ package com.inssa.server.api.comment;
 
 import com.inssa.server.api.comment.dto.CommentDto;
 import com.inssa.server.api.comment.service.CommentService;
-import com.inssa.server.common.ApiResponse;
+import com.inssa.server.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
