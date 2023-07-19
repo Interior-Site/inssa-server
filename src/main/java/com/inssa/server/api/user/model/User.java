@@ -2,6 +2,7 @@ package com.inssa.server.api.user.model;
 
 import com.inssa.server.api.image.model.Image;
 import com.inssa.server.common.entity.BaseTimeEntity;
+import com.inssa.server.share.user.UserStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,10 +23,6 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_no")
     private Long no;
-
-    @Column(nullable = false, unique = true)
-    private String userId;
-
     @Column(nullable = false, length = 100, unique = true)
     private String email;
 
@@ -35,12 +32,8 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false, length = 100, unique = true)
     private String nickname;
 
-    @Column(nullable = false, length = 100, unique = true)
-    private String phone;
-
-    @Column(nullable = false)
-    @ColumnDefault("'Y'")
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profileNo", insertable = false, updatable = false)
@@ -58,25 +51,27 @@ public class User extends BaseTimeEntity {
     }
 
     @Builder
-    public User(String userId, String email, String password, String nickname, String phone, EnumRole role) {
-        this.userId = userId;
+    public User(String email, String password, String nickname, EnumRole role) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
-        this.phone = phone;
         this.role = role;
     }
 
-    public User changeInfo(String email, String nickname, String phone) {
-        this.email = email != null ? email : this.email;
+    public void changeInfo(String nickname) {
         this.nickname = nickname != null ? nickname : this.nickname;
-        this.phone = phone != null ? phone : this.phone;
-
-        return this;
     }
 
-    public User changePassword(String password) {
+    public void changePassword(String password) {
         this.password = password;
-        return this;
+    }
+
+    public void changeUserStatus(UserStatus status) {
+        this.status = status;
+    }
+
+    public void leave() {
+        this.status = UserStatus.LEFT;
+        quitDate = LocalDateTime.now();
     }
 }
