@@ -19,7 +19,7 @@ public class CompanyRepositoryCustomImpl implements CompanyRepositoryCustom {
     public List<CompanyResponseDto> findCompanyList() {
         JPAQuery<CompanyResponseDto> query = jpaQueryFactory.select(constructor(
                         CompanyResponseDto.class,
-                        QCompany.company.id,
+                        QCompany.company.no,
                         QCompany.company.registrationNo,
                         QCompany.company.companyName,
                         QCompany.company.contactNumber,

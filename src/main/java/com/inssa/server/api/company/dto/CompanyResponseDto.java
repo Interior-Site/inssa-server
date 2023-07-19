@@ -38,7 +38,7 @@ public class CompanyResponseDto {
     }
 
     public CompanyResponseDto(Company company) {
-        this.companyNo = company.getId();
+        this.companyNo = company.getNo();
         this.registrationNo = company.getRegistrationNo();
         this.companyName = company.getCompanyName();
         this.contactNumber = company.getContactNumber();

@@ -71,7 +71,7 @@ public class UserService implements UserDetailsService {
         if(registerUser != null) {
             statusCode = StatusCode.SUCCESS;
             message = ResponseMessage.SUCCESS;
-            response.putData("userNo", registerUser.getId());
+            response.putData("userNo", registerUser.getNo());
         }
 
         response.setStatusCode(statusCode);
@@ -99,7 +99,7 @@ public class UserService implements UserDetailsService {
 
         statusCode = StatusCode.SUCCESS;
         message = ResponseMessage.SUCCESS;
-        response.putData("userNo", user.getId());
+        response.putData("userNo", user.getNo());
 
         response.setStatusCode(statusCode);
         response.setResponseMessage(message);
@@ -119,7 +119,7 @@ public class UserService implements UserDetailsService {
             user.changePassword(passwordEncoder.encode(pw.trim()));
             statusCode = StatusCode.SUCCESS;
             message = ResponseMessage.SUCCESS;
-            response.putData("userNo", user.getId());
+            response.putData("userNo", user.getNo());
         }
 
         response.setStatusCode(statusCode);
@@ -138,7 +138,7 @@ public class UserService implements UserDetailsService {
         ApiResponse response = new ApiResponse();
 
         User user = findByUserId(userId);
-        response.putData("userNo", user.getId());
+        response.putData("userNo", user.getNo());
         userRepository.delete(user);
 
         int statusCode = StatusCode.SUCCESS;
