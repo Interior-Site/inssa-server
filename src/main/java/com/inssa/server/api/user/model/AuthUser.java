@@ -1,45 +1,54 @@
-package com.inssa.server.api.user.dto;
+package com.inssa.server.api.user.model;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
-@Data
-public class UserDto implements UserDetails {
-    private String userId;
-    private String email;
+public class AuthUser implements UserDetails {
+
+    private Long userNo;
     private String password;
-    private String nickname;
-    private List<String> roles = new ArrayList<>();
+    private ArrayList<GrantedAuthority> authorities;
+
+    public AuthUser(Long userNo, String password, ArrayList<GrantedAuthority> authorities) {
+        this.userNo = userNo;
+        this.password = password;
+        this.authorities = authorities;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        return authorities;
+    }
+
+    @JsonIgnore // 데이터 값 숨기기
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return userNo.toString();
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
@@ -49,4 +58,5 @@ public class UserDto implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
