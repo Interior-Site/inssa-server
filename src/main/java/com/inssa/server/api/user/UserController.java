@@ -30,8 +30,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @Tag(name = "user")
-    @Operation(summary = "login", description = "사용자 로그인 API")
+    @Operation(summary = "사용자 로그인 API", tags = "user")
     @PostMapping("/login")
     public InssaApiResponse login(@RequestBody UserRequestDto request) {
         String token = userService.login(request);
@@ -39,23 +38,20 @@ public class UserController {
         return InssaApiResponse.ok(Map.of("token", token));
     }
 
-    @Tag(name = "user")
-    @Operation(summary = "register", description = "사용자 회원가입 API")
+    @Operation(summary = "사용자 회원가입 API", tags = "user")
     @PostMapping("/register")
     public InssaApiResponse register(@RequestBody UserRegisterRequestDto request) {
         Long userNo = userService.register(request);
         return InssaApiResponse.ok(Map.of("userNo", userNo));
     }
 
-    @Tag(name = "user")
-    @Operation(summary = "existsUserId", description = "이메일 중복 확인 API")
+    @Operation(summary = "이메일 중복 확인 API", tags = "user")
     @PostMapping("/exists/{email}")
     public InssaApiResponse existsEmail(@PathVariable String email) {
         return InssaApiResponse.ok(userService.existsEmail(email));
     }
 
-    @Tag(name = "user")
-    @Operation(summary = "changeUserInfo", description = "회원 정보 변경 API")
+    @Operation(summary = "회원 정보 변경 API", tags = "user")
     @PutMapping("/info")
     public InssaApiResponse changeUserInfo(@RequestBody UserChangeInfoRequestDto request, @AuthenticationPrincipal AuthUser user) {
         if(user == null) {
@@ -65,8 +61,7 @@ public class UserController {
         return InssaApiResponse.ok(userService.changeUserInfo(request, Long.parseLong(user.getUsername())));
     }
 
-    @Tag(name = "user")
-    @Operation(summary = "changePassword", description = "비밀번호 변경 API")
+    @Operation(summary = "비밀번호 변경 API", tags = "user")
     @PutMapping("/password/change")
     public InssaApiResponse changePassword(@RequestBody UserPasswordRequestDto request, @AuthenticationPrincipal AuthUser user) {
         if(user == null) {
@@ -77,8 +72,7 @@ public class UserController {
         return InssaApiResponse.ok(Map.of("userNo", userNo));
     }
 
-    @Tag(name = "user")
-    @Operation(summary = "checkPassword", description = "비밀번호 확인 API")
+    @Operation(summary = "비밀번호 확인 API", tags = "user")
     @PostMapping("/password/check")
     public InssaApiResponse checkPassword(@RequestBody UserPasswordRequestDto request, @AuthenticationPrincipal AuthUser user) {
         if(user == null) {
@@ -88,8 +82,7 @@ public class UserController {
         return InssaApiResponse.ok(userService.checkPassword(request, Long.parseLong(user.getUsername())));
     }
 
-    @Tag(name = "user")
-    @Operation(summary = "leave", description = "회원 탈퇴 API")
+    @Operation(summary = "회원 탈퇴 API", tags = "user")
     @PutMapping("/leave")
     public InssaApiResponse leave(@AuthenticationPrincipal AuthUser user) {
         if(user == null) {
