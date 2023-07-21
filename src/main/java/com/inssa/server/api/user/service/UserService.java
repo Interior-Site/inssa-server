@@ -122,7 +122,7 @@ public class UserService implements UserDetailsService {
     }
 
     private User findByUserNo(Long userNo) {
-        return userRepository.findByNo(userNo)
+        return userRepository.findById(userNo)
                 .orElseThrow(() -> new InssaException("해당 유저가 존재하지 않습니다. userNo: " + userNo));
     }
 }
