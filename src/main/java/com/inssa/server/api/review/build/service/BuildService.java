@@ -11,6 +11,7 @@ import com.inssa.server.common.response.ApiResponse;
 import com.inssa.server.common.response.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -35,6 +36,66 @@ public class BuildService {
         response.setStatusCode(statusCode);
         response.setResponseMessage(message);
         response.putData("result", selectList);
+        return response;
+    }
+
+
+    public ApiResponse insertBuild(BuildDto build){
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+
+        int result = builddao.insertBuild(build);
+
+        if(result > 0){
+            statusCode = StatusCode.SUCCESS;
+            message = ResponseMessage.SUCCESS;
+            response.putData("userId", build);
+        }
+
+        // 응답에 결과코드, 메세지 담음
+        response.setStatusCode(statusCode);
+        response.setResponseMessage(message);
+
+        return response;
+    }
+
+    public ApiResponse updateBuild(BuildDto build) {
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+
+        int result = builddao.updateBuild(build);
+
+        if(result > 0){
+            statusCode = StatusCode.SUCCESS;
+            message = ResponseMessage.SUCCESS;
+            response.putData("userId", build);
+
+        }
+        response.setStatusCode(statusCode);
+        response.setResponseMessage(message);
+
+        return response;
+
+    }
+
+    public ApiResponse deleteBuild(BuildDto build) {
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+
+        int result = builddao.deleteBuild(build);
+
+        if(result > 0){
+            statusCode = StatusCode.SUCCESS;
+            message = ResponseMessage.SUCCESS;
+            response.putData("userId", build);
+
+        }
+        response.setStatusCode(statusCode);
+        response.setResponseMessage(message);
+
         return response;
     }
 }

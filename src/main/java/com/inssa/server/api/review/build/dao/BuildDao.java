@@ -17,4 +17,16 @@ public class BuildDao {
     public List<BuildDto> selectList() {
         return buildMapper.selectList();
     }
+
+    public int insertBuild(BuildDto build){
+        return buildMapper.insertBuild(build);
+    }
+
+    public int updateBuild(BuildDto build){
+        return buildMapper.updateBuild(build);
+    }
+
+    public int deleteBuild(BuildDto build){
+        return buildMapper.deleteBuild(build);
+    }
 }
