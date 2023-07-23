@@ -21,6 +21,9 @@ public class BuildService {
 
     private final BuildDao builddao;
 
+    private final BuildDto builddto;
+
+
     public ApiResponse selectList(){
         ApiResponse response = new ApiResponse();
         int statusCode = StatusCode.FAIL;
@@ -28,14 +31,14 @@ public class BuildService {
 
         List<BuildDto> buildList = builddao.selectList();
 
-        if(!selectList.isEmpty()){
+        if(!buildList.isEmpty()){
             statusCode = StatusCode.SUCCESS;
             message = "시공후기 게시글 목록 조회 성공" + ResponseMessage.SUCCESS;
         }
 
         response.setStatusCode(statusCode);
         response.setResponseMessage(message);
-        response.putData("result", selectList);
+        response.putData("result", buildList);
         return response;
     }
 
@@ -96,6 +99,24 @@ public class BuildService {
         response.setStatusCode(statusCode);
         response.setResponseMessage(message);
 
+        return response;
+    }
+
+    public ApiResponse selectDetail() {
+        ApiResponse response = new ApiResponse();
+        int statusCode = StatusCode.FAIL;
+        String message = ResponseMessage.FAIL;
+
+        builddto buildDetail = builddao.selectDetail();
+
+        if(!buildDetail.isEmpty()){
+            statusCode = StatusCode.SUCCESS;
+            message = "시공후기 상세 조회 성공" + ResponseMessage.SUCCESS;
+        }
+
+        response.setStatusCode(statusCode);
+        response.setResponseMessage(message);
+        response.putData("result", buildDetail);
         return response;
     }
 }

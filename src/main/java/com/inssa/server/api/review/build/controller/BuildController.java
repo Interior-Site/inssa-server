@@ -25,6 +25,13 @@ public class BuildController {
         return buildService.selectList();
     }
 
+    @Operation(summary = "buildDetail", description = "시공후기 상세조회 API") // 스웨거
+    @GetMapping("/buildDetail/{buildNo}")
+    public ApiResponse buildDetail(){
+        return buildService.selectDetail();
+    }
+
+
     @Operation(summary = "buildInsert", description = "시공후기 작성 API")
     @PutMapping("/buildInsert")
     public ApiResponse insertBuild(@RequestBody BuildDto build){

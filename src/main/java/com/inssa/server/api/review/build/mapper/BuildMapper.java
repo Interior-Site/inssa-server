@@ -15,4 +15,6 @@ public interface BuildMapper {
     int updateBuild(BuildDto build);
 
     int deleteBuild(BuildDto build);
+
+    BuildDto selectDetail(int buildNo);
 }

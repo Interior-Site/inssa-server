@@ -25,6 +25,12 @@
         WHERE STATUS = 'Y'
     </select>
 
+    <!-- 시공후기 상세조회 -->
+    <select id="selectDetail" resultMap="build_rm">
+        SELECT * FROM build_review
+        WHERE BUILD_NO = #{buildNo}
+    </select>
+
     <!-- 시공후기 작성 -->
     <insert id="insertBuild">
         INSERT INTO build_review
