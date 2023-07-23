@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 60초마다 설정 파일의 변경을 확인 하여 변경시 갱신 -->
 <configuration scan="true" scanPeriod="30 seconds">
-    <property name="LOG_FILE" value="logs/inssa.log" />
-
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <property name="FilePath" value="logs" />
+    <appender name="api_log"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${FilePath}/inssa.log</file>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta(%-4relative) - [%thread{10}, %X{traceId:-}, %X{spanId:-}] %cyan(%logger{20}): %msg%n</pattern>
-        </encoder>
-    </appender>
-
-    <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_FILE}</file>
-        <encoder>
-            <charset>UTF-8</charset>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}[%thread][%-5level] %logger{36} : %msg%n</pattern>
         </encoder>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_FILE}.%d{yyyyMMdd}-%i</fileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>100MB</maxFileSize>
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${FilePath}/tkg-svc-api.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>30MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <maxHistory>30</maxHistory>
             <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
     </appender>
 
+    <appender name="STDOUT"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}[%thread][%-5level] %logger{36} : %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <logger name="org.hibernate.engine.jdbc.spi.SqlExceptionHelper"
             level="ERROR">
         <appender-ref ref="STDOUT" />
+    </logger>
+
+    <logger name="API_LOG" level="INFO" additivity="false">
+        <appender-ref ref="api_log" />
     </logger>
 
     <logger name="jdbc" level="off" />
@@ -40,6 +47,5 @@
 
     <root level="info">
         <appender-ref ref="STDOUT" />
-        <appender-ref ref="dailyRollingFileAppender" />
     </root>
 </configuration>
