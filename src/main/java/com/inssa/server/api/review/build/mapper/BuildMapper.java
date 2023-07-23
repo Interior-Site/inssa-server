@@ -9,4 +9,10 @@ import java.util.List;
 public interface BuildMapper {
 
     List<BuildDto> selectList();
+
+    int insertBuild(BuildDto build);
+
+    int updateBuild(BuildDto build);
+
+    int deleteBuild(BuildDto build);
 }

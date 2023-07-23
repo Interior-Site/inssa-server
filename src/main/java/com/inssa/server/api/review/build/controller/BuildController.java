@@ -1,14 +1,13 @@
 package com.inssa.server.api.review.build.controller;
 
+import com.inssa.server.api.review.build.dto.BuildDto;
 import com.inssa.server.api.review.build.service.BuildService;
 import com.inssa.server.common.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/review")
@@ -26,4 +25,21 @@ public class BuildController {
         return buildService.selectList();
     }
 
+    @Operation(summary = "buildInsert", description = "시공후기 작성 API")
+    @PutMapping("/buildInsert")
+    public ApiResponse insertBuild(@RequestBody BuildDto build){
+        return buildService.insertBuild(build);
+    }
+
+    @Operation(summary = "buildUpdate", description = "시공후기 수정 API")
+    @PostMapping("/buildUpdate")
+    public ApiResponse updateBuild(@RequestBody BuildDto build){
+        return buildService.updateBuild(build);
+    }
+
+    @Operation(summary = "buildDelete", description = "시공후기 삭제 API")
+    @PostMapping("/buildDelete")
+    public ApiResponse deleteBuild(@RequestBody BuildDto build){
+        return buildService.deleteBuild(build);
+    }
 }
