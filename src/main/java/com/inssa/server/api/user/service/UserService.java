@@ -1,5 +1,4 @@
 package com.inssa.server.api.user.service;
-
 import com.inssa.server.api.user.data.UserRepository;
 import com.inssa.server.api.user.dto.UserChangeInfoRequestDto;
 import com.inssa.server.api.user.dto.UserPasswordRequestDto;
