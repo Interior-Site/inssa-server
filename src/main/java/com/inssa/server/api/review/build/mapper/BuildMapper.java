@@ -11,7 +11,7 @@ public interface BuildMapper {
 
     List<BuildDto> selectList();
 
-    int insertBuild(BuildDto build);
+    int insertBuild(BuildDto request, Long userNo);
 
     int updateBuild(BuildUpdateDto buildUpdateDto, Long userNo);
 
