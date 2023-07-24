@@ -24,8 +24,8 @@ public class BuildDao {
         return buildMapper.selectDetail(buildNo);
     }
 
-    public int insertBuild(BuildDto build){
-        return buildMapper.insertBuild(build);
+    public int insertBuild(BuildDto request, Long userNo){
+        return buildMapper.insertBuild(request, userNo);
     }
 
     public int updateBuild(BuildUpdateDto buildUpdateDto, Long userNo){

@@ -38,12 +38,12 @@ public class BuildService {
     }
 
 
-    public ApiResponse insertBuild(BuildDto build){
+    public ApiResponse insertBuild(BuildDto request, Long userNo){
         ApiResponse response = new ApiResponse();
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
-        int result = builddao.insertBuild(build);
+        int result = builddao.insertBuild(request, userNo);
 
         if(result > 0){
             statusCode = StatusCode.SUCCESS;
