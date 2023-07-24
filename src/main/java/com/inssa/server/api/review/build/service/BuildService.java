@@ -1,17 +1,13 @@
 package com.inssa.server.api.review.build.service;
 
-import com.inssa.server.api.comment.dto.CommentDto;
 import com.inssa.server.api.review.build.dao.BuildDao;
 import com.inssa.server.api.review.build.dto.BuildDto;
-import com.inssa.server.common.ApiResponse;
-import com.inssa.server.common.ResponseMessage;
-import com.inssa.server.common.StatusCode;
+import com.inssa.server.api.review.build.dto.BuildUpdateDto;
 import com.inssa.server.common.code.StatusCode;
 import com.inssa.server.common.response.ApiResponse;
 import com.inssa.server.common.response.ResponseMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -21,7 +17,6 @@ public class BuildService {
 
     private final BuildDao builddao;
 
-    private final BuildDto builddto;
 
 
     public ApiResponse selectList(){
@@ -63,12 +58,12 @@ public class BuildService {
         return response;
     }
 
-    public ApiResponse updateBuild(BuildDto build) {
+    public ApiResponse updateBuild(BuildUpdateDto buildUpdateDto, Long userNo) {
         ApiResponse response = new ApiResponse();
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
-        int result = builddao.updateBuild(build);
+        int result = builddao.updateBuild(buildUpdateDto, userNo);
 
         if(result > 0){
             statusCode = StatusCode.SUCCESS;
@@ -83,12 +78,12 @@ public class BuildService {
 
     }
 
-    public ApiResponse deleteBuild(BuildDto build) {
+    public ApiResponse deleteBuild(int buildNo, Long userNo) {
         ApiResponse response = new ApiResponse();
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
-        int result = builddao.deleteBuild(build);
+        int result = builddao.deleteBuild(buildNo, userNo);
 
         if(result > 0){
             statusCode = StatusCode.SUCCESS;
@@ -102,12 +97,12 @@ public class BuildService {
         return response;
     }
 
-    public ApiResponse selectDetail() {
+    public ApiResponse selectDetail(int buildNo) {
         ApiResponse response = new ApiResponse();
         int statusCode = StatusCode.FAIL;
         String message = ResponseMessage.FAIL;
 
-        builddto buildDetail = builddao.selectDetail();
+        BuildDto buildDetail = builddao.selectDetail(buildNo);
 
         if(!buildDetail.isEmpty()){
             statusCode = StatusCode.SUCCESS;

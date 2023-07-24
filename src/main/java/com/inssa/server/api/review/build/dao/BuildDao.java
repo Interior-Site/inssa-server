@@ -2,6 +2,7 @@ package com.inssa.server.api.review.build.dao;
 
 
 import com.inssa.server.api.review.build.dto.BuildDto;
+import com.inssa.server.api.review.build.dto.BuildUpdateDto;
 import com.inssa.server.api.review.build.mapper.BuildMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
@@ -27,11 +28,11 @@ public class BuildDao {
         return buildMapper.insertBuild(build);
     }
 
-    public int updateBuild(BuildDto build){
-        return buildMapper.updateBuild(build);
+    public int updateBuild(BuildUpdateDto buildUpdateDto, Long userNo){
+        return buildMapper.updateBuild(buildUpdateDto, userNo);
     }
 
-    public int deleteBuild(BuildDto build){
-        return buildMapper.deleteBuild(build);
+    public int deleteBuild(int buildNo, Long userNo){
+        return buildMapper.deleteBuild(buildNo, userNo);
     }
 }

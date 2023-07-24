@@ -1,11 +1,11 @@
 package com.inssa.server.api.review.build.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+
 
 import java.util.Date;
 
-@Getter @Setter
+@Data
 public class BuildDto {
 
     public int buildNo;         // 시공후기 글번호
@@ -17,5 +17,5 @@ public class BuildDto {
     public Date modifiedDate;   // 수정일
     public String status;       // 글상태
     public int viewCount;       // 조회수
-    public int userId;          // 작성자ID
+    public int userNo;          // 작성자No
 }
