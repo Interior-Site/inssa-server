@@ -18,6 +18,18 @@ public class InssaApiResponse {
         return new InssaApiResponse("OK", "API 요청 성공", result);
     }
 
+    public static InssaApiResponse created(Object result) {
+        return new InssaApiResponse("OK", "Object created", result);
+    }
+
+    public static InssaApiResponse updated(Object result) {
+        return new InssaApiResponse("OK", "Object updated", result);
+    }
+
+    public static InssaApiResponse deleted(Object result) {
+        return new InssaApiResponse("OK", "Object deleted", result);
+    }
+
     public static InssaApiResponse ok() {
         return new InssaApiResponse("OK", "API 요청 성공", null);
     }
