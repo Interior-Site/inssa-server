@@ -40,7 +40,7 @@ public class BookmarkController {
 
         Long bookmarkNo = bookmarkService.createBookmark(serviceRequest);
 
-        return InssaApiResponse.ok(Map.of("bookmarkNo", bookmarkNo));
+        return InssaApiResponse.created(Map.of("bookmarkNo", bookmarkNo));
     }
 
     @Operation(summary = "북마크 삭제", tags = "bookmark")
@@ -56,7 +56,7 @@ public class BookmarkController {
                 .build();
 
         Long deleteNo = bookmarkService.deleteBookmark(serviceRequest);
-        return InssaApiResponse.ok(Map.of("bookmarkNo", deleteNo));
+        return InssaApiResponse.deleted(Map.of("bookmarkNo", deleteNo));
     }
 
 }
