@@ -8,17 +8,13 @@ import com.inssa.server.api.user.model.AuthUser;
 import com.inssa.server.common.exception.InssaException;
 import com.inssa.server.common.response.InssaApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Tag(name = "article", description = "게시글 API")
@@ -44,6 +40,14 @@ public class ArticleController {
 
 		Long articleNo = articleService.createArticle(serviceRequest);
 		return InssaApiResponse.created(Map.of("articleNo", articleNo));
+	}
+
+	@Operation(summary = "게시글 목록 조회", tags = "article")
+	@GetMapping("/articles")
+	public InssaApiResponse getArticles(@RequestParam @Parameter(description = "페이지 번호 (0부터 시작)", example = "0") int page,
+										@RequestParam @Parameter(description = "페이지별 조회 사이즈", example = "20") int size,
+										@AuthenticationPrincipal AuthUser user) {
+		return null;
 	}
 
 	@Operation(summary = "게시글 수정", tags = "article")
