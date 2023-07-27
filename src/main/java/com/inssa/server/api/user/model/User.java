@@ -3,14 +3,13 @@ package com.inssa.server.api.user.model;
 import com.inssa.server.api.image.model.Image;
 import com.inssa.server.common.entity.BaseTimeEntity;
 import com.inssa.server.share.user.UserStatus;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
