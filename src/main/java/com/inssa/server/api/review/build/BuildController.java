@@ -5,7 +5,6 @@ import com.inssa.server.api.review.build.dto.BuildUpdateDto;
 import com.inssa.server.api.review.build.service.BuildService;
 import com.inssa.server.api.user.model.AuthUser;
 import com.inssa.server.common.exception.InssaException;
-import com.inssa.server.common.response.ApiResponse;
 import com.inssa.server.common.response.InssaApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,9 +41,9 @@ public class BuildController {
     @Operation(summary = "시공후기 작성 API", tags = "buildReview")
     @PutMapping("/buildInsert")
     public InssaApiResponse insertBuild(@RequestBody BuildDto request, @AuthenticationPrincipal AuthUser user){
-        if(user == null){
-            throw new InssaException("로그인 후 이용 가능합니다.");
-        }
+      //  if(user == null){
+      //      throw new InssaException("로그인 후 이용 가능합니다.");
+      //  }
         return InssaApiResponse.ok(buildService.insertBuild(request, Long.parseLong(user.getUsername())));
     }
 
