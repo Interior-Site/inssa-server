@@ -1,12 +1,16 @@
 package com.inssa.server.api.article.service;
 
 import com.inssa.server.api.article.data.ArticleRepository;
+import com.inssa.server.api.article.dto.ArticleListResponseDto;
 import com.inssa.server.api.article.dto.ArticleRequestDto;
 import com.inssa.server.api.article.model.Article;
+import com.inssa.server.api.article.model.ArticleType;
 import com.inssa.server.common.board.BoardStatus;
 import com.inssa.server.common.exception.InssaException;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service("ArticleService")
@@ -17,6 +21,10 @@ public class ArticleService {
 	public Long createArticle(ArticleRequestDto request) {
 		Article article = articleRepository.save(request.toEntity());
 		return article.getNo();
+	}
+
+	public Page<ArticleListResponseDto> findArticles(ArticleType type, Pageable pageable) {
+		return articleRepository.findArticles(type, pageable);
 	}
 
 	public Long updateArticle(ArticleRequestDto request) {

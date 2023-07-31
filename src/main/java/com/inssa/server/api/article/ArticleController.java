@@ -1,18 +1,23 @@
 package com.inssa.server.api.article;
 
 import com.inssa.server.api.article.dto.ArticleCreateRequestDto;
+import com.inssa.server.api.article.dto.ArticleListResponseDto;
 import com.inssa.server.api.article.dto.ArticleRequestDto;
 import com.inssa.server.api.article.dto.ArticleUpdateRequestDto;
+import com.inssa.server.api.article.model.ArticleType;
 import com.inssa.server.api.article.service.ArticleService;
 import com.inssa.server.api.user.model.AuthUser;
 import com.inssa.server.common.exception.InssaException;
 import com.inssa.server.common.response.InssaApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,11 +48,11 @@ public class ArticleController {
 	}
 
 	@Operation(summary = "게시글 목록 조회", tags = "article")
-	@GetMapping("/articles")
-	public InssaApiResponse getArticles(@RequestParam @Parameter(description = "페이지 번호 (0부터 시작)", example = "0") int page,
-										@RequestParam @Parameter(description = "페이지별 조회 사이즈", example = "20") int size,
-										@AuthenticationPrincipal AuthUser user) {
-		return null;
+	@GetMapping("/articles/{type}/list")
+	public Page<ArticleListResponseDto> findArticles(@SortDefault(sort = "created_date", direction = Sort.Direction.DESC) Pageable pageable,
+													 @PathVariable ArticleType type) {
+
+		return articleService.findArticles(type, pageable);
 	}
 
 	@Operation(summary = "게시글 수정", tags = "article")
