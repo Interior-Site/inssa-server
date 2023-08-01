@@ -1,6 +1,5 @@
 package com.inssa.server.common.entity;
 
-import com.inssa.server.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
