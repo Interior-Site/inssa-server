@@ -1,5 +1,6 @@
 package com.inssa.server.api.review.order.model;
 
+import com.inssa.server.api.company.model.Company;
 import com.inssa.server.api.user.model.User;
 import com.inssa.server.common.board.BoardStatus;
 import com.inssa.server.common.entity.BaseTimeEntity;
@@ -43,6 +44,10 @@ public class OrderReview extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_no", insertable = false, updatable = false, nullable = false)
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_no", insertable = false, updatable = false, nullable = false)
+    private Company company;
 
     @OneToMany(mappedBy = "orderReview", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderBuildTag> buildTags = new ArrayList<>();
