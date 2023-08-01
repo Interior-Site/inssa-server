@@ -11,7 +11,7 @@
     <!-- 시공후기 목록 조회-->
     <select id="selectList" resultType="com.inssa.server.api.review.build.dto.BuildDto">
         SELECT * FROM build_review
-        WHERE STATUS = 'Y'
+        WHERE STATUS = 'VISIBLE'
     </select>
 
     <!-- 시공후기 상세조회 -->
