@@ -1,6 +1,7 @@
 package com.inssa.server.api.review.order.model;
 
 import com.inssa.server.common.entity.BaseTimeEntity;
+import com.inssa.server.common.entity.PlaceType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
