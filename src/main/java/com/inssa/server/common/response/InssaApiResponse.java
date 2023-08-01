@@ -1,36 +1,33 @@
 package com.inssa.server.common.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+import org.springframework.lang.Nullable;
 
 @Schema(description = "API 요청 결과")
-public class InssaApiResponse {
-    private String code;
-    private String message;
-    private Object result;
+@Data
+public class InssaApiResponse<T> {
+    private final ResponseCode message;
+    private final T result;
 
-    public InssaApiResponse(String code, String message, Object result) {
-        this.code = code;
+    private InssaApiResponse(ResponseCode message, T result) {
         this.message = message;
         this.result = result;
     }
 
-    public static InssaApiResponse ok(Object result) {
-        return new InssaApiResponse("OK", "API 요청 성공", result);
+    public static <T> InssaApiResponse<T> ok(@Nullable T result) {
+        return new InssaApiResponse<T>(ResponseCode.SUCCESS, result);
     }
 
-    public static InssaApiResponse created(Object result) {
-        return new InssaApiResponse("OK", "Object created", result);
+    public static <T> InssaApiResponse<T> ok(ResponseCode code) {
+        return new InssaApiResponse<T>(code, null);
     }
 
-    public static InssaApiResponse updated(Object result) {
-        return new InssaApiResponse("OK", "Object updated", result);
+    public static <T> InssaApiResponse<T> ok(ResponseCode code, @Nullable T result) {
+        return new InssaApiResponse<T>(code, result);
     }
 
-    public static InssaApiResponse deleted(Object result) {
-        return new InssaApiResponse("OK", "Object deleted", result);
-    }
-
-    public static InssaApiResponse ok() {
-        return new InssaApiResponse("OK", "API 요청 성공", null);
+    public static <T> InssaApiResponse<T> ok() {
+        return new InssaApiResponse<T>(ResponseCode.SUCCESS, null);
     }
 }

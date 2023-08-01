@@ -9,6 +9,7 @@ import com.inssa.server.api.article.service.ArticleService;
 import com.inssa.server.api.user.model.AuthUser;
 import com.inssa.server.common.exception.InssaException;
 import com.inssa.server.common.response.InssaApiResponse;
+import com.inssa.server.common.response.ResponseCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class ArticleController {
 
 	@Operation(summary = "게시글 등록", tags = "article")
 	@PostMapping("/article")
-	public InssaApiResponse createArticle(@RequestBody ArticleCreateRequestDto request, @AuthenticationPrincipal AuthUser user) {
+	public InssaApiResponse<Map<String, Object>> createArticle(@RequestBody ArticleCreateRequestDto request, @AuthenticationPrincipal AuthUser user) {
 		if(user == null) {
 			throw new InssaException("로그인 후 이용 가능합니다");
 		}
@@ -44,20 +45,20 @@ public class ArticleController {
 			.build();
 
 		Long articleNo = articleService.createArticle(serviceRequest);
-		return InssaApiResponse.created(Map.of("articleNo", articleNo));
+		return InssaApiResponse.ok(ResponseCode.CREATED, Map.of("articleNo", articleNo));
 	}
 
 	@Operation(summary = "게시글 목록 조회", tags = "article")
 	@GetMapping("/articles/{type}/list")
-	public Page<ArticleListResponseDto> findArticles(@SortDefault(sort = "created_date", direction = Sort.Direction.DESC) Pageable pageable,
+	public InssaApiResponse<Page<ArticleListResponseDto>> findArticles(@SortDefault(sort = "created_date", direction = Sort.Direction.DESC) Pageable pageable,
 													 @PathVariable ArticleType type) {
 
-		return articleService.findArticles(type, pageable);
+		return InssaApiResponse.ok(articleService.findArticles(type, pageable));
 	}
 
 	@Operation(summary = "게시글 수정", tags = "article")
 	@PutMapping("/article")
-	public InssaApiResponse updateArticle(@RequestBody ArticleUpdateRequestDto request, @AuthenticationPrincipal AuthUser user) {
+	public InssaApiResponse<Map<String, Object>> updateArticle(@RequestBody ArticleUpdateRequestDto request, @AuthenticationPrincipal AuthUser user) {
 		if(user == null) {
 			throw new InssaException("로그인 후 이용 가능합니다");
 		}
@@ -70,12 +71,12 @@ public class ArticleController {
 			.build();
 
 		Long articleNo = articleService.updateArticle(serviceRequest);
-		return InssaApiResponse.updated(Map.of("articleNo", articleNo));
+		return InssaApiResponse.ok(ResponseCode.UPDATED, Map.of("articleNo", articleNo));
 	}
 
 	@Operation(summary = "게시글 삭제", tags = "article")
 	@PutMapping("/article/{articleNo}")
-	public InssaApiResponse deleteArticle(@PathVariable Long articleNo, @AuthenticationPrincipal AuthUser user) {
+	public InssaApiResponse<Map<String, Object>> deleteArticle(@PathVariable Long articleNo, @AuthenticationPrincipal AuthUser user) {
 		if(user == null) {
 			throw new InssaException("로그인 후 이용 가능합니다");
 		}
@@ -86,6 +87,6 @@ public class ArticleController {
 			.build();
 
 		articleService.deleteArticle(serviceRequest);
-		return InssaApiResponse.deleted(Map.of("articleNo", articleNo));
+		return InssaApiResponse.ok(ResponseCode.DELETED, Map.of("articleNo", articleNo));
 	}
 }
