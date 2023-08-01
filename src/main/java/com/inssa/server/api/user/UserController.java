@@ -23,7 +23,7 @@ import java.util.Objects;
 
 @RestController
 @Tag(name = "user", description = "회원 API")
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
@@ -46,13 +46,13 @@ public class UserController {
     }
 
     @Operation(summary = "이메일 중복 확인 API", tags = "user")
-    @PostMapping("/exists/{email}")
+    @PostMapping("/user/exists/{email}")
     public InssaApiResponse<Boolean> existsEmail(@PathVariable String email) {
         return InssaApiResponse.ok(userService.existsEmail(email));
     }
 
     @Operation(summary = "회원 정보 변경 API", tags = "user")
-    @PutMapping("/info")
+    @PutMapping("/user/info")
     public InssaApiResponse<User> changeUserInfo(@RequestBody UserChangeInfoRequestDto request, @AuthenticationPrincipal AuthUser user) {
         if(user == null) {
             throw new InssaException("로그인 후 이용 가능합니다");
@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @Operation(summary = "비밀번호 변경 API", tags = "user")
-    @PutMapping("/password/change")
+    @PutMapping("/user/password/change")
     public InssaApiResponse<Map<String, Object>> changePassword(@RequestBody UserPasswordRequestDto request, @AuthenticationPrincipal AuthUser user) {
         if(user == null) {
             throw new InssaException("로그인 후 이용 가능합니다");
@@ -73,7 +73,7 @@ public class UserController {
     }
 
     @Operation(summary = "비밀번호 확인 API", tags = "user")
-    @PostMapping("/password/check")
+    @PostMapping("/user/password/check")
     public InssaApiResponse<Boolean> checkPassword(@RequestBody UserPasswordRequestDto request, @AuthenticationPrincipal AuthUser user) {
         if(user == null) {
             throw new InssaException("로그인 후 이용 가능합니다");

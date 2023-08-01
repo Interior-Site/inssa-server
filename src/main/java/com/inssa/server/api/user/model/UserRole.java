@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum EnumRole {
+public enum UserRole {
     ANONYMOUS("ROLE_ANONYMOUS", "손님"),
     USER("ROLE_USER", "일반 사용자"),
     EMPLOYEE("ROLE_COMPANY", "업체 사용자"),

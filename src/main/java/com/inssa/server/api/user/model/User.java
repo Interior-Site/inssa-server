@@ -43,16 +43,17 @@ public class User extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private EnumRole role;
+    private UserRole role;
 
     public String getRoleKey() {
         return this.role.getKey();
     }
 
     @Builder
-    public User(String email, String password, String nickname, EnumRole role) {
+    public User(String email, String password, UserStatus status, String nickname, UserRole role) {
         this.email = email;
         this.password = password;
+        this.status = status;
         this.nickname = nickname;
         this.role = role;
     }
