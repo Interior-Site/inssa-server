@@ -1,4 +1,4 @@
-package com.inssa.server.api.review.order.model;
+package com.inssa.server.common.entity;
 
 import com.inssa.server.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
