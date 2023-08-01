@@ -23,7 +23,7 @@ public class BuildController {
     private final BuildService buildService;
 
     @Operation(summary = "시공후기 목록조회 API", tags = "buildReview")
-    @GetMapping("/buildList")
+    @GetMapping("/builds")
     //@GetMapping(value = "/selectList/{boardNo}")
     public InssaApiResponse buildList(){
 
@@ -31,7 +31,7 @@ public class BuildController {
     }
 
     @Operation(summary = "시공후기 상세조회 API", tags = "buildReview")
-    @GetMapping("/buildDetail/{buildNo}")
+    @GetMapping("/build")
     public InssaApiResponse buildDetail(@RequestParam int buildNo){
 
         return InssaApiResponse.ok(buildService.selectDetail(buildNo));
@@ -39,24 +39,24 @@ public class BuildController {
 
 
     @Operation(summary = "시공후기 작성 API", tags = "buildReview")
-    @PutMapping("/buildInsert")
+    @PostMapping("/build")
     public InssaApiResponse insertBuild(@RequestBody BuildDto request, @AuthenticationPrincipal AuthUser user){
         if(user == null){
-            throw new InssaException("로그인 후 이용 가능합니다.");
+           throw new InssaException("로그인 후 이용 가능합니다.");
         }
         return InssaApiResponse.ok(buildService.insertBuild(request, Long.parseLong(user.getUsername())));
     }
 
     @Operation(summary = "시공후기 수정 API", tags = "buildReview")
-    @PostMapping("/buildUpdate")
+    @PutMapping("/build")
     public InssaApiResponse updateBuild(@RequestBody BuildUpdateDto buildUpdateDto, @AuthenticationPrincipal AuthUser user){
 
         return InssaApiResponse.ok(buildService.updateBuild(buildUpdateDto, Long.parseLong(user.getUsername())));
     }
 
     @Operation(summary = "시공후기 삭제 API", tags = "buildReview")
-    @PostMapping("/buildDelete")
-    public InssaApiResponse deleteBuild(@RequestParam int buildNo, @AuthenticationPrincipal AuthUser user){
+    @PutMapping("/build/{buildNo}")
+    public InssaApiResponse deleteBuild(@PathVariable int buildNo, @AuthenticationPrincipal AuthUser user){
 
         return InssaApiResponse.ok(buildService.deleteBuild(buildNo, Long.parseLong(user.getUsername())));
     }
