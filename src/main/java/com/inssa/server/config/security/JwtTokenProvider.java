@@ -1,5 +1,6 @@
 package com.inssa.server.config.security;
 
+import com.inssa.server.api.user.model.AuthUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -7,6 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,8 +16,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -25,13 +29,12 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private final String AUTHORITIES_KEY = "auth";
-    private String secretKey = "inssasecretkeyqhwrfjlekqiomkxckl";
-    private Key key;
+    private String secret = "inssasecretkeyqhwrfjlekqiomkxckl";
+    private SecretKey secretKey;
 
     public JwtTokenProvider() {
         // secretKey 로드
-        byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
     @Value("${jwt.token-validity-in-seconds}")
@@ -48,7 +51,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setSubject(authentication.getName()) // JWT payload 에 저장되는 정보단위
                 .claim(AUTHORITIES_KEY, authorities) // 정보 저장
-                .signWith(key, SignatureAlgorithm.HS256)
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .setExpiration(validity) // 만료 시간 세팅
                 .compact();
     }
@@ -58,7 +61,7 @@ public class JwtTokenProvider {
         // 토큰 정보 해석
         Claims claims = Jwts
                 .parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -67,18 +70,24 @@ public class JwtTokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        AuthUser principal = new AuthUser(claims.getSubject(), "", new ArrayList<>(authorities));
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
     // Request의 Header에서 token 값을 가져오기
-    public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("X-AUTH-TOKEN");
+    public String getToken(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if(authorizationHeader == null) {
+            return null;
+        }
+
+        return authorizationHeader.replaceFirst("Bearer ", "").trim();
     }
 
     // 유효한 토큰인지 확인
     public boolean validateToken(String jwtToken) {
+
         try {
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(jwtToken);
             return !claims.getBody().getExpiration().before(new Date());

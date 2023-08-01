@@ -5,10 +5,11 @@ import com.inssa.server.api.user.dto.UserPasswordRequestDto;
 import com.inssa.server.api.user.dto.UserRegisterRequestDto;
 import com.inssa.server.api.user.dto.UserRequestDto;
 import com.inssa.server.api.user.model.AuthUser;
-import com.inssa.server.api.user.model.EnumRole;
+import com.inssa.server.api.user.model.UserRole;
 import com.inssa.server.api.user.model.User;
 import com.inssa.server.common.exception.InssaException;
 import com.inssa.server.config.security.JwtTokenProvider;
+import com.inssa.server.share.user.UserStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -36,9 +37,9 @@ public class UserService implements UserDetailsService {
 
         // 로그인 유저의 권한 목록 주입
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getRoleKey()));
+        authorities.add(new SimpleGrantedAuthority(user.getRoleKey().replaceFirst("ROLE_", "")));
 
-        return new AuthUser(user.getNo(), user.getPassword(), authorities);
+        return new AuthUser(user.getNo().toString(), user.getPassword(), authorities);
     }
 
     public String login(UserRequestDto request) {
@@ -48,17 +49,22 @@ public class UserService implements UserDetailsService {
             throw new InssaException("잘못된 비밀번호입니다.");
         }
 
-        return jwtTokenProvider.createToken(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+        ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getRoleKey().replaceFirst("ROLE_", "")));
+
+        return jwtTokenProvider.createToken(new UsernamePasswordAuthenticationToken(user.getNo(), user.getPassword(), authorities));
     }
 
     @Transactional
     public Long register(UserRegisterRequestDto request) {
 
+        // email 인증 구현 후 status 수정 필요
         User registerUser = userRepository.save(User.builder()
                                                     .password(passwordEncoder.encode(request.getPassword().trim()))
                                                     .email(request.getEmail())
+                                                    .status(UserStatus.ACTIVATED)
                                                     .nickname(request.getNickname())
-                                                    .role(EnumRole.USER)
+                                                    .role(UserRole.USER)
                                                     .build());
 
         return registerUser.getNo();

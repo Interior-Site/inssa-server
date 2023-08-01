@@ -10,12 +10,12 @@ import java.util.Collection;
 
 public class AuthUser implements UserDetails {
 
-    private Long userNo;
-    private String password;
+    private final String userName;
+    private final String password;
     private ArrayList<GrantedAuthority> authorities;
 
-    public AuthUser(Long userNo, String password, ArrayList<GrantedAuthority> authorities) {
-        this.userNo = userNo;
+    public AuthUser(String userName, String password, ArrayList<GrantedAuthority> authorities) {
+        this.userName = userName;
         this.password = password;
         this.authorities = authorities;
     }
@@ -33,7 +33,7 @@ public class AuthUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userNo.toString();
+        return userName.toString();
     }
 
     @JsonIgnore
