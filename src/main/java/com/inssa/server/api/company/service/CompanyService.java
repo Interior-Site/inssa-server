@@ -4,9 +4,6 @@ import com.inssa.server.api.company.data.CompanyRepository;
 import com.inssa.server.api.company.dto.CompanyChangeInfoRequestDto;
 import com.inssa.server.api.company.dto.CompanyResponseDto;
 import com.inssa.server.api.company.model.Company;
-import com.inssa.server.common.response.ApiResponse;
-import com.inssa.server.common.response.ResponseMessage;
-import com.inssa.server.common.code.StatusCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,46 +27,19 @@ public class CompanyService {
     }
 
     @Transactional
-    public ApiResponse changeCompanyInfo(CompanyChangeInfoRequestDto request) {
-        ApiResponse response = new ApiResponse();
-        int statusCode;
-        String message;
-
+    public Company changeCompanyInfo(CompanyChangeInfoRequestDto request) {
         Company company = findCompanyById(request.getCompanyNo());
         company.update(request.getCompanyName(), request.getContactNumber(), request.getStatus(), request.getApproval());
 
-        statusCode = StatusCode.SUCCESS;
-        message = ResponseMessage.SUCCESS;
-        response.putData("companyNo", request.getCompanyNo());
-
-        response.setStatusCode(statusCode);
-        response.setResponseMessage(message);
-
-        return response;
+        return company;
     }
 
     @Transactional
-	public ApiResponse deleteCompany(Long companyNo) {
-        // 로그인한 유저가 해당 회사를 가지고 있는지 확인 로직 필요
-
-        ApiResponse response = new ApiResponse();
-        int statusCode;
-        String message;
-
+	public void deleteCompany(Long companyNo) {
         companyRepository.deleteById(companyNo);
-
-        statusCode = StatusCode.SUCCESS;
-        message = ResponseMessage.SUCCESS;
-        response.putData("companyNo", companyNo);
-
-        response.setStatusCode(statusCode);
-        response.setResponseMessage(message);
-
-        return response;
     }
 
     private Company findCompanyById(Long companyNo) {
-
         return companyRepository.findById(companyNo).orElseThrow(() -> new IllegalArgumentException("해당하는 업체를 찾을 수 없습니다. companyNo: " + companyNo));
     }
 }

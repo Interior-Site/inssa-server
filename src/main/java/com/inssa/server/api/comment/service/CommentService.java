@@ -2,9 +2,7 @@ package com.inssa.server.api.comment.service;
 
 import com.inssa.server.api.comment.dao.CommentDao;
 import com.inssa.server.api.comment.dto.CommentDto;
-import com.inssa.server.common.response.ApiResponse;
-import com.inssa.server.common.response.ResponseMessage;
-import com.inssa.server.common.code.StatusCode;
+import com.inssa.server.common.exception.InssaException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,31 +14,12 @@ public class CommentService {
 
     private final CommentDao commentdao;
 
-    public ApiResponse selectList(int boardNo){
-        ApiResponse response = new ApiResponse();
-        int statusCode = StatusCode.FAIL;
-        String message = ResponseMessage.FAIL;
-
+    public List<CommentDto> selectList(int boardNo){
         // DAO에서 result에 담긴 댓글목록
-        List<CommentDto> commentList = commentdao.selectList(boardNo);
-
-        if(!commentList.isEmpty()){
-            statusCode = StatusCode.SUCCESS;
-            message = boardNo + "번 게시글 댓글 목록 조회" + ResponseMessage.SUCCESS;
-        }
-
-
-        response.setStatusCode(statusCode);
-        response.setResponseMessage(message);
-        response.putData("result", commentList);
-        return response;
+        return commentdao.selectList(boardNo);
     }
 
-    public ApiResponse insertComment(CommentDto comment) {
-        ApiResponse response = new ApiResponse();
-        int statusCode = StatusCode.FAIL; // FAIL : 400, SUCCESS : 200
-        String message = ResponseMessage.FAIL;
-
+    public void insertComment(CommentDto comment) {
         int result = 0;
         Integer parentYn = comment.getParentCommentNo();
 
@@ -49,60 +28,27 @@ public class CommentService {
             result = commentdao.insertReComment(comment);
         } else{ // 댓글인 경우
             result = commentdao.insertComment(comment);
-
         }
 
-        // 댓글 등록에 성공했다면
-        if(result > 0){
-            statusCode = StatusCode.SUCCESS;
-            message = ResponseMessage.SUCCESS;
-            response.putData("userId", comment);
+        if(result <= 0) {
+            throw new InssaException("댓글 등록 실패");
         }
-
-        // 응답에 결과코드, 메세지 담음
-        response.setStatusCode(statusCode);
-        response.setResponseMessage(message);
-
-        return response;
     }
 
 
-    public ApiResponse updateComment(CommentDto comment) {
-        ApiResponse response = new ApiResponse();
-        int statusCode = StatusCode.FAIL; // FAIL : 400, SUCCESS : 200
-        String message = ResponseMessage.FAIL;
-
+    public void updateComment(CommentDto comment) {
         int result = commentdao.updateComment(comment);
 
-        if(result > 0){
-            statusCode = StatusCode.SUCCESS;
-            message = ResponseMessage.SUCCESS;
-            response.putData("userId", comment);
-
+        if(result <= 0) {
+            throw new InssaException("댓글 수정 실패");
         }
-        response.setStatusCode(statusCode);
-        response.setResponseMessage(message);
-
-        return response;
     }
 
-    public ApiResponse deleteComment(CommentDto comment) {
-        ApiResponse response = new ApiResponse();
-        int statusCode = StatusCode.FAIL; // FAIL : 400, SUCCESS : 200
-        String message = ResponseMessage.FAIL;
-
+    public void deleteComment(CommentDto comment) {
         int result = commentdao.deleteComment(comment);
 
-        if(result > 0){
-            statusCode = StatusCode.SUCCESS;
-            message = ResponseMessage.SUCCESS;
-            response.putData("commentNo", comment);
-
+        if(result <= 0) {
+            throw new InssaException("댓글 삭제 실패");
         }
-        response.setStatusCode(statusCode);
-        response.setResponseMessage(message);
-
-        return response;
-
     }
 }

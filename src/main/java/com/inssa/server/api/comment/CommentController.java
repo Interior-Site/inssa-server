@@ -2,11 +2,14 @@ package com.inssa.server.api.comment;
 
 import com.inssa.server.api.comment.dto.CommentDto;
 import com.inssa.server.api.comment.service.CommentService;
-import com.inssa.server.common.response.ApiResponse;
+import com.inssa.server.common.response.InssaApiResponse;
+import com.inssa.server.common.response.ResponseCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController // 알아서 RequestBody에 해당하는 내용 json 포맷으로 반환
@@ -20,29 +23,32 @@ public class CommentController {
     @Operation(summary = "댓글 목록 조회 API", tags = "comment") // 스웨거
     @GetMapping("/selectList")
     //@GetMapping(value = "/selectList/{boardNo}")
-    public ApiResponse selectList(@RequestParam int boardNo){
-        return commentService.selectList(boardNo);
+    public InssaApiResponse<List<CommentDto>> selectList(@RequestParam int boardNo){
+        return InssaApiResponse.ok(commentService.selectList(boardNo));
     }
 
     @Operation(summary = "댓글 등록 API", tags = "comment")
     @PostMapping("/insertComment")
-    public ApiResponse insertComment(@RequestBody CommentDto comment){
-        return commentService.insertComment(comment);
+    public InssaApiResponse<Object> insertComment(@RequestBody CommentDto comment){
+        commentService.insertComment(comment);
+        return InssaApiResponse.ok(ResponseCode.CREATED);
     }
 
 
     // 댓글 수정
     @Operation(summary = "댓글 수정 API", tags = "comment")
     @PostMapping("/updateComment")
-    public ApiResponse updateComment(@RequestBody CommentDto comment){
-        return commentService.updateComment(comment);
+    public InssaApiResponse<Object> updateComment(@RequestBody CommentDto comment){
+        commentService.updateComment(comment);
+        return InssaApiResponse.ok(ResponseCode.UPDATED);
     }
 
     // 댓글 삭제
     @Operation(summary = "댓글 삭제 API", tags = "comment")
     @PostMapping(value="/deleteComment")
-    public ApiResponse deleteComment(@RequestBody CommentDto comment){
-        return commentService.deleteComment(comment);
+    public InssaApiResponse<Object> deleteComment(@RequestBody CommentDto comment){
+        commentService.deleteComment(comment);
+        return InssaApiResponse.ok(ResponseCode.DELETED);
     }
 
 

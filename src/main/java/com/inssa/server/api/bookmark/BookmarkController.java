@@ -5,14 +5,13 @@ import com.inssa.server.api.bookmark.dto.BookmarkRequestDto;
 import com.inssa.server.api.bookmark.service.BookmarkService;
 import com.inssa.server.api.user.model.AuthUser;
 import com.inssa.server.common.exception.InssaException;
-import com.inssa.server.common.response.ApiResponse;
 import com.inssa.server.common.response.InssaApiResponse;
+import com.inssa.server.common.response.ResponseCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -27,7 +26,7 @@ public class BookmarkController {
 
     @Operation(summary = "북마크 생성", tags = "bookmark")
     @PostMapping("/api/v1/bookmark")
-    public InssaApiResponse createBookmark(@RequestBody BookmarkCreateRequestDto request, @AuthenticationPrincipal AuthUser user) {
+    public InssaApiResponse<Map<String, Object>> createBookmark(@RequestBody BookmarkCreateRequestDto request, @AuthenticationPrincipal AuthUser user) {
         if(user == null) {
             throw new InssaException("로그인 후 이용 가능합니다");
         }
@@ -40,12 +39,12 @@ public class BookmarkController {
 
         Long bookmarkNo = bookmarkService.createBookmark(serviceRequest);
 
-        return InssaApiResponse.created(Map.of("bookmarkNo", bookmarkNo));
+        return InssaApiResponse.ok(ResponseCode.CREATED, Map.of("bookmarkNo", bookmarkNo));
     }
 
     @Operation(summary = "북마크 삭제", tags = "bookmark")
     @DeleteMapping("/api/v1/bookmark/{bookmarkNo}")
-    public InssaApiResponse deleteBookmark(@PathVariable Long bookmarkNo, @AuthenticationPrincipal AuthUser user) {
+    public InssaApiResponse<Map<String, Object>> deleteBookmark(@PathVariable Long bookmarkNo, @AuthenticationPrincipal AuthUser user) {
         if(user == null) {
             throw new InssaException("로그인 후 이용 가능합니다");
         }
@@ -56,7 +55,7 @@ public class BookmarkController {
                 .build();
 
         Long deleteNo = bookmarkService.deleteBookmark(serviceRequest);
-        return InssaApiResponse.deleted(Map.of("bookmarkNo", deleteNo));
+        return InssaApiResponse.ok(ResponseCode.DELETED, Map.of("bookmarkNo", deleteNo));
     }
 
 }

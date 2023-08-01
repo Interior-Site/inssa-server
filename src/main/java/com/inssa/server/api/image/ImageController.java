@@ -2,6 +2,7 @@ package com.inssa.server.api.image;
 
 import com.inssa.server.api.image.model.Image;
 import com.inssa.server.api.image.service.ImageService;
+import com.inssa.server.common.response.InssaApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class ImageController {
 
     @Operation(summary = "이미지 업로드 API", tags = "image")
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE) // 들어오는 데이터 타입 지정
-    public List<Image> uploadImage(@RequestPart(name = "file")List<MultipartFile> files) {
-        return imageService.uploadAndSave(files);
+    public InssaApiResponse<List<Image>> uploadImage(@RequestPart(name = "file")List<MultipartFile> files) {
+        return InssaApiResponse.ok(imageService.uploadAndSave(files));
     }
 }

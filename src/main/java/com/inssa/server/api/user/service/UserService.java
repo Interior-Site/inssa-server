@@ -7,10 +7,7 @@ import com.inssa.server.api.user.dto.UserRequestDto;
 import com.inssa.server.api.user.model.AuthUser;
 import com.inssa.server.api.user.model.EnumRole;
 import com.inssa.server.api.user.model.User;
-import com.inssa.server.common.code.StatusCode;
 import com.inssa.server.common.exception.InssaException;
-import com.inssa.server.common.response.ApiResponse;
-import com.inssa.server.common.response.ResponseMessage;
 import com.inssa.server.config.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -77,10 +74,6 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public User changeUserInfo(UserChangeInfoRequestDto request, Long userNo) {
-        ApiResponse response = new ApiResponse();
-        int statusCode = StatusCode.FAIL;
-        String message = ResponseMessage.FAIL;
-
         User user = findByUserNo(userNo);
         user.changeInfo(request.getNickname());
 
