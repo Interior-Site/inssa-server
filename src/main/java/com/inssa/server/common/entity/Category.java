@@ -19,7 +19,7 @@ public class Category {
     @Column(name = "category_no")
     private Long no;
 
-    @Column(length = 10, name = "category_name", nullable = false)
+    @Column(length = 10, name = "name", nullable = false)
     private String name;
 
     @Builder
