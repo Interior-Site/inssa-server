@@ -1,13 +1,12 @@
 package com.inssa.server.api.review.order.dto;
 
 import com.inssa.server.api.review.order.model.OrderReview;
-import lombok.Builder;
 
-public class OrderReviewRequestDto {
+public class OrderReviewResponseDto {
 
-    @Builder
-    public OrderReview toEntity() {
+    // TODO
+
+    public OrderReviewResponseDto(OrderReview orderReview) {
         // TODO
-        return null;
     }
 }
