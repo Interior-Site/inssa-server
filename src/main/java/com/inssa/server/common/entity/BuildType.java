@@ -3,14 +3,17 @@ package com.inssa.server.common.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * 시공 종류: 방, 부엌, 거실, 베란다, 도배/장판, 기타
+ * 건물 유일: 아파트, 빌라, 오피스텔, 원룸/투룸, 카페, 식당, 기타
  */
 @Getter
 @NoArgsConstructor
 @Entity
-public class BuildType extends BaseTimeEntity {
+@Table(name = "build_type")
+public class BuildType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,4 +22,9 @@ public class BuildType extends BaseTimeEntity {
 
     @Column(length = 10, nullable = false)
     private String name;
+
+    public BuildType(Long no, String name) {
+        this.no = no;
+        this.name = name;
+    }
 }
