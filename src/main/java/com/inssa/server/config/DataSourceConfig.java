@@ -1,11 +1,11 @@
 package com.inssa.server.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.hibernate.dialect.MySQLDialect;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -17,11 +17,10 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import java.util.Properties;
+import java.util.Map;
 
 @Configuration
 /**
@@ -31,7 +30,7 @@ import java.util.Properties;
  * @Primary 를 사용해 우선적으로 등록할 트랜잭션 매니져 Bean을 지정
  */
 @EnableTransactionManagement
-@MapperScan(basePackages = {"com.inssa.server.api"}, sqlSessionFactoryRef = "testSqlSessionFactory")
+@MapperScan(basePackages = {"com.inssa.server"}, sqlSessionFactoryRef = "testSqlSessionFactory")
 
 /**
  * JpaRepository를 상속받아서 사용할 경우 해당 인터페이스가 존재하는 경로를
@@ -40,7 +39,7 @@ import java.util.Properties;
 @EnableJpaRepositories(
         entityManagerFactoryRef = "jpaEntityManagerFactory",
         transactionManagerRef = "transactionManager",
-        basePackages = {"com.inssa.server.api"}
+        basePackages = {"com.inssa.server"}
 )
 public class DataSourceConfig {
 
@@ -52,6 +51,16 @@ public class DataSourceConfig {
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() {
         return DataSourceBuilder.create().build();
+    }
+
+    /**
+     * application.yaml의 spring.jpa에 설정한 jpa 설정을 읽음
+     */
+    @Primary
+    @Bean(name = "jpaProperties")
+    @ConfigurationProperties(prefix = "spring.jpa")
+    public JpaProperties jpaProperties() {
+        return new JpaProperties();
     }
 
     /**
@@ -96,20 +105,18 @@ public class DataSourceConfig {
     @Bean(name = "jpaEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean jpaEntityManagerFactory(
             EntityManagerFactoryBuilder builder,
-            @Qualifier("dataSource") DataSource dataSource) {
-        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-        entityManagerFactoryBean.setDataSource(dataSource);
-        entityManagerFactoryBean.setPackagesToScan("com.inssa.server.api");
+            @Qualifier("dataSource") DataSource dataSource,
+            @Qualifier("jpaProperties") JpaProperties jpaProperties
+    ) {
+        Map<String, String> properties = jpaProperties.getProperties();
+        properties.put("hibernate.physical_naming_strategy", CustomNamingStrategy.class.getName());
 
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setDatabasePlatform(MySQLDialect.class.getName());
-        entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
-
-        Properties jpaProperties = new Properties();
-        jpaProperties.setProperty("hibernate.physical_naming_strategy", CustomNamingStrategy.class.getName());
-        entityManagerFactoryBean.setJpaProperties(jpaProperties);
-
-        return entityManagerFactoryBean;
+        return builder
+                .dataSource(dataSource)
+                .properties(properties)
+                .packages("com.inssa.server")
+                .persistenceUnit("default")
+                .build();
     }
 
     /**
