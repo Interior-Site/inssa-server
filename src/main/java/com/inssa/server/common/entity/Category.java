@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "category")
 public class Category {
 
     @Id
@@ -19,15 +18,11 @@ public class Category {
     @Column(name = "category_no")
     private Long no;
 
-    @Column(length = 10, name = "name", nullable = false)
+    @Column(length = 10, nullable = false)
     private String name;
 
     @Builder
     public Category(String name) {
         this.name = name;
     }
-
-////    public Category(String name) {
-////        this.name = name;
-//    }
 }

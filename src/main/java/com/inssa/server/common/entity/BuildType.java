@@ -1,6 +1,7 @@
 package com.inssa.server.common.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "build_type")
 public class BuildType {
 
     @Id
@@ -23,8 +23,8 @@ public class BuildType {
     @Column(length = 10, nullable = false)
     private String name;
 
-    public BuildType(Long no, String name) {
-        this.no = no;
+    @Builder
+    public BuildType(String name) {
         this.name = name;
     }
 }
