@@ -14,7 +14,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-@Entity
+@Entity(name = "order_review")
 public class OrderReview extends BaseTimeEntity {
 
     @Id
@@ -29,7 +29,8 @@ public class OrderReview extends BaseTimeEntity {
     @Column(length = 100, nullable = false)
     private String title;
 
-    @Column(columnDefinition = "LONGTEXT", nullable = false)
+    @Lob // Long Text (~4GB)
+    @Column(nullable = false)
     private String content;
 
     @Enumerated(EnumType.STRING)
@@ -50,8 +51,8 @@ public class OrderReview extends BaseTimeEntity {
     private Company company;
 
     @OneToMany(mappedBy = "orderReview", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderBuildTag> buildTags = new ArrayList<>();
+    private List<OrderReviewBuildType> orderReviewBuildTypes = new ArrayList<>();
 
     @OneToMany(mappedBy = "orderReview", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderPlaceTag> placeTags = new ArrayList<>();
+    private List<OrderReviewCategory> orderReviewCategories = new ArrayList<>();
 }

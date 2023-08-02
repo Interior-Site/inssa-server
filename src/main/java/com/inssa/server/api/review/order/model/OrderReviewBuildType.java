@@ -1,7 +1,7 @@
 package com.inssa.server.api.review.order.model;
 
 import com.inssa.server.common.entity.BaseTimeEntity;
-import com.inssa.server.common.entity.PlaceType;
+import com.inssa.server.common.entity.BuildType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,18 +9,18 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-public class OrderPlaceTag extends BaseTimeEntity {
+public class OrderReviewBuildType extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_place_tag_no")
+    @Column(name = "order_build_no")
     private Long no;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_review_no", insertable = false, updatable = false, nullable = false)
+    @JoinColumn(name = "order_no", insertable = false, updatable = false, nullable = false)
     private OrderReview orderReview;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "place_type_no", insertable = false, updatable = false, nullable = false)
-    private PlaceType placeType;
+    @JoinColumn(name = "build_type_no", insertable = false, updatable = false, nullable = false)
+    private BuildType buildType;
 }
