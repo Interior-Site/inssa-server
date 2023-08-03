@@ -11,6 +11,7 @@ import java.util.Collection;
 public class AuthUser implements UserDetails {
 
     private final String userName;
+    private final Long userNo;
     private final String password;
     private ArrayList<GrantedAuthority> authorities;
 
@@ -18,6 +19,7 @@ public class AuthUser implements UserDetails {
         this.userName = userName;
         this.password = password;
         this.authorities = authorities;
+        this.userNo = Long.parseLong(userName);
     }
 
     @Override
@@ -34,6 +36,10 @@ public class AuthUser implements UserDetails {
     @Override
     public String getUsername() {
         return userName.toString();
+    }
+
+    public Long getUserNo() {
+        return userNo;
     }
 
     @JsonIgnore
