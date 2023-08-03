@@ -1,7 +1,7 @@
 package com.inssa.server.api.review.order.model;
 
-import com.inssa.server.common.entity.BaseTimeEntity;
-import com.inssa.server.common.entity.Category;
+import com.inssa.server.api.review.category.model.Category;
+import com.inssa.server.share.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
