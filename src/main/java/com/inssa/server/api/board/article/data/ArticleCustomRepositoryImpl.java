@@ -1,9 +1,9 @@
 package com.inssa.server.api.board.article.data;
 
 import com.inssa.server.api.board.article.dto.ArticleListResponseDto;
-import com.inssa.server.api.article.dto.QArticleListResponseDto;
+import com.inssa.server.api.board.article.dto.QArticleListResponseDto;
 import com.inssa.server.api.board.article.model.ArticleType;
-import com.inssa.server.api.article.model.QArticle;
+import com.inssa.server.api.board.article.model.QArticle;
 import com.inssa.server.api.user.model.QUser;
 import com.inssa.server.share.board.BoardStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
