@@ -12,32 +12,20 @@ spring:
 
   # MariaDB (Docker)
   datasource:
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    jdbcUrl: jdbc:log4jdbc:mariadb://localhost:3306/INSSA?serverTimezone=Asia/Seoul
+    jdbcUrl: jdbc:mariadb://43.201.175.110:3306/INSSA?serverTimezone=Asia/Seoul
     username: INSSA
     password: INSSA
-
-  # H2 (temp, in-memory)
-#  datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:mem:test;MODE=MariaDB;CASE_INSENSITIVE_IDENTIFIERS=true;
-#    username: INSSA
-#    password: INSSA
-#  h2:
-#    console:
-#      enabled: true
-#      path: /h2-console
+    driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
     open-in-view: false
     generate-ddl: true
     show-sql: true
     hibernate:
-      ddl-auto: create-drop # for jpa test
+      ddl-auto: create # for jpa test
     properties:
       hibernate:
         format_sql: true
-
 
   mvc:
     pathmatch:

@@ -52,8 +52,6 @@ public class SecurityConfig {
             new AntPathRequestMatcher("api/v1/**")
     ).collect(Collectors.toList());
 
-//    private static final AntPathRequestMatcher LOCAL_DB_URL_MATCHER = new AntPathRequestMatcher("/h2-console/**");
-
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -72,11 +70,6 @@ public class SecurityConfig {
      */
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // local 실행 모드일 경우 처리
-//        if (activeProfile.contains("local")) {
-//            PERMIT_URL_ARRAY.add(LOCAL_DB_URL_MATCHER);
-//        }
-        // 권한 설정
         http
                 .csrf(AbstractHttpConfigurer::disable) // swagger API 호출시 403 에러 발생 방지
                 .headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
