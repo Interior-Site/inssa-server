@@ -10,9 +10,9 @@ import org.springframework.data.domain.Pageable;
 public class OrderReviewCustomRepositoryImpl implements OrderReviewCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
-    @Override
-    public Page<OrderReviewListResponseDto> findOrderReviews(Pageable pageable) {
-        // TODO
-        return null;
-    }
+//    @Override
+//    public Page<OrderReviewListResponseDto> findOrderReviews(Pageable pageable) {
+//        // TODO
+//        return null;
+//    }
 }
