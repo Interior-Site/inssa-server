@@ -5,7 +5,7 @@ import com.inssa.server.api.article.dto.QArticleListResponseDto;
 import com.inssa.server.api.article.model.ArticleType;
 import com.inssa.server.api.article.model.QArticle;
 import com.inssa.server.api.user.model.QUser;
-import com.inssa.server.common.board.BoardStatus;
+import com.inssa.server.share.board.BoardStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

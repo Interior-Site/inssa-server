@@ -1,7 +1,7 @@
 package com.inssa.server.api.bookmark.model;
 
 import com.inssa.server.api.user.model.User;
-import com.inssa.server.common.entity.BaseTimeEntity;
+import com.inssa.server.share.entity.BaseTimeEntity;
 import com.inssa.server.share.bookmark.BookmarkType;
 import jakarta.persistence.*;
 import lombok.Builder;
