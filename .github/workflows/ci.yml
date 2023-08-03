@@ -5,7 +5,7 @@ on: # event 발생 시점 정의
       - main # main에 push할 때
   pull_request:
     branches: [ "*" ]
-  workflow_dispatch:
+  workflow_dispatch: # 수동 트리거 활성화
 
 jobs:
   build:

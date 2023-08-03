@@ -1,6 +1,10 @@
 name: deploy-to-aws-server
 
 on:
+  workflow_run:
+    workflows: ["ci"]
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
