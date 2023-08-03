@@ -49,9 +49,10 @@ public class ArticleController {
 	}
 
 	@Operation(summary = "게시글 목록 조회", tags = "article")
-	@GetMapping("/articles/{type}/list")
-	public InssaApiResponse<Page<ArticleListResponseDto>> findArticles(@SortDefault(sort = "created_date", direction = Sort.Direction.DESC) Pageable pageable,
-																	   @PathVariable ArticleType type) {
+	@GetMapping("/articles")
+	public InssaApiResponse<Page<ArticleListResponseDto>> findArticles(
+			@SortDefault(sort = "created_date", direction = Sort.Direction.DESC) Pageable pageable,
+			@RequestParam ArticleType type) {
 
 		return InssaApiResponse.ok(articleService.findArticles(type, pageable));
 	}
