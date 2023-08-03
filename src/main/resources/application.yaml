@@ -1,12 +1,9 @@
 spring:
   datasource:
-    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    jdbcUrl: jdbc:log4jdbc:mariadb://43.201.175.110:3306/INSSA?serverTimezone=Asia/Seoul
+    jdbc-url: jdbc:mariadb://43.201.175.110:3306/INSSA?serverTimezone=Asia/Seoul
     username: INSSA
     password: INSSA123!@#
-#    resource: C:\Users\images
-#    resource-path: file
-#    upload-path: /upload`
+    driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
     open-in-view: false
@@ -16,8 +13,8 @@ spring:
       ddl-auto: none
     properties:
       hibernate:
+        show_sql: true
         format_sql: true
-
 
   mvc:
     pathmatch:
@@ -27,24 +24,6 @@ jwt:
   header:
   secret:
   token-validity-in-seconds: 86400
-
-
-logging:
-  config: classpath:logback-spring.xml
-  level:
-    jdbc:
-      sqlonly: off
-      sqltiming: info
-      resultsettable: info
-      audit: off
-      resultset: off
-      connection: off
-    root: info
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql: trace
 
 springdoc:
   packages-to-scan: com.inssa.server.api
