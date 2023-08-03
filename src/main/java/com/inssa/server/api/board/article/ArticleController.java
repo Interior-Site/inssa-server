@@ -7,6 +7,7 @@ import com.inssa.server.api.board.article.dto.ArticleUpdateRequestDto;
 import com.inssa.server.api.board.article.model.ArticleType;
 import com.inssa.server.api.board.article.service.ArticleService;
 import com.inssa.server.api.user.model.AuthUser;
+import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
 import com.inssa.server.common.exception.InssaException;
 import com.inssa.server.common.response.InssaApiResponse;
 import com.inssa.server.common.response.ResponseCode;
@@ -31,12 +32,9 @@ public class ArticleController {
 	private final ArticleService articleService;
 
 	@Operation(summary = "게시글 등록", tags = "article")
+	@PreAuthorizeLogInUser
 	@PostMapping("/article")
 	public InssaApiResponse<Map<String, Object>> createArticle(@RequestBody ArticleCreateRequestDto request, @AuthenticationPrincipal AuthUser user) {
-		if(user == null) {
-			throw new InssaException("로그인 후 이용 가능합니다");
-		}
-
 		ArticleRequestDto serviceRequest = ArticleRequestDto.createBuilder()
 			.articleType(request.getArticleType())
 			.title(request.getTitle())
@@ -58,12 +56,9 @@ public class ArticleController {
 	}
 
 	@Operation(summary = "게시글 수정", tags = "article")
+	@PreAuthorizeLogInUser
 	@PutMapping("/article")
 	public InssaApiResponse<Map<String, Object>> updateArticle(@RequestBody ArticleUpdateRequestDto request, @AuthenticationPrincipal AuthUser user) {
-		if(user == null) {
-			throw new InssaException("로그인 후 이용 가능합니다");
-		}
-
 		ArticleRequestDto serviceRequest = ArticleRequestDto.updateBuilder()
 			.articleNo(request.getArticleNo())
 			.title(request.getTitle())
@@ -76,12 +71,9 @@ public class ArticleController {
 	}
 
 	@Operation(summary = "게시글 삭제", tags = "article")
+	@PreAuthorizeLogInUser
 	@PutMapping("/article/{articleNo}")
 	public InssaApiResponse<Map<String, Object>> deleteArticle(@PathVariable Long articleNo, @AuthenticationPrincipal AuthUser user) {
-		if(user == null) {
-			throw new InssaException("로그인 후 이용 가능합니다");
-		}
-
 		ArticleRequestDto serviceRequest = ArticleRequestDto.deleteBuilder()
 			.articleNo(articleNo)
 			.userNo(Long.parseLong(user.getUsername()))

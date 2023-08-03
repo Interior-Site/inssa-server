@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 @EnableWebSecurity // Spring Security 설정 활성화
-@EnableMethodSecurity
+@EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
