@@ -3,11 +3,12 @@ package com.inssa.server.api.review.order;
 import com.inssa.server.api.review.order.dto.*;
 import com.inssa.server.api.review.order.service.OrderService;
 import com.inssa.server.api.user.model.AuthUser;
-import com.inssa.server.common.exception.InssaException;
+import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
 import com.inssa.server.common.response.InssaApiResponse;
 import com.inssa.server.common.response.ResponseCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,43 +28,42 @@ import java.util.Map;
 public class OrderController {
     private final OrderService orderService;
 
+    // Article 컨벤션 X 질문용
     @Operation(summary = "견적 후기 등록", tags = "orderReview")
+    @PreAuthorizeLogInUser
     @PostMapping
-    public InssaApiResponse<Map<String, Object>> createOrderReview(
-            @RequestBody OrderReviewCreateRequestDto createRequest,
+    public InssaApiResponse<OrderReviewCreateResponseDto> createOrderReview(
+            @Valid @RequestBody OrderReviewCreateRequestDto createRequest,
             @AuthenticationPrincipal AuthUser user
     ) {
-        // user 판단
-        if (user == null) {
-            throw new InssaException("로그인 후 이용 가능합니다.");
-        }
-        OrderReviewRequestDto requestDto = createRequest.toDto();
-        Long orderReviewNo = orderService.createOrderReview(requestDto);
-        // [header] Location: /api/v1/review/orders/{orderReviewNo}
-        return InssaApiResponse.ok(ResponseCode.CREATED, Map.of("orderReviewNo", orderReviewNo));
+        OrderReviewCreateResponseDto createResponse = orderService.createOrderReview(createRequest, user.getUserNo());
+        return InssaApiResponse.ok(ResponseCode.CREATED, createResponse);
     }
 
+    // TODO: 미로그인 시 일부만 노출
     @Operation(summary = "견적 후기 목록 조회", tags = "orderReview")
     @GetMapping
     public InssaApiResponse<Page<OrderReviewListResponseDto>> findOrderReviews(
             @SortDefault(sort = "created_date", direction = Sort.Direction.DESC) Pageable pageable
+            // TODO: 필터, 정렬, 검색 조건 등
     ) {
         return InssaApiResponse.ok(ResponseCode.SUCCESS, orderService.findOrderReviews(pageable));
     }
 
-    // TODO
-    @Operation(summary = "견적 후기 단건 조회", tags = "orderReview")
+    // TODO: 미로그인 시 일부만 노출
+    @Operation(summary = "견적 후기 상세 조회", tags = "orderReview")
     @GetMapping("/{orderReviewNo}")
     public InssaApiResponse<OrderReviewResponseDto> findById(
             @PathVariable Long orderReviewNo
     ) {
-        return InssaApiResponse.ok(ResponseCode.SUCCESS, orderService.findById(orderReviewNo));
+        OrderReviewResponseDto orderReviewResponse = orderService.findOrderReviewById(orderReviewNo);
+        return InssaApiResponse.ok(ResponseCode.SUCCESS, orderReviewResponse);
     }
 
 
     // TODO
     @Operation(summary = "견적 후기 수정", tags = "orderReview")
-    @PatchMapping("/{orderReviewNo}")
+    @PutMapping("/{orderReviewNo}")
     public InssaApiResponse<Map<String, Object>> updateOrderReview(
             @PathVariable Long orderReviewNo,
             @RequestBody OrderReviewUpdateRequestDto updateRequest
@@ -87,7 +87,7 @@ public class OrderController {
     }
 
 
-    /*
+    /* 질문용
     @Operation(summary = "견적 후기 삭제", tags = "orderReview")
     @DeleteMapping("/{orderReviewNo}")
     public InssaApiResponse<Void> deleteOrderReview(
