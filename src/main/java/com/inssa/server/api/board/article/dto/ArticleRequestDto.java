@@ -1,7 +1,7 @@
-package com.inssa.server.api.article.dto;
+package com.inssa.server.api.board.article.dto;
 
-import com.inssa.server.api.article.model.Article;
-import com.inssa.server.api.article.model.ArticleType;
+import com.inssa.server.api.board.article.model.Article;
+import com.inssa.server.api.board.article.model.ArticleType;
 import com.inssa.server.share.board.BoardStatus;
 import lombok.Builder;
 import lombok.Data;

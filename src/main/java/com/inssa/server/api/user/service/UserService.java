@@ -39,7 +39,7 @@ public class UserService implements UserDetailsService {
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getRoleKey().replaceFirst("ROLE_", "")));
 
-        return new AuthUser(user.getNo().toString(), user.getPassword(), authorities);
+        return new AuthUser(user.getNo(), user.getEmail(), user.getPassword(), authorities);
     }
 
     public String login(UserRequestDto request) {
@@ -52,7 +52,7 @@ public class UserService implements UserDetailsService {
         ArrayList<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getRoleKey().replaceFirst("ROLE_", "")));
 
-        return jwtTokenProvider.createToken(new UsernamePasswordAuthenticationToken(user.getNo(), user.getPassword(), authorities));
+        return jwtTokenProvider.createToken(new UsernamePasswordAuthenticationToken(user.getNo(), user.getPassword(), authorities), user.getEmail());
     }
 
     @Transactional
