@@ -44,20 +44,20 @@ public class BuildController {
         if(user == null){
            throw new InssaException("로그인 후 이용 가능합니다.");
         }
-        return InssaApiResponse.ok(buildService.insertBuild(request, Long.parseLong(user.getUsername())));
+        return InssaApiResponse.ok(buildService.insertBuild(request, user.getUserNo()));
     }
 
     @Operation(summary = "시공후기 수정 API", tags = "buildReview")
     @PutMapping("/build")
     public InssaApiResponse updateBuild(@RequestBody BuildUpdateDto buildUpdateDto, @AuthenticationPrincipal AuthUser user){
 
-        return InssaApiResponse.ok(buildService.updateBuild(buildUpdateDto, Long.parseLong(user.getUsername())));
+        return InssaApiResponse.ok(buildService.updateBuild(buildUpdateDto, user.getUserNo()));
     }
 
     @Operation(summary = "시공후기 삭제 API", tags = "buildReview")
     @PutMapping("/build/{buildNo}")
     public InssaApiResponse deleteBuild(@PathVariable int buildNo, @AuthenticationPrincipal AuthUser user){
 
-        return InssaApiResponse.ok(buildService.deleteBuild(buildNo, Long.parseLong(user.getUsername())));
+        return InssaApiResponse.ok(buildService.deleteBuild(buildNo, user.getUserNo()));
     }
 }

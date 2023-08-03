@@ -7,6 +7,7 @@ import com.inssa.server.api.user.dto.UserRequestDto;
 import com.inssa.server.api.user.model.AuthUser;
 import com.inssa.server.api.user.model.User;
 import com.inssa.server.api.user.service.UserService;
+import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
 import com.inssa.server.common.exception.InssaException;
 import com.inssa.server.common.response.InssaApiResponse;
 import com.inssa.server.common.response.ResponseCode;
@@ -52,44 +53,33 @@ public class UserController {
     }
 
     @Operation(summary = "회원 정보 변경 API", tags = "user")
+    @PreAuthorizeLogInUser
     @PutMapping("/user/info")
     public InssaApiResponse<User> changeUserInfo(@RequestBody UserChangeInfoRequestDto request, @AuthenticationPrincipal AuthUser user) {
-        if(user == null) {
-            throw new InssaException("로그인 후 이용 가능합니다");
-        }
-
-        return InssaApiResponse.ok(userService.changeUserInfo(request, Long.parseLong(user.getUsername())));
+        return InssaApiResponse.ok(userService.changeUserInfo(request, user.getUserNo()));
     }
 
     @Operation(summary = "비밀번호 변경 API", tags = "user")
+    @PreAuthorizeLogInUser
     @PutMapping("/user/password/change")
     public InssaApiResponse<Map<String, Object>> changePassword(@RequestBody UserPasswordRequestDto request, @AuthenticationPrincipal AuthUser user) {
-        if(user == null) {
-            throw new InssaException("로그인 후 이용 가능합니다");
-        }
-
-        Long userNo = userService.changePassword(request, Long.parseLong(user.getUsername()));
+        Long userNo = userService.changePassword(request, user.getUserNo());
         return InssaApiResponse.ok(Map.of("userNo", userNo));
     }
 
     @Operation(summary = "비밀번호 확인 API", tags = "user")
+    @PreAuthorizeLogInUser
     @PostMapping("/user/password/check")
     public InssaApiResponse<Boolean> checkPassword(@RequestBody UserPasswordRequestDto request, @AuthenticationPrincipal AuthUser user) {
-        if(user == null) {
-            throw new InssaException("로그인 후 이용 가능합니다");
-        }
-
-        return InssaApiResponse.ok(userService.checkPassword(request, Long.parseLong(user.getUsername())));
+        return InssaApiResponse.ok(userService.checkPassword(request, user.getUserNo()));
     }
 
     @Operation(summary = "회원 탈퇴 API", tags = "user")
+    @PreAuthorizeLogInUser
     @PutMapping("/leave")
     public InssaApiResponse<Map<String, Object>> leave(@AuthenticationPrincipal AuthUser user) {
-        if(user == null) {
-            throw new InssaException("로그인 후 이용 가능합니다");
-        }
-        userService.leave(Long.parseLong(user.getUsername()));
+        userService.leave(user.getUserNo());
 
-        return InssaApiResponse.ok(ResponseCode.DELETED, Map.of("userNo", user.getUsername()));
+        return InssaApiResponse.ok(ResponseCode.DELETED, Map.of("userNo", user.getUserNo()));
     }
 }
