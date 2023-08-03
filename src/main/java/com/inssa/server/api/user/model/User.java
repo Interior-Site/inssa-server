@@ -1,7 +1,7 @@
 package com.inssa.server.api.user.model;
 
 import com.inssa.server.api.image.model.Image;
-import com.inssa.server.common.entity.BaseTimeEntity;
+import com.inssa.server.share.entity.BaseTimeEntity;
 import com.inssa.server.share.user.UserStatus;
 import jakarta.persistence.*;
 import lombok.Builder;
