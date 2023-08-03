@@ -1,6 +1,7 @@
 package com.inssa.server.common.data;
 
-import com.inssa.server.common.entity.Category;
+import com.inssa.server.api.review.category.data.CategoryRepository;
+import com.inssa.server.api.review.category.model.Category;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

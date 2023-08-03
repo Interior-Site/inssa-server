@@ -2,8 +2,8 @@ package com.inssa.server.api.review.order.model;
 
 import com.inssa.server.api.company.model.Company;
 import com.inssa.server.api.user.model.User;
-import com.inssa.server.common.board.BoardStatus;
-import com.inssa.server.common.entity.BaseTimeEntity;
+import com.inssa.server.share.board.BoardStatus;
+import com.inssa.server.share.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
