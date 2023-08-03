@@ -1,4 +1,4 @@
-package com.inssa.server.common.entity;
+package com.inssa.server.share.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
