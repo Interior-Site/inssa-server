@@ -1,4 +1,4 @@
-package com.inssa.server.api.article.model;
+package com.inssa.server.api.board.article.model;
 
 import com.inssa.server.api.user.model.User;
 import com.inssa.server.share.board.BoardStatus;

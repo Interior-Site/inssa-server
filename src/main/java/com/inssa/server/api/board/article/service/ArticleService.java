@@ -1,10 +1,10 @@
-package com.inssa.server.api.article.service;
+package com.inssa.server.api.board.article.service;
 
-import com.inssa.server.api.article.data.ArticleRepository;
-import com.inssa.server.api.article.dto.ArticleListResponseDto;
-import com.inssa.server.api.article.dto.ArticleRequestDto;
-import com.inssa.server.api.article.model.Article;
-import com.inssa.server.api.article.model.ArticleType;
+import com.inssa.server.api.board.article.data.ArticleRepository;
+import com.inssa.server.api.board.article.dto.ArticleListResponseDto;
+import com.inssa.server.api.board.article.dto.ArticleRequestDto;
+import com.inssa.server.api.board.article.model.Article;
+import com.inssa.server.api.board.article.model.ArticleType;
 import com.inssa.server.share.board.BoardStatus;
 import com.inssa.server.common.exception.InssaException;
 import java.util.Objects;

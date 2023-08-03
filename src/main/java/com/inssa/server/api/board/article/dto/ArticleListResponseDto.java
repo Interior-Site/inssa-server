@@ -1,6 +1,6 @@
-package com.inssa.server.api.article.dto;
+package com.inssa.server.api.board.article.dto;
 
-import com.inssa.server.api.article.model.ArticleType;
+import com.inssa.server.api.board.article.model.ArticleType;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

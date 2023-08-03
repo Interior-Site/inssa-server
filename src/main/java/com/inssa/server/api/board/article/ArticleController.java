@@ -1,11 +1,11 @@
-package com.inssa.server.api.article;
+package com.inssa.server.api.board.article;
 
-import com.inssa.server.api.article.dto.ArticleCreateRequestDto;
-import com.inssa.server.api.article.dto.ArticleListResponseDto;
-import com.inssa.server.api.article.dto.ArticleRequestDto;
-import com.inssa.server.api.article.dto.ArticleUpdateRequestDto;
-import com.inssa.server.api.article.model.ArticleType;
-import com.inssa.server.api.article.service.ArticleService;
+import com.inssa.server.api.board.article.dto.ArticleCreateRequestDto;
+import com.inssa.server.api.board.article.dto.ArticleListResponseDto;
+import com.inssa.server.api.board.article.dto.ArticleRequestDto;
+import com.inssa.server.api.board.article.dto.ArticleUpdateRequestDto;
+import com.inssa.server.api.board.article.model.ArticleType;
+import com.inssa.server.api.board.article.service.ArticleService;
 import com.inssa.server.api.user.model.AuthUser;
 import com.inssa.server.common.exception.InssaException;
 import com.inssa.server.common.response.InssaApiResponse;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Tag(name = "article", description = "게시글 API")
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/board")
 @RequiredArgsConstructor
 @Slf4j
 public class ArticleController {
@@ -51,7 +51,7 @@ public class ArticleController {
 	@Operation(summary = "게시글 목록 조회", tags = "article")
 	@GetMapping("/articles/{type}/list")
 	public InssaApiResponse<Page<ArticleListResponseDto>> findArticles(@SortDefault(sort = "created_date", direction = Sort.Direction.DESC) Pageable pageable,
-													 @PathVariable ArticleType type) {
+																	   @PathVariable ArticleType type) {
 
 		return InssaApiResponse.ok(articleService.findArticles(type, pageable));
 	}
