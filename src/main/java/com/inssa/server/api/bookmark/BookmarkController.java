@@ -30,7 +30,7 @@ public class BookmarkController {
     @PostMapping("/api/v1/bookmark")
     public InssaApiResponse<Map<String, Object>> createBookmark(@RequestBody BookmarkCreateRequestDto request, @AuthenticationPrincipal AuthUser user) {
         BookmarkRequestDto serviceRequest = BookmarkRequestDto.createBuilder()
-                .userNo(Long.parseLong(user.getUsername()))
+                .userNo(user.getUserNo())
                 .type(request.getType())
                 .targetNo(request.getTargetNo())
                 .build();
@@ -45,7 +45,7 @@ public class BookmarkController {
     @DeleteMapping("/api/v1/bookmark/{bookmarkNo}")
     public InssaApiResponse<Map<String, Object>> deleteBookmark(@PathVariable Long bookmarkNo, @AuthenticationPrincipal AuthUser user) {
         BookmarkRequestDto serviceRequest = BookmarkRequestDto.deleteBuilder()
-                .userNo(Long.parseLong(user.getUsername()))
+                .userNo(user.getUserNo())
                 .bookmarkNo(bookmarkNo)
                 .build();
 
