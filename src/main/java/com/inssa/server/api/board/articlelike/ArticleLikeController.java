@@ -33,7 +33,6 @@ public class ArticleLikeController {
             @AuthenticationPrincipal AuthUser user
     ) {
         articleLikeService.createLike(articleNo, user.getUserNo());
-
-        return null;
+        return InssaApiResponse.ok(Map.of("articleNo", articleNo, "liked", true));
     }
 }
