@@ -31,7 +31,7 @@ import java.util.Properties;
  * @Primary 를 사용해 우선적으로 등록할 트랜잭션 매니져 Bean을 지정
  */
 @EnableTransactionManagement
-@MapperScan(basePackages = {"com.inssa.server.api"}, sqlSessionFactoryRef = "testSqlSessionFactory")
+@MapperScan(basePackages = {"com.inssa.server.api"}, sqlSessionFactoryRef = "sqlSessionFactory")
 
 /**
  * JpaRepository를 상속받아서 사용할 경우 해당 인터페이스가 존재하는 경로를
@@ -62,7 +62,7 @@ public class DataSourceConfig {
      * @param applicationContext
      */
     @Primary
-    @Bean(name = "testSqlSessionFactory")
+    @Bean(name = "sqlSessionFactory")
     public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource, ApplicationContext applicationContext) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);
