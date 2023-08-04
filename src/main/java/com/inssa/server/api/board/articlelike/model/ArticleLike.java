@@ -26,4 +26,9 @@ public class ArticleLike extends BaseTimeEntity {
     @JoinColumn(name = "articleNo", insertable = false, updatable = false)
     private Article article;
     private Long articleNo;
+
+    public ArticleLike(Long userNo, Long articleNo) {
+        this.userNo = userNo;
+        this.articleNo = articleNo;
+    }
 }
