@@ -10,16 +10,16 @@ import java.util.Collection;
 
 public class AuthUser implements UserDetails {
 
-    private final String userName;
     private final Long userNo;
+    private final String email;
     private final String password;
     private ArrayList<GrantedAuthority> authorities;
 
-    public AuthUser(String userName, String password, ArrayList<GrantedAuthority> authorities) {
-        this.userName = userName;
+    public AuthUser(Long userNo, String email, String password, ArrayList<GrantedAuthority> authorities) {
+        this.userNo = userNo;
+        this.email = email;
         this.password = password;
         this.authorities = authorities;
-        this.userNo = Long.parseLong(userName);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class AuthUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName.toString();
+        return email;
     }
 
     public Long getUserNo() {

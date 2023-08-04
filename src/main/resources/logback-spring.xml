@@ -37,14 +37,6 @@
         <appender-ref ref="api_log" />
     </logger>
 
-    <logger name="jdbc" level="off" />
-    <logger name="jdbc.sqlonly" level="off" />
-    <logger name="jdbc.sqltiming" level="off" />
-    <logger name="jdbc.audit" level="off" />
-    <logger name="jdbc.resultset" level="off" />
-    <logger name="jdbc.resultsettable" level="off" />
-    <logger name="jdbc.connection" level="off" />
-
     <root level="info">
         <appender-ref ref="STDOUT" />
     </root>
