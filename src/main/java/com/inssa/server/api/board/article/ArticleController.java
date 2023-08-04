@@ -39,7 +39,7 @@ public class ArticleController {
 			.articleType(request.getArticleType())
 			.title(request.getTitle())
 			.content(request.getContent())
-			.userNo(Long.parseLong(user.getUsername()))
+			.userNo(user.getUserNo())
 			.build();
 
 		Long articleNo = articleService.createArticle(serviceRequest);
@@ -63,7 +63,7 @@ public class ArticleController {
 			.articleNo(request.getArticleNo())
 			.title(request.getTitle())
 			.content(request.getContent())
-			.userNo(Long.parseLong(user.getUsername()))
+			.userNo(user.getUserNo())
 			.build();
 
 		Long articleNo = articleService.updateArticle(serviceRequest);
@@ -76,7 +76,7 @@ public class ArticleController {
 	public InssaApiResponse<Map<String, Object>> deleteArticle(@PathVariable Long articleNo, @AuthenticationPrincipal AuthUser user) {
 		ArticleRequestDto serviceRequest = ArticleRequestDto.deleteBuilder()
 			.articleNo(articleNo)
-			.userNo(Long.parseLong(user.getUsername()))
+			.userNo(user.getUserNo())
 			.build();
 
 		articleService.deleteArticle(serviceRequest);

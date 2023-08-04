@@ -2,6 +2,7 @@ package com.inssa.server.config.security;
 
 import com.inssa.server.api.user.model.AuthUser;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -40,7 +41,7 @@ public class JwtTokenProvider {
     @Value("${jwt.token-validity-in-seconds}")
     private String tokenValidityInSeconds = "";
 
-    public String createToken(Authentication authentication) {
+    public String createToken(Authentication authentication, String email) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -49,8 +50,10 @@ public class JwtTokenProvider {
         Date validity = new Date(now + Long.parseLong(tokenValidityInSeconds) * 1000); // 토큰 만료 시간
 
         return Jwts.builder()
+                .setHeaderParam(Header.TYPE, "JWT")
                 .setSubject(authentication.getName()) // JWT payload 에 저장되는 정보단위
                 .claim(AUTHORITIES_KEY, authorities) // 정보 저장
+                .claim("email", email)
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .setExpiration(validity) // 만료 시간 세팅
                 .compact();
@@ -70,7 +73,7 @@ public class JwtTokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        AuthUser principal = new AuthUser(claims.getSubject(), "", new ArrayList<>(authorities));
+        AuthUser principal = new AuthUser(Long.parseLong(claims.getSubject()), (String)claims.get("email"), "", new ArrayList<>(authorities));
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

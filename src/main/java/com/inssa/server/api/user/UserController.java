@@ -56,14 +56,14 @@ public class UserController {
     @PreAuthorizeLogInUser
     @PutMapping("/user/info")
     public InssaApiResponse<User> changeUserInfo(@RequestBody UserChangeInfoRequestDto request, @AuthenticationPrincipal AuthUser user) {
-        return InssaApiResponse.ok(userService.changeUserInfo(request, Long.parseLong(user.getUsername())));
+        return InssaApiResponse.ok(userService.changeUserInfo(request, user.getUserNo()));
     }
 
     @Operation(summary = "비밀번호 변경 API", tags = "user")
     @PreAuthorizeLogInUser
     @PutMapping("/user/password/change")
     public InssaApiResponse<Map<String, Object>> changePassword(@RequestBody UserPasswordRequestDto request, @AuthenticationPrincipal AuthUser user) {
-        Long userNo = userService.changePassword(request, Long.parseLong(user.getUsername()));
+        Long userNo = userService.changePassword(request, user.getUserNo());
         return InssaApiResponse.ok(Map.of("userNo", userNo));
     }
 
@@ -71,15 +71,15 @@ public class UserController {
     @PreAuthorizeLogInUser
     @PostMapping("/user/password/check")
     public InssaApiResponse<Boolean> checkPassword(@RequestBody UserPasswordRequestDto request, @AuthenticationPrincipal AuthUser user) {
-        return InssaApiResponse.ok(userService.checkPassword(request, Long.parseLong(user.getUsername())));
+        return InssaApiResponse.ok(userService.checkPassword(request, user.getUserNo()));
     }
 
     @Operation(summary = "회원 탈퇴 API", tags = "user")
     @PreAuthorizeLogInUser
     @PutMapping("/leave")
     public InssaApiResponse<Map<String, Object>> leave(@AuthenticationPrincipal AuthUser user) {
-        userService.leave(Long.parseLong(user.getUsername()));
+        userService.leave(user.getUserNo());
 
-        return InssaApiResponse.ok(ResponseCode.DELETED, Map.of("userNo", user.getUsername()));
+        return InssaApiResponse.ok(ResponseCode.DELETED, Map.of("userNo", user.getUserNo()));
     }
 }
