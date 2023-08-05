@@ -13,14 +13,14 @@ public class BookmarkRequestDto {
     private Long targetNo;
     private Long bookmarkNo;
 
-    @Builder(builderMethodName = "createBuilder")
+    @Builder(builderMethodName = "createBuilder", builderClassName = "createBuilder")
     public BookmarkRequestDto(Long userNo, BookmarkType type, Long targetNo) {
         this.userNo = userNo;
         this.type = type;
         this.targetNo = targetNo;
     }
 
-    @Builder(builderMethodName = "deleteBuilder")
+    @Builder(builderMethodName = "deleteBuilder", builderClassName = "deleteBuilder")
     public BookmarkRequestDto(Long userNo, Long bookmarkNo) {
         this.userNo = userNo;
         this.bookmarkNo = bookmarkNo;
