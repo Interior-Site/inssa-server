@@ -26,7 +26,7 @@ public class OrderReviewRequestDto {
     public OrderReviewRequestDto(
             Long no,
             int amount,
-            String tit용le,
+            String title,
             String content,
             Long companyNo,
             List<Long> buildTypes,

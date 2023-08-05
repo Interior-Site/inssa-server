@@ -1,5 +1,7 @@
 package com.inssa.server.api.review.order;
 
+import com.inssa.server.api.review.filter.RequestParamObject;
+import com.inssa.server.api.review.filter.ReviewFilterParam;
 import com.inssa.server.api.review.order.dto.*;
 import com.inssa.server.api.review.order.service.OrderService;
 import com.inssa.server.api.user.model.AuthUser;
@@ -11,14 +13,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.SortDefault;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,7 +28,6 @@ import java.util.Map;
 public class OrderController {
     private final OrderService orderService;
 
-    // Article 컨벤션 X 질문용
     @Operation(summary = "견적 후기 등록", tags = "orderReview")
     @PreAuthorizeLogInUser
     @PostMapping
@@ -44,11 +43,15 @@ public class OrderController {
     @Operation(summary = "견적 후기 목록 조회", tags = "orderReview")
     @GetMapping
     public InssaApiResponse<Page<OrderReviewListResponseDto>> findOrderReviews(
-            @SortDefault(sort = "created_date", direction = Sort.Direction.DESC) Pageable pageable
-            // TODO: 필터, 정렬, 검색 조건 등
+            @ParameterObject @RequestParamObject ReviewFilterParam filter, // 필터
+            @ParameterObject @PageableDefault Pageable pageable
     ) {
-        return InssaApiResponse.ok(ResponseCode.SUCCESS, orderService.findOrderReviews(pageable));
+
+        Page<OrderReviewListResponseDto> orderReviews = orderService.findOrderReviews(filter, pageable);
+        return InssaApiResponse.ok(ResponseCode.SUCCESS, orderReviews);
     }
+
+    // TODO: 베스트 시공 후기
 
     // TODO: 미로그인 시 일부만 노출
     @Operation(summary = "견적 후기 상세 조회", tags = "orderReview")
@@ -60,42 +63,38 @@ public class OrderController {
         return InssaApiResponse.ok(ResponseCode.SUCCESS, orderReviewResponse);
     }
 
-
-    // TODO
     @Operation(summary = "견적 후기 수정", tags = "orderReview")
-    @PutMapping("/{orderReviewNo}")
-    public InssaApiResponse<Map<String, Object>> updateOrderReview(
-            @PathVariable Long orderReviewNo,
-            @RequestBody OrderReviewUpdateRequestDto updateRequest
+    @PutMapping
+    public InssaApiResponse<OrderReviewUpdateResponseDto> updateOrderReview(
+            @RequestBody OrderReviewUpdateRequestDto updateRequest,
+            @AuthenticationPrincipal AuthUser user
     ) {
-        // updateRequest -> OrderReviewRequestDto
-        // save
-        // Long orderReviewNo
-        return InssaApiResponse.ok(ResponseCode.UPDATED, Map.of("orderReviewNo", orderReviewNo));
+        OrderReviewRequestDto request = OrderReviewRequestDto.updateBuilder()
+                .no(updateRequest.getNo())
+                .amount(updateRequest.getAmount())
+                .title(updateRequest.getTitle())
+                .content(updateRequest.getContent())
+                .companyNo(updateRequest.getCompanyNo())
+                .buildTypes(updateRequest.getBuildTypes())
+                .categories(updateRequest.getCategories())
+                .userNo(user.getUserNo())
+                .build();
+        OrderReviewUpdateResponseDto updateResponse = orderService.updateOrderReview(request);
+        return InssaApiResponse.ok(ResponseCode.UPDATED, updateResponse);
     }
 
-
-    // TODO
     @Operation(summary = "견적 후기 삭제", tags = "orderReview")
+    @PreAuthorizeLogInUser
     @DeleteMapping("/{orderReviewNo}")
-    public InssaApiResponse<Map<String, Object>> deleteOrderReview(
+    public InssaApiResponse<OrderReviewDeleteResponseDto> deleteOrderReview(
             @PathVariable Long orderReviewNo,
             @AuthenticationPrincipal AuthUser user
     ) {
-        // orderService.deleteOrderReview
-        return InssaApiResponse.ok(ResponseCode.DELETED, Map.of("orderReviewNo", orderReviewNo));
+        OrderReviewRequestDto request = OrderReviewRequestDto.deleteBuilder()
+                .no(orderReviewNo)
+                .userNo(user.getUserNo())
+                .build();
+        orderService.deleteOrderReview(request);
+        return InssaApiResponse.ok(ResponseCode.DELETED, new OrderReviewDeleteResponseDto(orderReviewNo));
     }
-
-
-    /* 질문용
-    @Operation(summary = "견적 후기 삭제", tags = "orderReview")
-    @DeleteMapping("/{orderReviewNo}")
-    public InssaApiResponse<Void> deleteOrderReview(
-            @PathVariable Long orderReviewNo,
-            @AuthenticationPrincipal AuthUser user
-    ) {
-        // orderService.deleteOrderReview(orderReviewNo)
-        return InssaApiResponse.ok(ResponseCode.DELETED);
-    }
-    */
 }
