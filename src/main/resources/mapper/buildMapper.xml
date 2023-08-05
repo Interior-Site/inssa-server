@@ -9,13 +9,20 @@
 
 
     <!-- 시공후기 목록 조회-->
-    <select id="selectList" resultType="com.inssa.server.api.review.build.dto.BuildDto">
+    <select id="selectList" resultType="com.inssa.server.api.review.build.dto.BuildRequestDto">
         SELECT * FROM build_review
+        WHERE STATUS = 'VISIBLE'
+        LIMIT ${offset}, ${pageSize}
+    </select>
+
+    <select id="selectListCount" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM build_review
         WHERE STATUS = 'VISIBLE'
     </select>
 
     <!-- 시공후기 상세조회 -->
-    <select id="selectDetail" resultType="com.inssa.server.api.review.build.dto.BuildDto">
+    <select id="selectDetail" resultType="com.inssa.server.api.review.build.dto.BuildRequestDto">
         SELECT * FROM build_review
         WHERE BUILD_NO = #{buildNo}
     </select>
