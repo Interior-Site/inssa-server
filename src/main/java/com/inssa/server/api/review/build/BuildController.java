@@ -77,7 +77,7 @@ public class BuildController {
                 .buildNo(buildNo)
                 .userNo(user.getUserNo())
                 .build();
-        Long buildNo = buildService.deleteBuild(serviceRequest);
+        buildNo = buildService.deleteBuild(serviceRequest);
         return InssaApiResponse.ok(ResponseCode.DELETED, Map.of("buildNo", buildNo));
     }
 }
