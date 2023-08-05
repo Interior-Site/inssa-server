@@ -1,10 +1,10 @@
 package com.inssa.server.api.review.build;
 
-import com.inssa.server.api.review.build.dto.BuildDto;
-import com.inssa.server.api.review.build.dto.BuildUpdateDto;
+import com.inssa.server.api.review.build.dto.BuildRequestDto;
+import com.inssa.server.api.review.build.dto.BuildUpdateRequestDto;
 import com.inssa.server.api.review.build.service.BuildService;
 import com.inssa.server.api.user.model.AuthUser;
-import com.inssa.server.common.exception.InssaException;
+import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
 import com.inssa.server.common.response.InssaApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +24,6 @@ public class BuildController {
 
     @Operation(summary = "시공후기 목록조회 API", tags = "buildReview")
     @GetMapping("/builds")
-    //@GetMapping(value = "/selectList/{boardNo}")
     public InssaApiResponse buildList(){
 
         return InssaApiResponse.ok(buildService.selectList());
@@ -39,17 +38,16 @@ public class BuildController {
 
 
     @Operation(summary = "시공후기 작성 API", tags = "buildReview")
+    @PreAuthorizeLogInUser
     @PostMapping("/build")
-    public InssaApiResponse insertBuild(@RequestBody BuildDto request, @AuthenticationPrincipal AuthUser user){
-        if(user == null){
-           throw new InssaException("로그인 후 이용 가능합니다.");
-        }
+    public InssaApiResponse insertBuild(@RequestBody BuildRequestDto request, @AuthenticationPrincipal AuthUser user){
+
         return InssaApiResponse.ok(buildService.insertBuild(request, user.getUserNo()));
     }
 
     @Operation(summary = "시공후기 수정 API", tags = "buildReview")
     @PutMapping("/build")
-    public InssaApiResponse updateBuild(@RequestBody BuildUpdateDto buildUpdateDto, @AuthenticationPrincipal AuthUser user){
+    public InssaApiResponse updateBuild(@RequestBody BuildUpdateRequestDto buildUpdateDto, @AuthenticationPrincipal AuthUser user){
 
         return InssaApiResponse.ok(buildService.updateBuild(buildUpdateDto, user.getUserNo()));
     }
