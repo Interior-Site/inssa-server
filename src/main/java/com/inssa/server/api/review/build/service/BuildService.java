@@ -22,29 +22,30 @@ public class BuildService {
     }
 
 
-    public int insertBuild(BuildRequestDto request, Long userNo){
+    public Long insertBuild(BuildRequestDto request){
 
-        int result = builddao.insertBuild(request, userNo);
+        Long result = builddao.insertBuild(request);
 
-        return result;
-    }
-
-    public int updateBuild(BuildUpdateRequestDto buildUpdateDto, Long userNo) {
-
-        int result = builddao.updateBuild(buildUpdateDto, userNo);
-
-        return result;
-
-    }
-
-    public int deleteBuild(int buildNo, Long userNo) {
-
-        int result = builddao.deleteBuild(buildNo, userNo);
 
         return result;
     }
 
-    public BuildRequestDto selectDetail(int buildNo) {
+    public Long updateBuild(BuildRequestDto request) {
+
+        Long result = builddao.updateBuild(request);
+
+        return result;
+
+    }
+
+    public Long deleteBuild(BuildRequestDto request) {
+
+        Long result = builddao.deleteBuild(request);
+
+        return result;
+    }
+
+    public BuildRequestDto selectDetail(Long buildNo) {
 
         BuildRequestDto buildDetail = builddao.selectDetail(buildNo);
 

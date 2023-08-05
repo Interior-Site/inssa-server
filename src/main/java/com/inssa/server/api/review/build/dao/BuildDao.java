@@ -19,19 +19,36 @@ public class BuildDao {
         return buildMapper.selectList();
     }
 
-    public BuildRequestDto selectDetail(int buildNo) {
+    public BuildRequestDto selectDetail(Long buildNo) {
         return buildMapper.selectDetail(buildNo);
     }
 
-    public int insertBuild(BuildRequestDto request, Long userNo){
-        return buildMapper.insertBuild(request, userNo);
+    public Long insertBuild(BuildRequestDto request) {
+        Long result = buildMapper.insertBuild(request);
+
+        return result;
     }
 
-    public int updateBuild(BuildUpdateRequestDto buildUpdateDto, Long userNo){
-        return buildMapper.updateBuild(buildUpdateDto, userNo);
+    public Long updateBuild(BuildRequestDto request){
+
+        Long result = buildMapper.updateBuild(request);
+
+        Long buildNo = null;
+        if (result > 0) {
+            buildNo = request.getBuildNo();
+        }
+
+        return buildNo;
     }
 
-    public int deleteBuild(int buildNo, Long userNo){
-        return buildMapper.deleteBuild(buildNo, userNo);
+    public Long deleteBuild(BuildRequestDto request){
+
+        Long result = buildMapper.deleteBuild(request);
+
+        Long buildNo = null;
+        if (result > 0) {
+            buildNo = request.getBuildNo();
+        }
+        return buildNo;
     }
 }
