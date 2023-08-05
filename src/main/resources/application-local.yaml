@@ -12,7 +12,7 @@ spring:
 
   # MariaDB (Docker)
   datasource:
-    jdbcUrl: jdbc:mariadb://43.201.175.110:3306/INSSA?serverTimezone=Asia/Seoul
+    jdbcUrl: jdbc:mariadb://localhost:3306/INSSA?serverTimezone=Asia/Seoul
     username: INSSA
     password: INSSA
     driver-class-name: org.mariadb.jdbc.Driver
@@ -35,24 +35,6 @@ jwt:
   header:
   secret:
   token-validity-in-seconds: 86400
-
-
-logging:
-  config: classpath:logback-spring.xml
-  level:
-    jdbc:
-      sqlonly: off
-      sqltiming: info
-      resultsettable: info
-      audit: off
-      resultset: off
-      connection: off
-    root: info
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql: trace
 
 springdoc:
   packages-to-scan: com.inssa.server.api
