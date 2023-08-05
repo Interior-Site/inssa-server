@@ -11,11 +11,11 @@ public interface BuildMapper {
 
     List<BuildRequestDto> selectList();
 
-    int insertBuild(BuildRequestDto request, Long userNo);
+    Long insertBuild(BuildRequestDto request);
 
-    int updateBuild(BuildUpdateRequestDto buildUpdateDto, Long userNo);
+    Long updateBuild(BuildRequestDto request);
 
-    int deleteBuild(int buildNo, Long userNo);
+    Long deleteBuild(BuildRequestDto request);
 
-    BuildRequestDto selectDetail(int buildNo);
+    BuildRequestDto selectDetail(Long buildNo);
 }

@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class BuildUpdateRequestDto {
-    private int buildNo;
+    private Long buildNo;
     private String title;
     private String content;
 
