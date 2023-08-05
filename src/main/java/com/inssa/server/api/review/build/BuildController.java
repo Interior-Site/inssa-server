@@ -1,6 +1,7 @@
 package com.inssa.server.api.review.build;
 
 import com.inssa.server.api.review.build.dto.BuildCreateRequestDto;
+import com.inssa.server.api.review.build.dto.BuildListResponseDto;
 import com.inssa.server.api.review.build.dto.BuildRequestDto;
 import com.inssa.server.api.review.build.dto.BuildUpdateRequestDto;
 import com.inssa.server.api.review.build.service.BuildService;
@@ -12,9 +13,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -28,9 +34,16 @@ public class BuildController {
 
     @Operation(summary = "시공후기 목록조회 API", tags = "buildReview")
     @GetMapping("/builds")
-    public InssaApiResponse buildList(){
+    public InssaApiResponse<Map<String, Object>> buildList(@RequestParam Map<String, Object> parapMap,
+            @SortDefault(sort = "created_date", direction = Sort.Direction.DESC) Pageable pageable){
 
-        return InssaApiResponse.ok(buildService.selectList());
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        Page<Map<String, Object>> result = buildService.selectList(parapMap, pageable);
+
+        resultMap.put("pages", result);
+        resultMap.put("size", pageable.getPageSize());
+
+        return InssaApiResponse.ok(resultMap);
     }
 
     @Operation(summary = "시공후기 상세조회 API", tags = "buildReview")
@@ -58,6 +71,7 @@ public class BuildController {
     }
 
     @Operation(summary = "시공후기 수정 API", tags = "buildReview")
+    @PreAuthorizeLogInUser
     @PutMapping("/build")
     public InssaApiResponse<Map<String, Object>> updateBuild(@RequestBody BuildUpdateRequestDto request, @AuthenticationPrincipal AuthUser user){
         BuildRequestDto serviceRequest = BuildRequestDto.updateBuilder()
@@ -71,6 +85,7 @@ public class BuildController {
     }
 
     @Operation(summary = "시공후기 삭제 API", tags = "buildReview")
+    @PreAuthorizeLogInUser
     @PutMapping("/build/{buildNo}")
     public InssaApiResponse<Map<String, Object>> deleteBuild(@PathVariable Long buildNo, @AuthenticationPrincipal AuthUser user){
         BuildRequestDto serviceRequest = BuildRequestDto.deleteBuilder()
