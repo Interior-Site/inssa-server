@@ -1,21 +1,24 @@
 package com.inssa.server.api.review.build.mapper;
 
-import com.inssa.server.api.review.build.dto.BuildDto;
-import com.inssa.server.api.review.build.dto.BuildUpdateDto;
+import com.inssa.server.api.review.build.dto.BuildRequestDto;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface BuildMapper {
 
-    List<BuildDto> selectList();
+    List<Map<String, Object>> selectList(Map<String, Object> paramMap);
 
-    int insertBuild(BuildDto request, Long userNo);
+    int selectListCount(Map<String, Object> paramMap);
 
-    int updateBuild(BuildUpdateDto buildUpdateDto, Long userNo);
+    Long insertBuild(BuildRequestDto request);
 
-    int deleteBuild(int buildNo, Long userNo);
+    Long updateBuild(BuildRequestDto request);
 
-    BuildDto selectDetail(int buildNo);
+    Long deleteBuild(BuildRequestDto request);
+
+    BuildRequestDto selectDetail(Long buildNo);
 }

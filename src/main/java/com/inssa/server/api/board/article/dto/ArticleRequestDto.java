@@ -14,7 +14,7 @@ public class ArticleRequestDto {
 	private String content;
 	private Long userNo;
 
-	@Builder(builderMethodName = "createBuilder")
+	@Builder(builderMethodName = "createBuilder", builderClassName = "createBuilder")
 	public ArticleRequestDto(ArticleType articleType, String title, String content, Long userNo) {
 		this.articleType = articleType;
 		this.title = title;
@@ -22,7 +22,7 @@ public class ArticleRequestDto {
 		this.userNo = userNo;
 	}
 
-	@Builder(builderMethodName = "updateBuilder")
+	@Builder(builderMethodName = "updateBuilder", builderClassName = "updateBuilder")
 	public ArticleRequestDto(Long articleNo, String title, String content, Long userNo) {
 		this.articleNo = articleNo;
 		this.title = title;
@@ -30,7 +30,7 @@ public class ArticleRequestDto {
 		this.userNo = userNo;
 	}
 
-	@Builder(builderMethodName = "deleteBuilder")
+	@Builder(builderMethodName = "deleteBuilder", builderClassName = "deleteBuilder")
 	public ArticleRequestDto(Long articleNo, Long userNo) {
 		this.articleNo = articleNo;
 		this.userNo = userNo;
