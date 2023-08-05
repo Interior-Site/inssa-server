@@ -34,3 +34,8 @@ springdoc:
     disable-swagger-default-url: true
     display-request-duration: true
     operations-sorter: alpha
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
