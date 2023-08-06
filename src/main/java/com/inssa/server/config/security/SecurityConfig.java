@@ -2,7 +2,6 @@ package com.inssa.server.config.security;
 
 import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,11 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @EnableWebSecurity // Spring Security 설정 활성화
@@ -32,25 +26,22 @@ public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Value("${spring.profiles.active: null}")
-    private String activeProfile;
-
-    private static final List<AntPathRequestMatcher> PERMIT_URL_ARRAY = Stream.of(
+    private static final String[] PERMIT_URL_ARRAY = {
             /* swagger v2 */
-            new AntPathRequestMatcher("v2/api-docs"),
-            new AntPathRequestMatcher("swagger-resources"),
-            new AntPathRequestMatcher("swagger-resources/**"),
-            new AntPathRequestMatcher("configuration/ui"),
-            new AntPathRequestMatcher("configuration/security"),
-            new AntPathRequestMatcher("swagger-ui.html"),
-            new AntPathRequestMatcher("webjars/**"),
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
 
             /* swagger v3 */
-            new AntPathRequestMatcher("v3/api-docs/**"),
-            new AntPathRequestMatcher("swagger-ui/**"),
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
 
-            new AntPathRequestMatcher("api/v1/**")
-    ).collect(Collectors.toList());
+            "/api/v1/**"
+    };
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
@@ -77,7 +68,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         request -> request
                                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                                .requestMatchers(PERMIT_URL_ARRAY.toArray(AntPathRequestMatcher[]::new)).permitAll()
+                                .requestMatchers(PERMIT_URL_ARRAY).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class); // UsernamePasswordAuthenticationFilter 앞에 커스텀 필터 추가
