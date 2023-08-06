@@ -12,21 +12,20 @@ spring:
 
   # MariaDB (Docker)
   datasource:
-    jdbcUrl: jdbc:mariadb://localhost:3306/INSSA?serverTimezone=Asia/Seoul
-    username: INSSA
-    password: INSSA
+    jdbcUrl: jdbc:mariadb://db:3306/INSSA?serverTimezone=Asia/Seoul
+    username: root
+    password: root!
     driver-class-name: org.mariadb.jdbc.Driver
-
   jpa:
     open-in-view: false
     generate-ddl: true
     show-sql: true
-    hibernate:
-      ddl-auto: create # for jpa test
     properties:
+      show_sql: true
+      format_sql: true
       hibernate:
-        format_sql: true
-
+        hbm2ddl:
+          auto: create
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
