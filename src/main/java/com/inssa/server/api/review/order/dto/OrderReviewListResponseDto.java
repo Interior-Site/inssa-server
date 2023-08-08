@@ -3,6 +3,7 @@ package com.inssa.server.api.review.order.dto;
 import com.inssa.server.api.review.build_type.dto.BuildTypeListResponse;
 import com.inssa.server.api.review.category.dto.CategoryListResponse;
 import com.inssa.server.api.review.order.model.OrderReview;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -13,29 +14,27 @@ import java.util.List;
 @Getter
 public class OrderReviewListResponseDto {
 
-    /**
-     * 제목
-     */
+    @Schema(description = "견적 후기 제목")
     private final String title;
 
-    /**
-     * 내용
-     */
+    @Schema(description = "견적 후기 내용")
     private final String content;
 
-    /**
-     * 견적 금액
-     */
+    @Schema(description = "견적 비용")
     private final int amount;
 
-    /**
-     * 건물 유형
-     */
+    @Schema(
+            description = "시공 유형 객체 배열",
+            type = "List",
+            subTypes = CategoryListResponse.class
+    )
     private final List<CategoryListResponse> categories;
 
-    /**
-     * 시공 유형
-     */
+    @Schema(
+            description = "건물 유형 객체 배열",
+            type = "List",
+            subTypes = BuildTypeListResponse.class
+    )
     private final List<BuildTypeListResponse> buildTypes;
 
     public OrderReviewListResponseDto(OrderReview orderReview){

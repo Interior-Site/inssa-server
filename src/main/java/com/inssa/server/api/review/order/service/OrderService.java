@@ -207,7 +207,7 @@ public class OrderService {
             Pageable pageable
     ) {
         // 정렬 옵션
-        ReviewSortOption sortBy = ReviewSortOption.fromValue(filter.getSortBy())
+        ReviewSortOption sortBy = ReviewSortOption.fromValue(filter.getSort())
                 .orElseThrow(() -> new InssaException(ErrorCode.INVALID, "정렬 옵션이 올바르지 않습니다."));
         Sort sort = Sort.by("createdDate").descending();
         if (sortBy != null) {

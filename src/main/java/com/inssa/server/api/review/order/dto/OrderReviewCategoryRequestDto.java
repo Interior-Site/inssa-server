@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class OrderReviewCategoryRequestDto {
+
     @NotNull(message = "견적 후기 정보가 누락되었습니다.")
     @ElementCollection
     private OrderReview orderReview;
