@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+
+  db:
+    image: mariadb:10
+    container_name: inssa-db-local
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mariadb/db/conf.d:/etc/mysql/conf.d
+      - ./mariadb/db/initdb.d/init-local.sql:/docker-entrypoint-initdb.d/init.sql
+    env_file: ./mariadb/.env
+    restart: always
+
+  api:
+    container_name: inssa-api-local
+    image: azul/zulu-openjdk-centos:17-latest
+    ports:
+      - 5005:5005
+      - 8080:8080
+    volumes:
+      - ./:/usr/app
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/inssa
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root!
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      JAVA_OPT: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+    working_dir: /usr/app
+    command: sh -c "chmod +x ./gradlew && ./gradlew bootRun"
+    depends_on:
+      db:
+        condition: service_started
+    restart: always
+
+#  builder:
+#    image: azul/zulu-openjdk-centos:17-latest
+#    container_name: inssa-api-builder
+#    volumes:
+#      - ./:/usr/app
+#    working_dir: /usr/app
+#    command: sh -c "chmod +x /usr/app/gradlew && /usr/app/gradlew bootJar -x test"

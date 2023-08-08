@@ -1,6 +1,8 @@
 # openjdk8 base image
 FROM openjdk:17-oracle
 
+ENV PROFILE=main
+
 # directory 생성
 #RUN mkdir -p /usr/app/
 # jar 파일이 복사되는 위치
@@ -12,4 +14,4 @@ COPY build/libs/*.jar app.jar
 # cf docker push, random port 사용할 수 없다
 EXPOSE 8080
 # 실행
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-Dspring.profiles.active=${PROFILE}", "-jar", "app.jar"]

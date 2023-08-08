@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -21,6 +22,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.Map;
 import java.util.Properties;
 
 @Configuration
@@ -52,6 +54,16 @@ public class DataSourceConfig {
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource dataSource() {
         return DataSourceBuilder.create().build();
+    }
+
+    /**
+     * application.yaml의 spring.jpa에 설정한 jpa 설정을 읽음
+     */
+    @Primary
+    @Bean(name = "jpaProperties")
+    @ConfigurationProperties(prefix = "spring.jpa")
+    public JpaProperties jpaProperties() {
+        return new JpaProperties();
     }
 
     /**
@@ -96,18 +108,21 @@ public class DataSourceConfig {
     @Bean(name = "jpaEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean jpaEntityManagerFactory(
             EntityManagerFactoryBuilder builder,
-            @Qualifier("dataSource") DataSource dataSource) {
+            @Qualifier("dataSource") DataSource dataSource,
+            @Qualifier("jpaProperties") JpaProperties jpaProperties) {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource);
         entityManagerFactoryBean.setPackagesToScan("com.inssa.server.api");
-
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setDatabasePlatform(MySQLDialect.class.getName());
         entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
 
-        Properties jpaProperties = new Properties();
-        jpaProperties.setProperty("hibernate.physical_naming_strategy", CustomNamingStrategy.class.getName());
-        entityManagerFactoryBean.setJpaProperties(jpaProperties);
+        entityManagerFactoryBean.setPackagesToScan("com.inssa.server.api");
+        Map<String, String> propertiesMeta = jpaProperties.getProperties();
+        propertiesMeta.put("hibernate.physical_naming_strategy", CustomNamingStrategy.class.getName());
+        Properties properties = new Properties();
+        properties.putAll(propertiesMeta);
+        entityManagerFactoryBean.setJpaProperties(properties);
 
         return entityManagerFactoryBean;
     }
