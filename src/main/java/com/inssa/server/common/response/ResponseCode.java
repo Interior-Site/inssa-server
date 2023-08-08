@@ -1,7 +1,7 @@
 package com.inssa.server.common.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
@@ -13,9 +13,13 @@ public enum ResponseCode {
     DELETED(203, "DELETED")
     ;
 
+
+    @Schema(description = "API 응답 코드")
     private final int code;
+
+    @Schema(description = "API 응답 메시지")
     private final String message;
-    private ResponseCode(int code, String message) {
+    ResponseCode(int code, String message) {
         this.code = code;
         this.message = message;
     }
