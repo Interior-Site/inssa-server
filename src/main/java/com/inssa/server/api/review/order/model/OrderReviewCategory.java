@@ -32,7 +32,7 @@ public class OrderReviewCategory extends BaseTimeEntity {
 
     @Builder
     public OrderReviewCategory(OrderReview orderReview, Category category) {
-        this.orderReview = orderReview;
-        this.category = category;
+        this.orderReviewNo = orderReview.getNo();
+        this.categoryNo = category.getNo();
     }
 }

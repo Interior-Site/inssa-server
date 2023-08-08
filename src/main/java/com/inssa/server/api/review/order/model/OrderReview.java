@@ -13,13 +13,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @NoArgsConstructor
+@DynamicInsert
 @Entity(name = "order_review")
 public class OrderReview extends BaseTimeEntity {
 
@@ -59,10 +59,10 @@ public class OrderReview extends BaseTimeEntity {
     private Long companyNo;
 
     @OneToMany(mappedBy = "orderReview", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderReviewBuildType> orderReviewBuildTypes = new ArrayList<>();
+    private final List<OrderReviewBuildType> orderReviewBuildTypes = new ArrayList<>();
 
     @OneToMany(mappedBy = "orderReview", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderReviewCategory> orderReviewCategories = new ArrayList<>();
+    private final List<OrderReviewCategory> orderReviewCategories = new ArrayList<>();
 
     @Builder
     public OrderReview(int amount, String title, String content, Long userNo, Long companyNo) {
@@ -71,6 +71,7 @@ public class OrderReview extends BaseTimeEntity {
         this.content = content;
         this.userNo = userNo;
         this.companyNo = companyNo;
+        this.status = BoardStatus.VISIBLE;
     }
 
     public void addReviewCategory(OrderReviewCategory category) {
@@ -123,17 +124,22 @@ public class OrderReview extends BaseTimeEntity {
         if (!Objects.equals(company.getNo(), this.companyNo)){
             this.company = company;
         }
-        if (!this.orderReviewBuildTypes.isEmpty()) {
-            this.orderReviewBuildTypes.clear();
-        }
         if (!this.orderReviewCategories.isEmpty()) {
             this.orderReviewCategories.clear();
         }
-        if (!buildTypes.isEmpty()){
-            this.orderReviewBuildTypes = buildTypes;
+        if (!buildTypes.isEmpty()) {
+            Set<OrderReviewBuildType> oldBuildTypes = new HashSet<>(this.orderReviewBuildTypes);
+            if (buildTypes.stream().anyMatch(b -> !oldBuildTypes.contains(b))){
+                this.orderReviewBuildTypes.clear();
+                this.orderReviewBuildTypes.addAll(buildTypes);
+            }
         }
-        if (!categories.isEmpty()) {
-            this.orderReviewCategories = categories;
+        if (!categories.isEmpty() || !this.orderReviewCategories.isEmpty()) {
+            Set<OrderReviewCategory> oldCategories = new HashSet<>(this.orderReviewCategories);
+            if (categories.stream().anyMatch(b -> !oldCategories.contains(b))){
+                this.orderReviewCategories.clear();
+                this.orderReviewCategories.addAll(categories);
+            }
         }
         return this;
     }
@@ -158,5 +164,9 @@ public class OrderReview extends BaseTimeEntity {
                     .toList();
         }
         throw new InssaException(ErrorCode.INVALID, "시공 유형 정보가 올바르지 않습니다.");
+    }
+
+    public void delete() {
+        this.status = BoardStatus.DELETED;
     }
 }
