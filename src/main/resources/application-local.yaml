@@ -1,0 +1,46 @@
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  # auto reload
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+
+  # MariaDB (Docker)
+  datasource:
+    jdbcUrl: jdbc:mariadb://db:3306/INSSA?serverTimezone=Asia/Seoul
+    username: root
+    password: root!
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    open-in-view: false
+    generate-ddl: true
+    show-sql: true
+    properties:
+      show_sql: true
+      format_sql: true
+      hibernate:
+        hbm2ddl:
+          auto: create
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+jwt:
+  header:
+  secret:
+  token-validity-in-seconds: 86400
+
+springdoc:
+  packages-to-scan: com.inssa.server.api
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha
