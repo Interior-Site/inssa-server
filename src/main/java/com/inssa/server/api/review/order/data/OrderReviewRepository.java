@@ -32,7 +32,7 @@ public interface OrderReviewRepository extends JpaRepository<OrderReview, Long>,
                 predicate = criteriaBuilder.and(predicate, keywordPredicate);
             }
             if (Objects.nonNull(buildTypeIds) && !buildTypeIds.isEmpty()) {
-                predicate = criteriaBuilder.and(predicate, root.join("orderReviewBuildTypes").get("no").in(buildTypeIds));
+                predicate = criteriaBuilder.and(predicate, root.join("orderReviewBuildTypes").get("buildTypeNo").in(buildTypeIds));
             }
             if (Objects.nonNull(categoryIds) && !categoryIds.isEmpty()) {
                 predicate = criteriaBuilder.and(predicate, root.join("orderReviewCategories").get("categoryNo").in(categoryIds));

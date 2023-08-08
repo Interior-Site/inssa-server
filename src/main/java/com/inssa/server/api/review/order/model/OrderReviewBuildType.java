@@ -32,7 +32,7 @@ public class OrderReviewBuildType extends BaseTimeEntity {
 
     @Builder
     public OrderReviewBuildType(OrderReview orderReview, BuildType buildType) {
-        this.orderReview = orderReview;
-        this.buildType = buildType;
+        this.orderReviewNo = orderReview.getNo();
+        this.buildTypeNo = buildType.getNo();
     }
 }

@@ -42,8 +42,8 @@ public class OrderReviewListResponseDto {
         this.title = orderReview.getTitle();
         this.content = orderReview.getContent();
         this.amount = orderReview.getAmount();
-        this.categories = null;
-        this.buildTypes = null;
+        this.categories = orderReview.getCategories().stream().map(CategoryListResponse::new).toList();
+        this.buildTypes = orderReview.getBuildTypes().stream().map(BuildTypeListResponse::new).toList();
     }
 
 }
