@@ -78,19 +78,31 @@ public class OrderService {
     }
 
     private void validateCategories(List<Long> categoryIds, Map<Long, Category> availableCategoryIds) {
-        categoryIds.forEach(id -> {
-            if (!availableCategoryIds.containsKey(id)) {
-                throw new InssaException(ErrorCode.INVALID, "시공 유형 번호가 올바르지 않습니다.");
-            }
-        });
+        Optional.of(categoryIds)
+                .ifPresentOrElse(
+                        ids -> { if (!ids.isEmpty()){
+                            ids.forEach(id -> {
+                                if (Objects.isNull(id) || !availableCategoryIds.containsKey(id)) {
+                                    throw new InssaException(ErrorCode.INVALID, "시공 유형 번호가 올바르지 않습니다.");
+                                }});
+                        } else {
+                            throw new InssaException(ErrorCode.INVALID, "시공 유형이 올바르지 않습니다.");
+                        }},
+                        () -> new InssaException(ErrorCode.INVALID, "시공 유형을 1개 이상 입력해야 합니다."));
     }
 
     private void validateBuildTypes(List<Long> buildTypeIds, Map<Long, BuildType> availableBuildTypeIds) {
-        buildTypeIds.forEach(id -> {
-            if (!availableBuildTypeIds.containsKey(id)) {
-                throw new InssaException(ErrorCode.INVALID, "건물 유형 번호가 올바르지 않습니다.");
-            }
-        });
+        Optional.of(buildTypeIds)
+                .ifPresentOrElse(
+                        ids -> { if (!ids.isEmpty()){
+                            ids.forEach(id -> {
+                                if (Objects.isNull(id) || !availableBuildTypeIds.containsKey(id)) {
+                                    throw new InssaException(ErrorCode.INVALID, "건물 유형 번호가 올바르지 않습니다.");
+                                }});
+                        } else {
+                            throw new InssaException(ErrorCode.INVALID, "건물 유형 요청이 올바르지 않습니다.");
+                        }},
+                        () -> new InssaException(ErrorCode.INVALID, "건물 유형을 1개 이상 입력해야 합니다."));
     }
 
     private void validateStatus(BoardStatus status) {
@@ -117,7 +129,6 @@ public class OrderService {
         // 시공 유형 & 건물 유형 검사
         List<Long> categories = request.getCategories();
         List<Long> buildTypes = request.getBuildTypes();
-
         validateCategories(categories, allCategories);
         validateBuildTypes(buildTypes, allBuildTypes);
 
@@ -156,15 +167,16 @@ public class OrderService {
             Pageable pageable
     ) {
         // 정렬 옵션
-        ReviewSortOption sortBy = ReviewSortOption.fromValue(filter.getSortBy());
-        Sort sort = Sort.by("createdAt").descending();
+        ReviewSortOption sortBy = ReviewSortOption.fromValue(filter.getSortBy())
+                .orElseThrow(() -> new InssaException(ErrorCode.INVALID, "정렬 옵션이 올바르지 않습니다."));
+        Sort sort = Sort.by("createdDate").descending();
         if (sortBy != null) {
             switch (sortBy) {
                 case COMMENTS -> sort = Sort.by("comments").descending();
                 case LIKES -> sort = Sort.by("likes").descending();
                 case AMOUNT_HIGH_TO_LOW -> sort = Sort.by("amount").descending();
                 case AMOUNT_LOW_TO_HIGH -> sort = Sort.by("amount").ascending();
-                default -> sort = Sort.by("createdAt").descending();
+                default -> sort = Sort.by("createdDate").descending();
             }
         }
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
@@ -181,7 +193,8 @@ public class OrderService {
         Map<Long, Category> availableCategories = findAllCategories();
 
         // 건물 유형, 시공유형 검증
-        validateBuildTypes(buildTypeIds, availableBuildTypes);
+        if (Objects.nonNull(buildTypeIds)) validateBuildTypes(buildTypeIds, availableBuildTypes);
+        if (Objects.nonNull(categoryIds)) validateBuildTypes(categoryIds, availableBuildTypes);
         validateCategories(categoryIds, availableCategories);
 
         // 접근 가능한 글만 조회

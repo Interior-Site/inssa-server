@@ -43,10 +43,9 @@ public class OrderController {
     @Operation(summary = "견적 후기 목록 조회", tags = "orderReview")
     @GetMapping
     public InssaApiResponse<Page<OrderReviewListResponseDto>> findOrderReviews(
-            @ParameterObject @RequestParamObject ReviewFilterParam filter, // 필터
-            @ParameterObject @PageableDefault Pageable pageable
+            @Valid @ParameterObject ReviewFilterParam filter, // 필터
+            @Valid @ParameterObject Pageable pageable
     ) {
-
         Page<OrderReviewListResponseDto> orderReviews = orderService.findOrderReviews(filter, pageable);
         return InssaApiResponse.ok(ResponseCode.SUCCESS, orderReviews);
     }
@@ -66,7 +65,7 @@ public class OrderController {
     @Operation(summary = "견적 후기 수정", tags = "orderReview")
     @PutMapping
     public InssaApiResponse<OrderReviewUpdateResponseDto> updateOrderReview(
-            @RequestBody OrderReviewUpdateRequestDto updateRequest,
+            @Valid @RequestBody OrderReviewUpdateRequestDto updateRequest,
             @AuthenticationPrincipal AuthUser user
     ) {
         OrderReviewRequestDto request = OrderReviewRequestDto.updateBuilder()

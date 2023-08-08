@@ -1,10 +1,6 @@
 package com.inssa.server.api.review.order.dto;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,10 +27,8 @@ public class OrderReviewUpdateRequestDto {
     @NotNull(message = "업체 번호가 누락되었습니다.")
     private Long companyNo;
 
-    @ElementCollection
     private List<Long> buildTypes;
 
-    @ElementCollection
     private List<Long> categories;
 
     // TODO: 이미지

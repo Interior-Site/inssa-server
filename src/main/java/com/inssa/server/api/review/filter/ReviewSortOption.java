@@ -3,6 +3,9 @@ package com.inssa.server.api.review.filter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Objects;
+import java.util.Optional;
+
 @Getter
 @RequiredArgsConstructor
 public enum ReviewSortOption {
@@ -15,12 +18,16 @@ public enum ReviewSortOption {
     ;
     private final String value;
 
-    public static ReviewSortOption fromValue(String value) {
+    public static Optional<ReviewSortOption> fromValue(String value) {
+        // default
+        if (Objects.isNull(value)) {
+            return Optional.of(LATEST);
+        }
         for (ReviewSortOption option : values()) {
             if (option.value.equalsIgnoreCase(value)) {
-                return option;
+                return Optional.of(option);
             }
         }
-        return LATEST; // Default value
+        return Optional.empty(); // null
     }
 }
