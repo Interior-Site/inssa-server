@@ -9,8 +9,11 @@ spring:
       enabled: true
     restart:
       enabled: true
+    remote:
+      secret: inssa-secret
+      proxy:
+        port: 5005
 
-  # MariaDB (Docker)
   datasource:
     jdbcUrl: jdbc:mariadb://db:3306/INSSA?serverTimezone=Asia/Seoul
     username: root
