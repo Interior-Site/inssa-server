@@ -73,3 +73,21 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+tasks {
+    bootJar {
+        archiveFileName.set("app.jar")
+    }
+
+    bootRun {
+        // includes resources in hot reload files as well
+        sourceResources(sourceSets.main)
+    }
+
+}
+
+tasks.register('copyDeps', Copy) {
+    from(sourceSets.main.runtimeClasspath)
+    includeEmptyDirs = false
+    into('/usr/app/classes/')
+}
