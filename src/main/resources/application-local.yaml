@@ -9,13 +9,12 @@ spring:
       enabled: true
     restart:
       enabled: true
+      additional-paths: .
     remote:
       secret: inssa-secret
-      proxy:
-        port: 5005
 
   datasource:
-    jdbcUrl: jdbc:mariadb://db:3306/INSSA?serverTimezone=Asia/Seoul
+    jdbcUrl: jdbc:mariadb://localhost:3306/INSSA?serverTimezone=Asia/Seoul
     username: root
     password: root!
     driver-class-name: org.mariadb.jdbc.Driver
@@ -29,6 +28,7 @@ spring:
       hibernate:
         hbm2ddl:
           auto: create
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

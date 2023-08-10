@@ -1,22 +1,6 @@
 version: "3"
 
 services:
-  builder:
-    image: amazoncorretto:17-alpine
-    container_name: inssa-api-builder
-    volumes:
-      - ./:/usr/build
-      - type: volume
-        source: app_home
-        target: /usr/app
-        volume:
-          nocopy: true
-      - type: volume
-        source: gradle_home
-        target: /usr/.gradle:rw
-    working_dir: /usr/build
-    command: sh -c "chmod +x /usr/build/gradlew && /usr/build/gradlew copyDeps --gradle-user-home=/usr/gradle -x test"
-
   db:
     image: mariadb:10
     container_name: inssa-db-local
@@ -32,24 +16,17 @@ services:
     container_name: inssa-api-local
     image: amazoncorretto:17-alpine
     ports:
-      - 5005:5005
       - 8080:8080
     volumes:
-      - app_home:/usr/app
+      - ./:/usr/app
     environment:
       SPRING_PROFILES_ACTIVE: local
-      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/inssa
+      SPRING_DATASOURCE_JDBCURL: jdbc:mariadb://db:3306/inssa
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root!
       SPRING_JPA_HIBERNATE_DDL_AUTO: create
-    working_dir: /usr/app/classes
-    entrypoint: sh -c "java -Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -cp .:/usr/app/classes/* com.inssa.server.InssaServerApplication"
+    working_dir: /usr/app
     depends_on:
       db:
         condition: service_started
-      builder:
-        condition: service_completed_successfully
     restart: always
-volumes:
-  app_home:
-  gradle_home:
