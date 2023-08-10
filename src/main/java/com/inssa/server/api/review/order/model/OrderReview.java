@@ -2,7 +2,9 @@ package com.inssa.server.api.review.order.model;
 
 import com.inssa.server.api.company.model.Company;
 import com.inssa.server.api.review.build_type.model.BuildType;
+import com.inssa.server.api.review.order.model.OrderReviewBuildType;
 import com.inssa.server.api.review.category.model.Category;
+import com.inssa.server.api.review.like.model.OrderReviewLike;
 import com.inssa.server.api.user.model.User;
 import com.inssa.server.common.code.ErrorCode;
 import com.inssa.server.common.exception.InssaException;
@@ -63,6 +65,9 @@ public class OrderReview extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "orderReview", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<OrderReviewCategory> orderReviewCategories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "orderReview", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<OrderReviewLike> likes = new ArrayList<>();
 
     @Builder
     public OrderReview(int amount, String title, String content, Long userNo, Long companyNo) {
