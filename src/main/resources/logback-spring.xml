@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property value="/usr/app/logs/inssa.log" name="LOG_FILE"/>
+    <springProfile name="!local">
+        <property value="/usr/app/logs/inssa.log" name="LOG_FILE"/>
+    </springProfile>
+    <springProfile name="local">
+        <property value="./logs/inssa.log" name="LOG_FILE"/>
+    </springProfile>
 
     <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_FILE}</file>
@@ -26,8 +31,10 @@
         </encoder>
     </appender>
 
-    <root level="info">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="dailyRollingFileAppender" />
-    </root>
+    <springProfile name="!local">
+        <root level="info">
+            <appender-ref ref="STDOUT" />
+            <appender-ref ref="dailyRollingFileAppender"/>
+        </root>
+    </springProfile>
 </configuration>
