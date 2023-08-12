@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,5 +35,16 @@ public class ArticleLikeController {
     ) {
         articleLikeService.createLike(articleNo, user.getUserNo());
         return InssaApiResponse.ok(Map.of("articleNo", articleNo, "liked", true));
+    }
+
+    @Operation(summary = "게시글 공감 취소", tags = "articleLike")
+    @PreAuthorizeLogInUser
+    @DeleteMapping("/article/{articleNo}/like")
+    public InssaApiResponse<Map<String, Object>> deleteArticleLike(
+        @Parameter(description = "게시글 No") @PathVariable Long articleNo,
+        @AuthenticationPrincipal AuthUser user
+    ) {
+        articleLikeService.deleteLike(articleNo, user.getUserNo());
+        return InssaApiResponse.ok(Map.of("articleNo", articleNo, "liked", false));
     }
 }
