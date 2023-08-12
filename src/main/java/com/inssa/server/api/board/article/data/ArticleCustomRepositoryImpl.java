@@ -26,13 +26,13 @@ public class ArticleCustomRepositoryImpl implements ArticleCustomRepository {
     public Page<ArticleListResponseDto> findArticles(ArticleType type, Pageable pageable) {
         List<ArticleListResponseDto> result = jpaQueryFactory
                 .select(new QArticleListResponseDto(
-                        QArticle.article.no,
-                        QArticle.article.type,
-                        QArticle.article.title,
-                        QArticle.article.viewCount,
-                        QArticle.article.userNo,
-                        QUser.user.nickname,
-                        QArticleLike.articleLike.count()
+                    QArticle.article.no,
+                    QArticle.article.type,
+                    QArticle.article.title,
+                    QArticle.article.viewCount,
+                    QArticle.article.userNo,
+                    QUser.user.nickname,
+                    QArticleLike.articleLike.count()
                 ))
                 .from(QArticle.article)
                 .leftJoin(QUser.user).on(QArticle.article.userNo.eq(QUser.user.no))
@@ -60,13 +60,17 @@ public class ArticleCustomRepositoryImpl implements ArticleCustomRepository {
                 QArticle.article.content,
                 QArticle.article.viewCount,
                 QArticle.article.userNo,
-                QUser.user.nickname
+                QUser.user.nickname,
+                QArticleLike.articleLike.count()
             ))
             .from(QArticle.article)
             .leftJoin(QUser.user).on(QArticle.article.userNo.eq(QUser.user.no))
             .fetchJoin()
+            .leftJoin(QArticleLike.articleLike).on(QArticle.article.no.eq(QArticleLike.articleLike.articleNo))
+            .fetchJoin()
             .where(QArticle.article.no.eq(articleNo)
                 .and(QArticle.article.status.eq(BoardStatus.VISIBLE)))
+            .groupBy(QArticle.article.no)
             .fetchOne();
     }
 }
