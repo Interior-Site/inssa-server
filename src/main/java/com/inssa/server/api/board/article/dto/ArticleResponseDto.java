@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ArticleListResponseDto {
+public class ArticleResponseDto {
     /**
      * 게시글 번호
      */
@@ -22,6 +22,11 @@ public class ArticleListResponseDto {
      * 게시글 제목
      */
     private String title;
+
+    /**
+     * 게시글 내용
+     */
+    private String content;
 
     /**
      * 조회 수
@@ -43,13 +48,12 @@ public class ArticleListResponseDto {
      */
     private Long likeCount;
 
-    // 추후 댓글 개수 추가해야 함
-
     @QueryProjection
-    public ArticleListResponseDto(Long articleNo, ArticleType type, String title, int viewCount, Long writerNo, String writerNickname, Long likeCount) {
+    public ArticleResponseDto(Long articleNo, ArticleType type, String title, String content, int viewCount, Long writerNo, String writerNickname, Long likeCount) {
         this.articleNo = articleNo;
         this.type = type;
         this.title = title;
+        this.content = content;
         this.viewCount = viewCount;
         this.writerNo = writerNo;
         this.writerNickname = writerNickname;
