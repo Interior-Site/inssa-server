@@ -3,6 +3,7 @@ package com.inssa.server.api.board.article;
 import com.inssa.server.api.board.article.dto.ArticleCreateRequestDto;
 import com.inssa.server.api.board.article.dto.ArticleListResponseDto;
 import com.inssa.server.api.board.article.dto.ArticleRequestDto;
+import com.inssa.server.api.board.article.dto.ArticleResponseDto;
 import com.inssa.server.api.board.article.dto.ArticleUpdateRequestDto;
 import com.inssa.server.api.board.article.model.ArticleType;
 import com.inssa.server.api.board.article.service.ArticleService;
@@ -53,6 +54,12 @@ public class ArticleController {
 			@RequestParam ArticleType type) {
 
 		return InssaApiResponse.ok(articleService.findArticles(type, pageable));
+	}
+
+	@Operation(summary = "게시글 단건 조회", tags = "article")
+	@GetMapping("/article")
+	public InssaApiResponse<ArticleResponseDto> findArticle(@RequestParam Long articleNo) {
+		return InssaApiResponse.ok(articleService.findArticle(articleNo));
 	}
 
 	@Operation(summary = "게시글 수정", tags = "article")
