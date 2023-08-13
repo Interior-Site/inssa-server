@@ -3,6 +3,7 @@ package com.inssa.server.api.board.article.service;
 import com.inssa.server.api.board.article.data.ArticleRepository;
 import com.inssa.server.api.board.article.dto.ArticleListResponseDto;
 import com.inssa.server.api.board.article.dto.ArticleRequestDto;
+import com.inssa.server.api.board.article.dto.ArticleResponseDto;
 import com.inssa.server.api.board.article.model.Article;
 import com.inssa.server.api.board.article.model.ArticleType;
 import com.inssa.server.share.board.BoardStatus;
@@ -27,6 +28,10 @@ public class ArticleService {
 
 	public Page<ArticleListResponseDto> findArticles(ArticleType type, Pageable pageable) {
 		return articleRepository.findArticles(type, pageable);
+	}
+
+	public ArticleResponseDto findArticle(Long articleNo) {
+		return articleRepository.findArticle(articleNo);
 	}
 
 	public Long updateArticle(ArticleRequestDto request) {
