@@ -11,6 +11,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor
@@ -73,5 +74,11 @@ public class User extends BaseTimeEntity {
     public void leave() {
         this.status = UserStatus.LEFT;
         quitDate = LocalDateTime.now();
+    }
+
+    public boolean isActive() {
+        return Objects.equals(status, UserStatus.ACTIVATED)
+                && Objects.isNull(quitDate)
+                && !Objects.equals(role, UserRole.ANONYMOUS);
     }
 }
