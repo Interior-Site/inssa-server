@@ -7,11 +7,12 @@ import org.springframework.lang.Nullable;
 @Schema(description = "API 요청 결과")
 @Data
 public class InssaApiResponse<T> {
-    private final ResponseCode message;
+
+    private final ResponseCodeWrapper message;
     private final T result;
 
     private InssaApiResponse(ResponseCode message, T result) {
-        this.message = message;
+        this.message = ResponseCodeWrapper.from(message);
         this.result = result;
     }
 
