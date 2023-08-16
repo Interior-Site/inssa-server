@@ -79,6 +79,10 @@ public class OrderReview extends BaseTimeEntity {
         this.status = BoardStatus.VISIBLE;
     }
 
+    public int getLikeCount() {
+        return likes.size();
+    }
+
     public void addReviewCategory(OrderReviewCategory category) {
         this.getOrderReviewCategories().add(category);
         category.setOrderReview(this);
