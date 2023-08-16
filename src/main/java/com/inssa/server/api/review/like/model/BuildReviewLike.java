@@ -1,5 +1,6 @@
 package com.inssa.server.api.review.like.model;
 
+import com.inssa.server.api.review.build.model.BuildReview;
 import com.inssa.server.api.user.model.User;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -17,13 +18,13 @@ import lombok.NoArgsConstructor;
 })
 public class BuildReviewLike extends ReviewLike {
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "build_review_no", nullable = false, updatable = false)
-//    private BuildReview buildReview;
-//
-//    @Builder
-//    public BuildReviewLike(Long id, User user, BuildReview buildReview) {
-//        super(id, user);
-//        this.buildReview = buildReview;
-//    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "build_review_no", nullable = false, updatable = false)
+    private BuildReview buildReview;
+
+    @Builder
+    public BuildReviewLike(User user, BuildReview buildReview) {
+        super(user);
+        this.buildReview = buildReview;
+    }
 }

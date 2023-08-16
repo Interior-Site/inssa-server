@@ -23,8 +23,8 @@ public class OrderReviewLike extends ReviewLike {
     private OrderReview orderReview;
 
     @Builder
-    public OrderReviewLike(Long id, User user, OrderReview orderReview) {
-        super(id, user);
+    public OrderReviewLike(User user, OrderReview orderReview) {
+        super(user);
         this.orderReview = orderReview;
     }
 
