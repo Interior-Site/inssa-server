@@ -22,9 +22,6 @@ public class ReviewLikeController {
 
     @Tag(name = "orderReviewLike", description = "견적후기 공감 API")
     @Operation(description = "견적 후기 공감 추가")
-    @ApiResponses({
-//            @ApiResponse(responseCode = "200", description = "API 응답 성공", content = @Content(@Schema(implementation = ))),
-    })
     @PostMapping("/order/{orderReviewNo}/like")
     @PreAuthorizeLogInUser
     public InssaApiResponse<ReviewLikeResponseDto> createOrderReviewLike(
