@@ -47,6 +47,9 @@ public class OrderReviewResponseDto {
     @Schema(description = "조회수")
     private final int viewCount;
 
+    @Schema(description = "공감수")
+    private final int likeCount;
+
     @Schema(description = "작성자 번호")
     private final Long userNo;
 
@@ -92,6 +95,7 @@ public class OrderReviewResponseDto {
         this.content = orderReview.getContent();
         this.status = orderReview.getStatus();
         this.viewCount = orderReview.getViewCount();
+        this.likeCount = orderReview.getLikeCount();
         this.company = new CompanyResponseDto(company);
         this.buildTypes = buildTypes.stream().map(BuildTypeResponseDto::new).toList();
         this.categories = categories.stream().map(CategoryResponseDto::new).toList();
