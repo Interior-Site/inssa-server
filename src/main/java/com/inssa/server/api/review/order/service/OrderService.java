@@ -136,14 +136,17 @@ public class OrderService {
      * @return keyword:  검색 키워드(filtered)
      */
     private String validateAndCleanKeyword(String keyword) {
-        if (!keyword.isEmpty() && !keyword.isBlank()) {
-            String cleanedKeyword = keyword.replaceAll("[^a-zA-Zㄱ-힣0-9,._()]", "");
-            if (cleanedKeyword.length() < 2){
-                throw new InssaException(ErrorCode.INVALID, "검색 키워드는 공백 제외 2자 이상 입력해야 합니다.");
+        if (!Objects.isNull(keyword)) {
+            if (!keyword.isEmpty() && !keyword.isBlank()) {
+                String cleanedKeyword = keyword.replaceAll("[^a-zA-Zㄱ-힣0-9,._()]", "");
+                if (cleanedKeyword.length() < 2){
+                    throw new InssaException(ErrorCode.INVALID, "검색 키워드는 공백 제외 2자 이상 입력해야 합니다.");
+                }
+                return cleanedKeyword;
             }
-            return cleanedKeyword;
+            throw new InssaException(ErrorCode.INVALID, "검색 키워드는 공백일 수 없습니다.");
         }
-        throw new InssaException(ErrorCode.INVALID, "검색 키워드는 공백일 수 없습니다.");
+        return null;
     }
 
     /**
