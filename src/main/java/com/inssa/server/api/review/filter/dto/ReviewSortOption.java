@@ -1,5 +1,6 @@
 package com.inssa.server.api.review.filter.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +19,7 @@ public enum ReviewSortOption {
     ;
     private final String value;
 
+    @JsonCreator
     public static Optional<ReviewSortOption> fromValue(String value) {
         // default
         if (Objects.isNull(value)) {

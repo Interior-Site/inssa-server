@@ -26,6 +26,9 @@ public class OrderReviewListResponseDto {
     @Schema(description = "공감수")
     private final int likeCount;
 
+    @Schema(description = "댓글수")
+    private final int commentCount;
+
     @Schema(
             description = "시공 유형 객체 배열",
             type = "List",
@@ -47,6 +50,7 @@ public class OrderReviewListResponseDto {
         this.categories = orderReview.getCategories().stream().map(CategoryListResponse::new).toList();
         this.buildTypes = orderReview.getBuildTypes().stream().map(BuildTypeListResponse::new).toList();
         this.likeCount = orderReview.getLikeCount();
+        this.commentCount = orderReview.getCommentCount();
     }
 
 }
