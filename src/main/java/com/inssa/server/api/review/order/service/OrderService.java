@@ -157,6 +157,9 @@ public class OrderService {
      */
     @Transactional
     public OrderReviewCreateResponseDto createOrderReview(OrderReviewCreateRequestDto request, Long userNo) {
+        // 사용자 검사
+        User user = findUserById(userNo);
+
         // 견적 금액 유효성 검사
         validateAmount(request.getAmount());
 
@@ -175,7 +178,7 @@ public class OrderService {
         validateBuildTypes(buildTypes, allBuildTypes);
 
         // 견적 후기
-        OrderReview orderReview = orderReviewRepository.save(request.toEntity(userNo, company.getNo()));
+        OrderReview orderReview = orderReviewRepository.save(request.toEntity(user, company));
 
 
         // 시공 유형 연결
@@ -316,7 +319,7 @@ public class OrderService {
                 ).toList();
 
 
-        OrderReview updatedReview = orderReview.updateOrderReview(
+        orderReview.update(
                 request.getAmount(),
                 request.getTitle(),
                 request.getContent(),
@@ -324,7 +327,7 @@ public class OrderService {
                 reviewBuildTypes,
                 reviewCategories
         );
-        return new OrderReviewUpdateResponseDto(updatedReview);
+        return new OrderReviewUpdateResponseDto(orderReview);
     }
 
     @Transactional

@@ -1,6 +1,8 @@
 package com.inssa.server.api.review.order.dto;
 
+import com.inssa.server.api.company.model.Company;
 import com.inssa.server.api.review.order.model.OrderReview;
+import com.inssa.server.api.user.model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -59,13 +61,13 @@ public class OrderReviewCreateRequestDto {
 
     // TODO: 이미지
 
-    public OrderReview toEntity(Long userNo, Long companyNo) {
+    public OrderReview toEntity(User user, Company company) {
         return OrderReview.builder()
                 .amount(this.amount)
                 .title(this.title)
                 .content(this.content)
-                .userNo(userNo)
-                .companyNo(companyNo)
+                .user(user)
+                .company(company)
                 .build();
     }
 }
