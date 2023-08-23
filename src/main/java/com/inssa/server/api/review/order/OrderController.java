@@ -1,6 +1,6 @@
 package com.inssa.server.api.review.order;
 
-import com.inssa.server.api.review.filter.ReviewFilterParam;
+import com.inssa.server.api.review.filter.dto.ReviewFilterParam;
 import com.inssa.server.api.review.order.dto.*;
 import com.inssa.server.api.review.order.service.OrderService;
 import com.inssa.server.api.user.model.AuthUser;

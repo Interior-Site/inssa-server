@@ -2,7 +2,7 @@ package com.inssa.server.api.review.order.service;
 
 import com.inssa.server.api.company.data.CompanyRepository;
 import com.inssa.server.api.company.model.Company;
-import com.inssa.server.api.review.filter.ReviewFilterParam;
+import com.inssa.server.api.review.filter.dto.ReviewFilterParam;
 import com.inssa.server.api.review.build_type.data.BuildTypeRepository;
 import com.inssa.server.api.review.build_type.model.BuildType;
 import com.inssa.server.api.review.category.data.CategoryRepository;
@@ -17,7 +17,7 @@ import com.inssa.server.api.user.model.User;
 import com.inssa.server.common.code.ErrorCode;
 import com.inssa.server.common.exception.InssaException;
 import com.inssa.server.share.board.BoardStatus;
-import com.inssa.server.api.review.filter.ReviewSortOption;
+import com.inssa.server.api.review.filter.dto.ReviewSortOption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
