@@ -1,4 +1,4 @@
-package com.inssa.server.api.review.filter;
+package com.inssa.server.api.review.filter.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
