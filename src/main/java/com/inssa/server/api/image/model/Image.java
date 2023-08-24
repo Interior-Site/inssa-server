@@ -17,6 +17,7 @@ public class Image {
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "image_no")
     private Long id;
+
     @Column(nullable = false)
     private String imgUrl;
     private String originFileName;

@@ -1,12 +1,18 @@
 package com.inssa.server.api.review.order.service;
 
 import com.inssa.server.api.company.data.CompanyRepository;
+import com.inssa.server.api.company.dto.CompanyResponseDto;
 import com.inssa.server.api.company.model.Company;
+import com.inssa.server.api.image.dto.ImageResponseDto;
+import com.inssa.server.api.image.model.Image;
+import com.inssa.server.api.review.comment.dto.ReviewUserResponseDto;
 import com.inssa.server.api.review.filter.dto.ReviewFilterParam;
 import com.inssa.server.api.review.build_type.data.BuildTypeRepository;
 import com.inssa.server.api.review.build_type.model.BuildType;
 import com.inssa.server.api.review.category.data.CategoryRepository;
 import com.inssa.server.api.review.category.model.Category;
+import com.inssa.server.api.review.like.data.OrderReviewLikeRepository;
+import com.inssa.server.api.review.like.dto.ReviewLikeResponseDto;
 import com.inssa.server.api.review.order.data.OrderReviewRepository;
 import com.inssa.server.api.review.order.dto.*;
 import com.inssa.server.api.review.order.model.OrderReview;
@@ -35,6 +41,7 @@ public class OrderService {
     private final BuildTypeRepository buildTypeRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final OrderReviewLikeRepository orderReviewLikeRepository;
 
     private OrderReview findById(Long orderReviewNo) {
         return orderReviewRepository.findById(orderReviewNo)
@@ -147,6 +154,48 @@ public class OrderService {
             throw new InssaException(ErrorCode.INVALID, "검색 키워드는 공백일 수 없습니다.");
         }
         return null;
+    }
+
+    private List<BuildTypeResponseDto> getBuildTypeResponses(List<BuildType> buildTypes) {
+        return buildTypes.stream().map(type -> new BuildTypeResponseDto(type.getNo(), type.getName())).toList();
+    }
+
+    private OrderReviewResponseDto getOrderReviewResponse(OrderReview orderReview, Company company, List<BuildType> buildTypes, List<Category> categories, Long userNo) {
+        return new OrderReviewResponseDto(
+                orderReview.getNo(), orderReview.getTitle(), orderReview.getContent(), orderReview.getStatus(), orderReview.getViewCount(),
+                getUserResponse(orderReview.getUser()),
+                getCompanyResponse(company),
+                getBuildTypeResponses(buildTypes),
+                getCategoryResponses(categories),
+                orderReview.getCreatedDate(),
+                orderReview.getModifiedDate(),
+                orderReview.getAmount(),
+                getReviewLikeResponse(orderReview, userNo),
+                orderReview.getCommentCount());
+    }
+
+    private ReviewLikeResponseDto getReviewLikeResponse(OrderReview review, Long userNo) {
+        boolean hasLiked = orderReviewLikeRepository.existsByUserNoAndOrderReviewNo(userNo, review.getNo());
+        return new ReviewLikeResponseDto(hasLiked, review.getLikeCount());
+    }
+
+    private List<CategoryResponseDto> getCategoryResponses(List<Category> categories) {
+        return categories.stream().map(category -> new CategoryResponseDto(category.getNo(), category.getName())).toList();
+    }
+
+    private CompanyResponseDto getCompanyResponse(Company company) {
+        return new CompanyResponseDto(company);
+    }
+
+    private ReviewUserResponseDto getUserResponse(User user) {
+        Image image = user.getProfile();
+        ImageResponseDto profile = new ImageResponseDto(image.getId(), image.getImgUrl(), image.getOriginFileName());
+        return new ReviewUserResponseDto(
+                user.getNo(),
+                user.getNickname(),
+                user.getStatus(),
+                profile,
+                user.getRole());
     }
 
     /**
@@ -262,7 +311,7 @@ public class OrderService {
      * @return 견적 후기 상세 정보
      */
     @Transactional
-    public OrderReviewResponseDto findOrderReviewById(Long orderReviewNo) {
+    public OrderReviewResponseDto findOrderReviewById(Long orderReviewNo, Long currentUserNo) {
         // 견적 후기 조회
         OrderReview orderReview = findById(orderReviewNo);
 
@@ -274,7 +323,7 @@ public class OrderService {
         Company company = orderReview.getCompany();
         List<BuildType> buildTypes = orderReview.getBuildTypes();
         List<Category> categories = orderReview.getCategories();
-        return new OrderReviewResponseDto(orderReview, company, buildTypes, categories);
+        return getOrderReviewResponse(orderReview, company, buildTypes, categories, currentUserNo);
     }
 
     /**

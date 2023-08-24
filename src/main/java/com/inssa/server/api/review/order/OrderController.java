@@ -26,6 +26,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @Slf4j
 @RequiredArgsConstructor
 @Tag(name = "orderReview", description = "견적 후기 API")
@@ -108,9 +110,11 @@ public class OrderController {
     )
     @GetMapping("/order/{orderReviewNo}")
     public InssaApiResponse<OrderReviewResponseDto> findById(
-            @PathVariable Long orderReviewNo
+            @PathVariable Long orderReviewNo,
+            @AuthenticationPrincipal AuthUser user
     ) {
-        OrderReviewResponseDto orderReviewResponse = orderService.findOrderReviewById(orderReviewNo);
+        Long userNo = Objects.nonNull(user)? user.getUserNo(): null;
+        OrderReviewResponseDto orderReviewResponse = orderService.findOrderReviewById(orderReviewNo, userNo);
         return InssaApiResponse.ok(ResponseCode.SUCCESS, orderReviewResponse);
     }
 
