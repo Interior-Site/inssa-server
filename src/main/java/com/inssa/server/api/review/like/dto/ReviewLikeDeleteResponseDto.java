@@ -3,10 +3,10 @@ package com.inssa.server.api.review.like.dto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-
 @RequiredArgsConstructor
 @Getter
-public class ReviewLikeResponseDto {
+public class ReviewLikeDeleteResponseDto {
+    private final Long userNo;
+    private final Long reviewNo;
     private final boolean liked;
-    private final int likeCount;
 }
