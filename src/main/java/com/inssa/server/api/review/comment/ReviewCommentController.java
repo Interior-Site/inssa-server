@@ -112,7 +112,7 @@ public class ReviewCommentController {
                                                         "message":"CREATED"
                                                     },
                                                     "result": {
-                                                        "orderReviewCommentNo": 3
+                                                        "commentNo": 3
                                                     }
                                                 }
                                             """
@@ -128,6 +128,40 @@ public class ReviewCommentController {
             @AuthenticationPrincipal AuthUser user
     ){
         ReviewCommentCreateResponseDto response = reviewCommentService.createOrderReviewComment(reviewNo, request, user.getUserNo());
+        return InssaApiResponse.ok(ResponseCode.CREATED, response);
+    }
+
+    @Operation(summary = "시공후기 댓글 등록 API", tags = "reviewComment")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "등록 성공",
+                    content = @Content(
+                            examples = @ExampleObject(
+                                    name = "CREATED",
+                                    value = """
+                                            {
+                                                    "message":{
+                                                        "code":201,
+                                                        "message":"CREATED"
+                                                    },
+                                                    "result": {
+                                                        "commentNo": 3
+                                                    }
+                                                }
+                                            """
+                            )
+                    )
+            )
+    })
+    @PreAuthorizeLogInUser
+    @PostMapping("/build/{reviewNo}/comment")
+    public InssaApiResponse<ReviewCommentCreateResponseDto> createBuildReviewComment(
+            @PathVariable Long reviewNo,
+            @RequestBody @Valid ReviewCommentRequestDto request,
+            @AuthenticationPrincipal AuthUser user
+    ){
+        ReviewCommentCreateResponseDto response = reviewCommentService.createBuildReviewComment(reviewNo, request, user.getUserNo());
         return InssaApiResponse.ok(ResponseCode.CREATED, response);
     }
 

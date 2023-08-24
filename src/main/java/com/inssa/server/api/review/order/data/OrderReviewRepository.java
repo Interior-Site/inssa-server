@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public interface OrderReviewRepository extends JpaRepository<OrderReview, Long>, OrderReviewCustomRepository {
 
@@ -42,4 +43,6 @@ public interface OrderReviewRepository extends JpaRepository<OrderReview, Long>,
     }
 
     Page<OrderReview> findAll(Specification<OrderReview> spec, Pageable pageable);
+
+    Optional<OrderReview> findByStatusAndNo(BoardStatus boardStatus, Long no);
 }
