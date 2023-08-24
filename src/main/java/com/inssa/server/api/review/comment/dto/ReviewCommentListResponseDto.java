@@ -1,40 +1,20 @@
 package com.inssa.server.api.review.comment.dto;
 
-import com.inssa.server.api.review.comment.model.BuildReviewComment;
-import com.inssa.server.api.review.comment.model.OrderReviewComment;
-import com.inssa.server.api.user.dto.UserResponseDto;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-@RequiredArgsConstructor
+
 @Getter
-public class ReviewCommentListResponseDto {
-    private final Long no;
-    private final String content;
-    private final boolean deleted;
-    private final UserResponseDto user;
-    private final Long reviewNo;
+public class ReviewCommentListResponseDto extends ReviewCommentResponseDto{
+
+    @Schema(description = "후기 답댓글")
     private final List<ReviewCommentResponseDto> children;
 
-    public ReviewCommentListResponseDto(OrderReviewComment reviewComment){
-        this.reviewNo = reviewComment.getReviewNo();
-        this.no = reviewComment.getNo();
-        this.content = reviewComment.getContent();
-        this.deleted = reviewComment.isDeleted();
-        this.user = new UserResponseDto(reviewComment.getUser());
-        this.children = reviewComment.getChildren().stream()
-                .map(ReviewCommentResponseDto::new).toList();
-    }
-
-    public ReviewCommentListResponseDto(BuildReviewComment reviewComment){
-        this.no = reviewComment.getNo();
-        this.content = reviewComment.getContent();
-        this.deleted = reviewComment.isDeleted();
-        this.user = new UserResponseDto(reviewComment.getUser());
-        this.reviewNo = reviewComment.getReviewNo();
-        this.children = reviewComment.getChildren().stream()
-                .map(ReviewCommentResponseDto::new).toList();
+    public ReviewCommentListResponseDto(Long no, String content, ReviewUserResponseDto user, LocalDateTime createdDate, LocalDateTime modifiedDate, ReviewCommentLikeResponseDto likes, List<ReviewCommentResponseDto> children) {
+        super(no, content, user, createdDate, modifiedDate, likes);
+        this.children = children;
     }
 }

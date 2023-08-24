@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface BuildReviewLikeRepository extends JpaRepository<BuildReviewLike, Long> {
-    Long countByUserNoAndBuildReviewNo(Long userNo, Long buildReviewNo);
+    boolean existsByUserNoAndBuildReviewNo(Long userNo, Long buildReviewNo);
     Optional<BuildReviewLike> findByUserNoAndBuildReviewNo(Long userNo, Long buildReviewNo);
 }

@@ -52,7 +52,7 @@ public abstract class ReviewComment<R extends Review, C extends ReviewComment<R,
         this.content = content;
     }
 
-    public Long getReviewNo() {
-        return Objects.isNull(this.review)? null : this.review.getNo();
+    public Long getUserNo() {
+        return Objects.isNull(this.user)? null : this.user.getNo();
     }
 }

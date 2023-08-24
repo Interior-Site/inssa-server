@@ -23,9 +23,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -52,13 +55,16 @@ public class ReviewCommentController {
             , description = "페이지당 데이터 수"
             , name = "size"
             , content = @Content(schema = @Schema(type = "integer", defaultValue = "10")))
+    @Parameter(in = ParameterIn.QUERY, name = "sort", hidden = true)
     @Operation(summary = "견적후기 댓글 목록 조회 API", tags = "reviewComment")
     @GetMapping("/order/{reviewNo}/comments")
     public InssaApiResponse<Page<ReviewCommentListResponseDto>> findOrderReviewComments(
             @PathVariable Long reviewNo,
-            @ParameterObject @Valid @PageableDefault Pageable pageable
+            @Valid @ParameterObject @PageableDefault(size = 10, page = 0, sort = "no", direction = Sort.Direction.DESC) Pageable pageable,
+            @AuthenticationPrincipal AuthUser user
     ){
-        return InssaApiResponse.ok(reviewCommentService.findOrderReviewCommentsByReviewId(reviewNo, pageable));
+        Long userNo = Objects.nonNull(user)? user.getUserNo(): null;
+        return InssaApiResponse.ok(reviewCommentService.findOrderReviewCommentsByReviewId(reviewNo, pageable, userNo));
     }
 
 
@@ -78,13 +84,16 @@ public class ReviewCommentController {
             , description = "페이지당 데이터 수"
             , name = "size"
             , content = @Content(schema = @Schema(type = "integer", defaultValue = "10")))
+    @Parameter(in = ParameterIn.QUERY, name = "sort", hidden = true)
     @Operation(summary = "시공후기 댓글 목록 조회 API", tags = "reviewComment")
     @GetMapping("/build/{reviewNo}/comments")
     public InssaApiResponse<Page<ReviewCommentListResponseDto>> findBuildReviewComments(
             @PathVariable Long reviewNo,
-            @ParameterObject @Valid @PageableDefault Pageable pageable
+            @Valid @ParameterObject @PageableDefault(size = 10, page = 0, sort = "no", direction = Sort.Direction.DESC) Pageable pageable,
+            @AuthenticationPrincipal AuthUser user
     ){
-        return InssaApiResponse.ok(reviewCommentService.findBuildReviewCommentsByReviewId(reviewNo, pageable));
+        Long userNo = Objects.nonNull(user)? user.getUserNo(): null;
+        return InssaApiResponse.ok(reviewCommentService.findBuildReviewCommentsByReviewId(reviewNo, pageable, userNo));
     }
 
 
