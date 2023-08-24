@@ -55,7 +55,6 @@ public class ReviewCommentController {
             , description = "페이지당 데이터 수"
             , name = "size"
             , content = @Content(schema = @Schema(type = "integer", defaultValue = "10")))
-    @Parameter(in = ParameterIn.QUERY, name = "sort", hidden = true)
     @Operation(summary = "견적후기 댓글 목록 조회 API", tags = "reviewComment")
     @GetMapping("/order/{reviewNo}/comments")
     public InssaApiResponse<Page<ReviewCommentListResponseDto>> findOrderReviewComments(
@@ -84,7 +83,6 @@ public class ReviewCommentController {
             , description = "페이지당 데이터 수"
             , name = "size"
             , content = @Content(schema = @Schema(type = "integer", defaultValue = "10")))
-    @Parameter(in = ParameterIn.QUERY, name = "sort", hidden = true)
     @Operation(summary = "시공후기 댓글 목록 조회 API", tags = "reviewComment")
     @GetMapping("/build/{reviewNo}/comments")
     public InssaApiResponse<Page<ReviewCommentListResponseDto>> findBuildReviewComments(
