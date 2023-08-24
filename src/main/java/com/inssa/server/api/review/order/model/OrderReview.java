@@ -21,11 +21,6 @@ import java.util.*;
 @Entity
 public class OrderReview extends Review {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_no")
-    private Long no;
-
     @ColumnDefault("0")
     @Column(nullable = false)
     private int amount;

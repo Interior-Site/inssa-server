@@ -1,10 +1,11 @@
 package com.inssa.server.api.review.order.dto;
 
-import com.inssa.server.api.review.category.model.Category;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Schema(description = "시공 유형 Response")
+@RequiredArgsConstructor
 @Getter
 public class CategoryResponseDto {
 
@@ -21,10 +22,4 @@ public class CategoryResponseDto {
             example = "도배"
     )
     private final String name;
-
-    public CategoryResponseDto(Category category) {
-        this.no = category.getNo();
-        this.name = category.getName();
-    }
-
 }

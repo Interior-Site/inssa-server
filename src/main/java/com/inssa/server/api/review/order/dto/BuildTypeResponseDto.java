@@ -1,10 +1,11 @@
 package com.inssa.server.api.review.order.dto;
 
-import com.inssa.server.api.review.build_type.model.BuildType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Schema(description = "건물 유형 Response")
+@RequiredArgsConstructor
 @Getter
 public class BuildTypeResponseDto {
     @Schema(
@@ -20,9 +21,4 @@ public class BuildTypeResponseDto {
             example = "아파트"
     )
     private final String name;
-
-    public BuildTypeResponseDto(BuildType buildType) {
-        this.no = buildType.getNo();
-        this.name = buildType.getName();
-    }
 }

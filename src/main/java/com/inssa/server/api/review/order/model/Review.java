@@ -17,6 +17,8 @@ import java.util.Objects;
 public abstract class Review extends BaseTimeEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "review_no")
     private Long no;
 
     @Column(length = 100, nullable = false)
@@ -56,7 +58,7 @@ public abstract class Review extends BaseTimeEntity {
         if (Objects.nonNull(content) && !content.isBlank() && !Objects.equals(this.content, content)) {
             this.content = content;
         }
-        if (Objects.nonNull(company) && !Objects.equals(company.getNo(), this.company)) {
+        if (Objects.nonNull(company) && !Objects.equals(company, this.company)) {
             this.company = company;
         }
     }
