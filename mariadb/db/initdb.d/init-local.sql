@@ -29,3 +29,15 @@ INSERT INTO inssa.order_review (amount, view_count, company_no, created_date, mo
 INSERT INTO inssa.build_review (view_count, company_no, created_date, modified_date, user_no, status, title, content) VALUES (0, 1, '2023-08-16 20:51:01.000000', '2023-08-16 20:51:03.000000', 2, 'VISIBLE', 'build title', 'build title');
 INSERT INTO inssa.build_review (view_count, company_no, created_date, modified_date, user_no, status, title, content) VALUES (0, 1, '2023-08-16 20:51:01.000000', '2023-08-16 20:51:03.000000', 1, 'DELETED', 'build title 2', 'build title 2');
 INSERT INTO inssa.build_review (view_count, company_no, created_date, modified_date, user_no, status, title, content) VALUES (0, 1, '2023-08-16 20:51:01.000000', '2023-08-16 20:51:03.000000', 3, 'VISIBLE', 'build title 2', 'build title 2');
+
+INSERT INTO inssa.order_review_comment (deleted, created_date, modified_date, parent_comment_no, review_no, user_no, content) VALUES (false, '2023-08-24 16:19:03.000000', '2023-08-24 16:19:05.000000', null, 1, 1, '안ㄴ여하세요 저는 댓글이에요');
+INSERT INTO inssa.order_review_comment (deleted, created_date, modified_date, parent_comment_no, review_no, user_no, content) VALUES (false, '2023-08-24 16:19:23.000000', '2023-08-24 16:19:24.000000', 1, 1, 2, '답댓글까지 쓸래요');
+INSERT INTO inssa.order_review_comment (deleted, created_date, modified_date, parent_comment_no, review_no, user_no, content) VALUES (false, '2023-08-24 16:19:50.000000', '2023-08-24 16:19:51.000000', null, 1, 3, '샘플');
+INSERT INTO inssa.order_review_comment (deleted, created_date, modified_date, parent_comment_no, review_no, user_no, content) VALUES (true, '2023-08-24 16:20:18.000000', '2023-08-24 16:20:19.000000', null, 1, 3, '삭제된 댓글');
+INSERT INTO inssa.order_review_comment (deleted, created_date, modified_date, parent_comment_no, review_no, user_no, content) VALUES (true, '2023-08-24 16:24:17.000000', '2023-08-24 16:24:19.000000', 1, 1, 3, '답댓글2');
+
+INSERT INTO inssa.build_review_comment (deleted, created_date, modified_date, parent_comment_no, review_no, user_no, content) VALUES (false, '2023-08-24 16:19:03.000000', '2023-08-24 16:19:05.000000', null, 1, 1, '안ㄴ여하세요 저는 댓글이에요');
+INSERT INTO inssa.build_review_comment (deleted, created_date, modified_date, parent_comment_no, review_no, user_no, content) VALUES (false, '2023-08-24 16:19:23.000000', '2023-08-24 16:19:24.000000', 1, 1, 2, '답댓글까지 쓸래요');
+INSERT INTO inssa.build_review_comment (deleted, created_date, modified_date, parent_comment_no, review_no, user_no, content) VALUES (false, '2023-08-24 16:19:50.000000', '2023-08-24 16:19:51.000000', null, 1, 3, '샘플');
+INSERT INTO inssa.build_review_comment (deleted, created_date, modified_date, parent_comment_no, review_no, user_no, content) VALUES (true, '2023-08-24 16:20:18.000000', '2023-08-24 16:20:19.000000', null, 1, 3, '삭제된 댓글');
+INSERT INTO inssa.build_review_comment (deleted, created_date, modified_date, parent_comment_no, review_no, user_no, content) VALUES (true, '2023-08-24 16:24:17.000000', '2023-08-24 16:24:19.000000', 1, 1, 3, '답댓글2');
