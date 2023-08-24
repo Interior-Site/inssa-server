@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class ReviewLikeResponseDto {
+public class ReviewLikeCreateResponseDto {
+    private final Long userNo;
+    private final Long reviewNo;
+    private final Long likeNo;
     private final boolean liked;
-    private final int likeCount;
 }

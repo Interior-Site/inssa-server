@@ -4,7 +4,8 @@ import com.inssa.server.api.review.build.data.BuildReviewRepository;
 import com.inssa.server.api.review.build.model.BuildReview;
 import com.inssa.server.api.review.like.data.BuildReviewLikeRepository;
 import com.inssa.server.api.review.like.data.OrderReviewLikeRepository;
-import com.inssa.server.api.review.like.dto.ReviewLikeResponseDto;
+import com.inssa.server.api.review.like.dto.ReviewLikeCreateResponseDto;
+import com.inssa.server.api.review.like.dto.ReviewLikeDeleteResponseDto;
 import com.inssa.server.api.review.like.model.BuildReviewLike;
 import com.inssa.server.api.review.like.model.OrderReviewLike;
 import com.inssa.server.api.review.order.data.OrderReviewRepository;
@@ -69,13 +70,13 @@ public class ReviewLikeService {
     }
 
     private void validateDuplicateOrderReviewLike(Long userNo, Long orderReviewNo) {
-        if (orderReviewLikeRepository.countByUserNoAndOrderReviewNo(userNo, orderReviewNo) > 0) {
+        if (orderReviewLikeRepository.existsByUserNoAndOrderReviewNo(userNo, orderReviewNo)) {
             throw new InssaException(ErrorCode.CONFLICT, "이미 공감한 후기입니다.");
         }
     }
 
     private void validateDuplicateBuildReviewLike(Long userNo, Long buildReviewNo) {
-        if (buildReviewLikeRepository.countByUserNoAndBuildReviewNo(userNo, buildReviewNo) > 0) {
+        if (buildReviewLikeRepository.existsByUserNoAndBuildReviewNo(userNo, buildReviewNo)) {
             throw new InssaException(ErrorCode.CONFLICT, "이미 공감한 후기입니다.");
         }
     }
@@ -87,14 +88,15 @@ public class ReviewLikeService {
      * @return 공감한 정보
      */
     @Transactional
-    public ReviewLikeResponseDto createOrderReviewLike(Long orderReviewNo, Long userNo) {
+    public ReviewLikeCreateResponseDto createOrderReviewLike(Long orderReviewNo, Long userNo) {
         User user = findUserAndValidateAuthority(userNo);
         OrderReview orderReview = findOrderReviewById(orderReviewNo);
         validateDuplicateOrderReviewLike(userNo, orderReviewNo);
 
-        OrderReviewLike orderReviewLike = OrderReviewLike.builder()
+        OrderReviewLike like = OrderReviewLike.builder()
                 .orderReview(orderReview).user(user).build();
-        return new ReviewLikeResponseDto(orderReviewLikeRepository.save(orderReviewLike), true);
+        return new ReviewLikeCreateResponseDto(userNo, orderReviewNo,
+                orderReviewLikeRepository.save(like).getNo(), true);
     }
 
     /**
@@ -104,12 +106,12 @@ public class ReviewLikeService {
      * @return 견적 후기 PK, 공감 여부(false)
      */
     @Transactional
-    public ReviewLikeResponseDto deleteOrderReviewLike(Long orderReviewNo, Long userNo) {
+    public ReviewLikeDeleteResponseDto deleteOrderReviewLike(Long orderReviewNo, Long userNo) {
         findUserAndValidateAuthority(userNo);
         findOrderReviewById(orderReviewNo);
         OrderReviewLike like = findOrderReviewLikeByUserNoAndOrderReviewNo(userNo, orderReviewNo);
         orderReviewLikeRepository.delete(like);
-        return new ReviewLikeResponseDto(like, false);
+        return new ReviewLikeDeleteResponseDto(userNo, orderReviewNo, false);
     }
 
     /**
@@ -119,14 +121,15 @@ public class ReviewLikeService {
      * @return 공감한 정보
      */
     @Transactional
-    public ReviewLikeResponseDto createBuildReviewLike(Long buildReviewNo, Long userNo) {
+    public ReviewLikeCreateResponseDto createBuildReviewLike(Long buildReviewNo, Long userNo) {
         User user = findUserAndValidateAuthority(userNo);
         BuildReview buildReview = findBuildReviewById(buildReviewNo);
         validateDuplicateBuildReviewLike(userNo, buildReviewNo);
 
         BuildReviewLike like = BuildReviewLike.builder()
                 .user(user).buildReview(buildReview).build();
-        return new ReviewLikeResponseDto(buildReviewLikeRepository.save(like), true);
+        return new ReviewLikeCreateResponseDto(userNo, buildReviewNo,
+                buildReviewLikeRepository.save(like).getNo(), true);
     }
 
     /**
@@ -136,11 +139,11 @@ public class ReviewLikeService {
      * @return 시공후기 PK, 공감 여부(false)
      */
     @Transactional
-    public ReviewLikeResponseDto deleteBuildReviewLike(Long buildReviewNo, Long userNo) {
+    public ReviewLikeDeleteResponseDto deleteBuildReviewLike(Long buildReviewNo, Long userNo) {
         findUserAndValidateAuthority(userNo);
         findBuildReviewById(buildReviewNo);
         BuildReviewLike like = findBuildReviewLikeByUserNoAndOrderReviewNo(userNo, buildReviewNo);
         buildReviewLikeRepository.delete(like);
-        return new ReviewLikeResponseDto(like, false);
+        return new ReviewLikeDeleteResponseDto(userNo, buildReviewNo,false);
     }
 }
