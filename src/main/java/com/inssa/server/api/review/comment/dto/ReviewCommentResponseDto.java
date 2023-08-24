@@ -1,34 +1,30 @@
 package com.inssa.server.api.review.comment.dto;
 
 
-import com.inssa.server.api.review.comment.model.BuildReviewComment;
-import com.inssa.server.api.review.comment.model.OrderReviewComment;
-import com.inssa.server.api.user.dto.UserResponseDto;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Getter
 public class ReviewCommentResponseDto {
+    @Schema(description = "후기 댓글 번호")
     private final Long no;
+
+    @Schema(description = "후기 댓글 내용")
     private final String content;
-    private final boolean deleted;
-    private final UserResponseDto user;
-    private final Long reviewNo;
 
-    public ReviewCommentResponseDto(OrderReviewComment reviewComment){
-        this.no = reviewComment.getNo();
-        this.content = reviewComment.getContent();
-        this.deleted = reviewComment.isDeleted();
-        this.user = new UserResponseDto(reviewComment.getUser());
-        this.reviewNo = reviewComment.getReviewNo();
-    }
+    @Schema(description = "후기 댓글 작성자")
+    private final ReviewUserResponseDto user;
 
-    public ReviewCommentResponseDto(BuildReviewComment reviewComment){
-        this.no = reviewComment.getNo();
-        this.content = reviewComment.getContent();
-        this.deleted = reviewComment.isDeleted();
-        this.user = new UserResponseDto(reviewComment.getUser());
-        this.reviewNo = reviewComment.getReviewNo();
-    }
+    @Schema(description = "후기 댓글 작성일시")
+    private final LocalDateTime createdDate;
+
+    @Schema(description = "후기 댓글 수정일시")
+    private final LocalDateTime modifiedDate;
+
+    @Schema(description = "후기 댓글 공감")
+    private final ReviewCommentLikeResponseDto like;
 }

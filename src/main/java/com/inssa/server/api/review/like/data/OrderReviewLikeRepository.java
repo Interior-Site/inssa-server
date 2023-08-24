@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface OrderReviewLikeRepository extends JpaRepository<OrderReviewLike, Long> {
     Long countByUserNoAndOrderReviewNo(Long userNo, Long orderReviewNo);
     Optional<OrderReviewLike> findByUserNoAndOrderReviewNo(Long userNo, Long orderReviewNo);
+
+    boolean existsByUserNoAndOrderReviewNo(Long userNo, Long reviewNo);
 }

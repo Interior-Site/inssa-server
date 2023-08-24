@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface OrderReviewCommentRepository extends JpaRepository<OrderReviewComment, Long> {
-    Page<OrderReviewComment> findByReviewNo(Long reviewNo, Pageable pageable);
+    Page<OrderReviewComment> findByParentNullAndDeletedFalseAndReviewNo(Long reviewNo, Pageable pageable);
 }

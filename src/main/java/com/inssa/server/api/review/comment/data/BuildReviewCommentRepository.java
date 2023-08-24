@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BuildReviewCommentRepository extends JpaRepository<BuildReviewComment, Long> {
-    Page<BuildReviewComment> findByReviewNo(Long reviewNo, Pageable pageable);
+    Page<BuildReviewComment> findByParentNullAndDeletedFalseAndReviewNo(Long reviewNo, Pageable pageable);
 }
