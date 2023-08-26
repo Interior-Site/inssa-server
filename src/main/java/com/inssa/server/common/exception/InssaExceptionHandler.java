@@ -4,6 +4,7 @@ import com.inssa.server.common.code.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.lang.Nullable;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,8 +18,19 @@ public class InssaExceptionHandler {
 
     private static final String CODE = "code";
     private static final String TITLE = "error";
-
     private static final String MESSAGE = "message";
+    private static final String RESULT = "result";
+
+    private Map<String, Object> mapFromErrorStringToResponseBody(
+            String errorMessage, @Nullable Integer status, @Nullable String exactCause){
+        int responseCode = (Objects.nonNull(status))? status: HttpStatus.BAD_REQUEST.value();
+        String message = (Objects.nonNull(exactCause))? exactCause: ErrorCode.INVALID.getMsg();
+        Map<String, Object> errorTitle = Map.of(CODE, responseCode, MESSAGE, message);
+        Map<String, Object> errorDetail = Map.of(TITLE, errorMessage);
+        return Map.of(
+                MESSAGE, errorTitle,
+                RESULT, errorDetail);
+    }
 
     @ExceptionHandler(InssaException.class)
     public ResponseEntity<Map<String, Object>> handleServiceException(InssaException exception) {
@@ -31,11 +43,7 @@ public class InssaExceptionHandler {
             }
         }
         return ResponseEntity.status(status)
-                .body(Map.of(
-                        CODE, status,
-                        TITLE, cause,
-                        MESSAGE, exception.getMessage()
-                ));
+                .body(mapFromErrorStringToResponseBody(exception.getMessage(), status, cause));
     }
 
     // HTTP Request Parameter error
@@ -49,11 +57,7 @@ public class InssaExceptionHandler {
         );
         return ResponseEntity
                 .badRequest()
-                .body(Map.of(
-                        CODE, HttpStatus.BAD_REQUEST.value(),
-                        TITLE, ErrorCode.INVALID.getMsg(),
-                        MESSAGE, errorMessage
-                ));
+                .body(mapFromErrorStringToResponseBody(errorMessage, null, null));
     }
 
     // HTTP Request Body error
@@ -62,10 +66,6 @@ public class InssaExceptionHandler {
         String errorMessage = exception.getMessage();
         return ResponseEntity
                 .badRequest()
-                .body(Map.of(
-                        CODE, HttpStatus.BAD_REQUEST.value(),
-                        TITLE, ErrorCode.INVALID.getMsg(),
-                        MESSAGE, errorMessage
-                ));
+                .body(mapFromErrorStringToResponseBody(errorMessage, null, null));
     }
 }
