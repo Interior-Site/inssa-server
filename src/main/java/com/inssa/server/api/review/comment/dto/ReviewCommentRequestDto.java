@@ -1,20 +1,39 @@
 package com.inssa.server.api.review.comment.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class ReviewCommentRequestDto {
 
-    @Schema(description = "댓글 내용", type = "String")
-    @NotBlank(message = "내용은 공백일 수 없습니다.")
-    @NotNull(message = "내용은 null일 수 없습니다.")
-    @NotEmpty(message = "내용은 빈 문자열일 수 없습니다.")
-    private String content;
-
-    @Schema(description = "상위 댓글")
+    private final Long reviewNo;
+    private Long commentNo;
     private Long parentNo;
+    private String content;
+    private final Long userNo;
+
+
+    @Builder(builderMethodName = "createBuilder", builderClassName = "createBuilder")
+    public ReviewCommentRequestDto(Long reviewNo, String content, Long parentNo, Long userNo) {
+        this.reviewNo = reviewNo;
+        this.parentNo = parentNo;
+        this.content = content;
+        this.userNo = userNo;
+    }
+
+    @Builder(builderMethodName = "updateBuilder", builderClassName = "updateBuilder")
+    public ReviewCommentRequestDto(Long reviewNo, Long commentNo, String content, Long userNo) {
+        this.reviewNo = reviewNo;
+        this.commentNo = commentNo;
+        this.content = content;
+        this.userNo = userNo;
+    }
+
+    @Builder(builderMethodName = "deleteBuilder", builderClassName = "deleteBuilder")
+    public ReviewCommentRequestDto(Long reviewNo, Long commentNo, Long userNo) {
+        this.reviewNo = reviewNo;
+        this.commentNo = commentNo;
+        this.userNo = userNo;
+    }
+
 }
