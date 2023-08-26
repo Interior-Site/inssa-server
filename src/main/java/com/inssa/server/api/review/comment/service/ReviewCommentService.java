@@ -98,47 +98,67 @@ public class ReviewCommentService {
         );
     }
 
-    private OrderReview findAndValidateOrderReviewById(Long reviewNo) {
+    private OrderReview findAndValidateOrderReviewByNo(Long reviewNo) {
         return orderReviewRepository.findByStatusAndNo(BoardStatus.VISIBLE, reviewNo)
-                .orElseThrow(() -> new InssaException(ErrorCode.NOT_FOUND, "시공 후기를 찾을 수 없습니다."));
+                .orElseThrow(() -> new InssaException(ErrorCode.NOT_FOUND, "견적 후기를 찾을 수 없습니다."));
     }
 
-    private OrderReviewComment findAndValidateOrderReviewCommentsById(Long parentNo) {
+    private OrderReviewComment findAndValidateOrderReviewCommentByParentNo(Long parentNo) {
         return orderReviewCommentRepository.findByDeletedFalseAndNo(parentNo)
                 .orElseThrow(() -> new InssaException(ErrorCode.NOT_FOUND, "상위 댓글을 찾을 수 없습니다."));
     }
 
-    private BuildReview findAndValidateBuildReviewById(Long reviewNo) {
+    private OrderReviewComment findAndValidateOrderReviewCommentByNo(Long commentNo) {
+        return orderReviewCommentRepository.findByDeletedFalseAndNo(commentNo)
+                .orElseThrow(() -> new InssaException(ErrorCode.NOT_FOUND, "댓글을 찾을 수 없습니다."));
+    }
+
+    private BuildReview findAndValidateBuildReviewByNo(Long reviewNo) {
         return buildReviewRepository.findByStatusAndNo(BoardStatus.VISIBLE, reviewNo)
                 .orElseThrow(() -> new InssaException(ErrorCode.NOT_FOUND, "시공 후기를 찾을 수 없습니다."));
     }
 
-    private BuildReviewComment findAndValidateBuildReviewCommentsById(Long parentNo) {
+    private BuildReviewComment findAndValidateBuildReviewCommentByParentNo(Long parentNo) {
         return buildReviewCommentRepository.findByDeletedFalseAndNo(parentNo)
                 .orElseThrow(() -> new InssaException(ErrorCode.NOT_FOUND, "상위 댓글을 찾을 수 없습니다."));
     }
 
-    private User findAndValidateUserById(Long userNo) {
+    private BuildReviewComment findAndValidateBuildReviewCommentByNo(Long commentNo) {
+        return buildReviewCommentRepository.findByDeletedFalseAndNo(commentNo)
+                .orElseThrow(() -> new InssaException(ErrorCode.NOT_FOUND, "댓글을 찾을 수 없습니다."));
+    }
+
+    private User findAndValidateUserByNo(Long userNo) {
         User user = userRepository.findById(userNo)
-                .orElseThrow(() -> new InssaException(ErrorCode.NOT_FOUND, "사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new InssaException(ErrorCode.UNAUTHORIZED, "사용자를 찾을 수 없습니다."));
         if (!user.isActive()) {
             throw new InssaException(ErrorCode.FORBIDDEN, "댓글 작성 권한이 없습니다.");
         }
         return user;
     }
 
+    private void validateAuthority(Long modelUserNo, Long requestUserNo) {
+        if (Objects.isNull(requestUserNo)) {
+            throw new InssaException(ErrorCode.UNAUTHORIZED, "로그인이 필요합니다.");
+        }
+        // TODO: 관리자 여부 확인
+        if (!Objects.equals(modelUserNo, requestUserNo)) {
+            throw new InssaException(ErrorCode.FORBIDDEN, "권한이 없습니다.");
+        }
+        findAndValidateUserByNo(requestUserNo);
+    }
+
+
     /**
      * 견적후기 댓글 등록 API
-     * @param reviewNo: 견적후기 PK
      * @param request: 견적후기 댓글 요청 정보
-     * @param userNo: 작성자 PK
      * @return 생성된 견적후기 댓글 PK
      */
     @Transactional
-    public ReviewCommentCreateResponseDto createOrderReviewComment(Long reviewNo, ReviewCommentRequestDto request, Long userNo) {
-        User user = findAndValidateUserById(userNo);
-        OrderReview review = findAndValidateOrderReviewById(reviewNo);
-        OrderReviewComment parentComment = (Objects.nonNull(request.getParentNo()))? findAndValidateOrderReviewCommentsById(request.getParentNo()): null;
+    public ReviewCommentResponseDto createOrderReviewComment(ReviewCommentRequestDto request) {
+        User user = findAndValidateUserByNo(request.getUserNo());
+        OrderReview review = findAndValidateOrderReviewByNo(request.getReviewNo());
+        OrderReviewComment parentComment = (Objects.nonNull(request.getParentNo()))? findAndValidateOrderReviewCommentByParentNo(request.getParentNo()): null;
         OrderReviewComment comment = orderReviewCommentRepository.save(
                 OrderReviewComment.builder()
                         .user(user)
@@ -146,22 +166,20 @@ public class ReviewCommentService {
                         .parent(parentComment)
                         .content(request.getContent())
                         .build());
-        return new ReviewCommentCreateResponseDto(comment.getNo());
+        return new ReviewCommentResponseDto(comment.getNo());
     }
 
 
     /**
      * 시공후기 댓글 등록 API
-     * @param reviewNo: 시공후기 pk
      * @param request: 시공후기 댓글 요청 정보
-     * @param userNo: 작성자 PK
      * @return 생성된 시공후기 댓글 PK
      */
     @Transactional
-    public ReviewCommentCreateResponseDto createBuildReviewComment(Long reviewNo, ReviewCommentRequestDto request, Long userNo) {
-        User user = findAndValidateUserById(userNo);
-        BuildReview review = findAndValidateBuildReviewById(reviewNo);
-        BuildReviewComment parentComment = (Objects.nonNull(request.getParentNo()))? findAndValidateBuildReviewCommentsById(request.getParentNo()): null;
+    public ReviewCommentResponseDto createBuildReviewComment(ReviewCommentRequestDto request) {
+        User user = findAndValidateUserByNo(request.getUserNo());
+        BuildReview review = findAndValidateBuildReviewByNo(request.getReviewNo());
+        BuildReviewComment parentComment = (Objects.nonNull(request.getParentNo()))? findAndValidateBuildReviewCommentByParentNo(request.getParentNo()): null;
         BuildReviewComment comment = buildReviewCommentRepository.save(
                 BuildReviewComment.builder()
                         .user(user)
@@ -169,7 +187,7 @@ public class ReviewCommentService {
                         .parent(parentComment)
                         .content(request.getContent())
                         .build());
-        return new ReviewCommentCreateResponseDto(comment.getNo());
+        return new ReviewCommentResponseDto(comment.getNo());
     }
 
     /**
@@ -200,5 +218,65 @@ public class ReviewCommentService {
         List<ReviewCommentListResponseDto> result = comments.stream()
                 .map(comment -> getBuildReviewCommentListResponse(comment, userNo)).toList();
         return new PageImpl<>(result, comments.getPageable(), comments.getSize());
+    }
+
+    /**
+     * 견적후기 댓글 수정 API
+     * @param request: 견적후기 댓글 요청 정보
+     * @return 수정된 견적후기 댓글 PK
+     */
+    @Transactional
+    public ReviewCommentResponseDto updateOrderReviewComment(ReviewCommentRequestDto request) {
+        OrderReviewComment comment = findAndValidateOrderReviewCommentByNo(request.getCommentNo());
+        if (Objects.nonNull(request.getParentNo())) {
+            // TODO: 상위 댓글 삭제 여부에 따른 처리
+            findAndValidateOrderReviewCommentByParentNo(request.getParentNo());
+        }
+        validateAuthority(comment.getUser().getNo(), request.getUserNo());
+        comment.updateContent(request.getContent());
+        return new ReviewCommentResponseDto(comment.getNo());
+    }
+
+    /**
+     * 시공후기 댓글 수정 API
+     * @param request: 견적후기 댓글 요청 정보
+     * @return 수정된 견적후기 댓글 PK
+     */
+    @Transactional
+    public ReviewCommentResponseDto updateBuildReviewComment(ReviewCommentRequestDto request) {
+        BuildReviewComment comment = findAndValidateBuildReviewCommentByNo(request.getCommentNo());
+        if (Objects.nonNull(request.getParentNo())) {
+            // TODO: 상위 댓글 삭제 여부에 따른 처리
+            findAndValidateBuildReviewCommentByParentNo(request.getParentNo());
+        }
+        validateAuthority(comment.getUser().getNo(), request.getUserNo());
+        comment.updateContent(request.getContent());
+        return new ReviewCommentResponseDto(comment.getNo());
+    }
+
+    /**
+     * 견적후기 댓글 삭제 API
+     * @param request 견적후기 댓글 삭제 요청 정보
+     * @return 삭제된 견적후기 댓글 PK
+     */
+    @Transactional
+    public ReviewCommentResponseDto deleteOrderReviewComment(ReviewCommentRequestDto request) {
+        OrderReviewComment comment = findAndValidateOrderReviewCommentByNo(request.getCommentNo());
+        validateAuthority(comment.getUser().getNo(), request.getUserNo());
+        comment.delete();
+        return new ReviewCommentResponseDto(comment.getNo());
+    }
+
+    /**
+     * 시공후기 댓글 삭제 API
+     * @param request 시공후기 댓글 삭제 요청 정보
+     * @return 삭제된 시공후기 댓글 PK
+     */
+    @Transactional
+    public ReviewCommentResponseDto deleteBuildReviewComment(ReviewCommentRequestDto request) {
+        BuildReviewComment comment = findAndValidateBuildReviewCommentByNo(request.getCommentNo());
+        validateAuthority(comment.getUser().getNo(), request.getUserNo());
+        comment.delete();
+        return new ReviewCommentResponseDto(comment.getNo());
     }
 }
