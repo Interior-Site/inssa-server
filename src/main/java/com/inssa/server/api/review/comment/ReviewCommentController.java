@@ -1,8 +1,6 @@
 package com.inssa.server.api.review.comment;
 
-import com.inssa.server.api.review.comment.dto.ReviewCommentCreateResponseDto;
-import com.inssa.server.api.review.comment.dto.ReviewCommentListResponseDto;
-import com.inssa.server.api.review.comment.dto.ReviewCommentRequestDto;
+import com.inssa.server.api.review.comment.dto.*;
 import com.inssa.server.api.review.comment.service.ReviewCommentService;
 import com.inssa.server.api.user.model.AuthUser;
 import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
@@ -38,6 +36,88 @@ import java.util.Objects;
 public class ReviewCommentController {
 
     private final ReviewCommentService reviewCommentService;
+
+
+    @Operation(summary = "견적후기 댓글 등록 API", tags = "reviewComment")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "등록 성공",
+                    content = @Content(
+                            examples = @ExampleObject(
+                                    name = "CREATED",
+                                    value = """
+                                            {
+                                                    "message":{
+                                                        "code":201,
+                                                        "message":"CREATED"
+                                                    },
+                                                    "result": {
+                                                        "commentNo": 3
+                                                    }
+                                                }
+                                            """
+                            )
+                    )
+            )
+    })
+    @PreAuthorizeLogInUser
+    @PostMapping("/order/{reviewNo}/comment")
+    public InssaApiResponse<ReviewCommentResponseDto> createOrderReviewComment(
+            @PathVariable Long reviewNo,
+            @RequestBody @Valid final ReviewCommentCreateRequestDto createRequest,
+            @AuthenticationPrincipal AuthUser user
+    ){
+        ReviewCommentRequestDto request = ReviewCommentRequestDto.createBuilder()
+                .reviewNo(reviewNo)
+                .parentNo(createRequest.getParentNo())
+                .content(createRequest.getContent())
+                .userNo(user.getUserNo())
+                .build();
+        ReviewCommentResponseDto response = reviewCommentService.createOrderReviewComment(request);
+        return InssaApiResponse.ok(ResponseCode.CREATED, response);
+    }
+
+    @Operation(summary = "시공후기 댓글 등록 API", tags = "reviewComment")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "등록 성공",
+                    content = @Content(
+                            examples = @ExampleObject(
+                                    name = "CREATED",
+                                    value = """
+                                            {
+                                                    "message":{
+                                                        "code":201,
+                                                        "message":"CREATED"
+                                                    },
+                                                    "result": {
+                                                        "commentNo": 3
+                                                    }
+                                                }
+                                            """
+                            )
+                    )
+            )
+    })
+    @PreAuthorizeLogInUser
+    @PostMapping("/build/{reviewNo}/comment")
+    public InssaApiResponse<ReviewCommentResponseDto> createBuildReviewComment(
+            @PathVariable Long reviewNo,
+            @RequestBody @Valid final ReviewCommentCreateRequestDto createRequest,
+            @AuthenticationPrincipal AuthUser user
+    ){
+        ReviewCommentRequestDto request = ReviewCommentRequestDto.createBuilder()
+                .reviewNo(reviewNo)
+                .parentNo(createRequest.getParentNo())
+                .content(createRequest.getContent())
+                .userNo(user.getUserNo())
+                .build();
+        ReviewCommentResponseDto response = reviewCommentService.createBuildReviewComment(request);
+        return InssaApiResponse.ok(ResponseCode.CREATED, response);
+    }
+
 
     @ApiResponses(
             value = {
@@ -95,19 +175,19 @@ public class ReviewCommentController {
     }
 
 
-    @Operation(summary = "견적후기 댓글 등록 API", tags = "reviewComment")
+    @Operation(summary = "견적후기 댓글 수정 API", tags = "reviewComment")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "등록 성공",
+                    description = "수정 성공",
                     content = @Content(
                             examples = @ExampleObject(
-                                    name = "CREATED",
+                                    name = "UPDATED",
                                     value = """
                                             {
                                                     "message":{
-                                                        "code":201,
-                                                        "message":"CREATED"
+                                                        "code":202,
+                                                        "message":"UPDATED"
                                                     },
                                                     "result": {
                                                         "commentNo": 3
@@ -119,29 +199,35 @@ public class ReviewCommentController {
             )
     })
     @PreAuthorizeLogInUser
-    @PostMapping("/order/{reviewNo}/comment")
-    public InssaApiResponse<ReviewCommentCreateResponseDto> createOrderReviewComment(
+    @PutMapping("/order/{reviewNo}/comment")
+    public InssaApiResponse<ReviewCommentResponseDto> updateOrderReviewComment(
             @PathVariable Long reviewNo,
-            @RequestBody @Valid ReviewCommentRequestDto request,
+            @RequestBody @Valid final ReviewCommentUpdateRequestDto updateRequest,
             @AuthenticationPrincipal AuthUser user
     ){
-        ReviewCommentCreateResponseDto response = reviewCommentService.createOrderReviewComment(reviewNo, request, user.getUserNo());
-        return InssaApiResponse.ok(ResponseCode.CREATED, response);
+        ReviewCommentRequestDto request = ReviewCommentRequestDto.updateBuilder()
+                .reviewNo(reviewNo)
+                .commentNo(updateRequest.getCommentNo())
+                .content(updateRequest.getContent())
+                .userNo(user.getUserNo())
+                .build();
+        ReviewCommentResponseDto response = reviewCommentService.updateOrderReviewComment(request);
+        return InssaApiResponse.ok(ResponseCode.UPDATED, response);
     }
 
-    @Operation(summary = "시공후기 댓글 등록 API", tags = "reviewComment")
+    @Operation(summary = "시공후기 댓글 수정 API", tags = "reviewComment")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "등록 성공",
+                    description = "수정 성공",
                     content = @Content(
                             examples = @ExampleObject(
-                                    name = "CREATED",
+                                    name = "UPDATED",
                                     value = """
                                             {
                                                     "message":{
-                                                        "code":201,
-                                                        "message":"CREATED"
+                                                        "code":202,
+                                                        "message":"UPDATED"
                                                     },
                                                     "result": {
                                                         "commentNo": 3
@@ -153,14 +239,98 @@ public class ReviewCommentController {
             )
     })
     @PreAuthorizeLogInUser
-    @PostMapping("/build/{reviewNo}/comment")
-    public InssaApiResponse<ReviewCommentCreateResponseDto> createBuildReviewComment(
-            @PathVariable Long reviewNo,
-            @RequestBody @Valid ReviewCommentRequestDto request,
-            @AuthenticationPrincipal AuthUser user
+    @PutMapping("/build/{reviewNo}/comment")
+    public InssaApiResponse<ReviewCommentResponseDto> updateBuildReviewComment(
+        @PathVariable Long reviewNo,
+        @RequestBody @Valid final ReviewCommentUpdateRequestDto updateRequest,
+        @AuthenticationPrincipal AuthUser user
     ){
-        ReviewCommentCreateResponseDto response = reviewCommentService.createBuildReviewComment(reviewNo, request, user.getUserNo());
-        return InssaApiResponse.ok(ResponseCode.CREATED, response);
+     ReviewCommentRequestDto request = ReviewCommentRequestDto.updateBuilder()
+             .reviewNo(reviewNo)
+             .commentNo(updateRequest.getCommentNo())
+             .content(updateRequest.getContent())
+             .userNo(user.getUserNo())
+             .build();
+     ReviewCommentResponseDto response = reviewCommentService.updateBuildReviewComment(request);
+     return InssaApiResponse.ok(ResponseCode.UPDATED, response);
     }
 
+    @Operation(summary = "견적후기 댓글 삭제 API", tags = "reviewComment")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "삭제 성공",
+                    content = @Content(
+                            examples = @ExampleObject(
+                                    name = "DELETED",
+                                    value = """
+                                            {
+                                                    "message":{
+                                                        "code":203,
+                                                        "message":"DELETED"
+                                                    },
+                                                    "result": {
+                                                        "commentNo": 3
+                                                    }
+                                                }
+                                            """
+                            )
+                    )
+            )
+    })
+    @PreAuthorizeLogInUser
+    @PutMapping("/order/{reviewNo}/comment/{commentNo}")
+    public InssaApiResponse<ReviewCommentResponseDto> deleteOrderReviewComment(
+            @PathVariable Long reviewNo,
+            @PathVariable Long commentNo,
+            @AuthenticationPrincipal AuthUser user
+    ){
+        ReviewCommentRequestDto request = ReviewCommentRequestDto.deleteBuilder()
+                .reviewNo(reviewNo)
+                .commentNo(commentNo)
+                .userNo(user.getUserNo())
+                .build();
+        ReviewCommentResponseDto response = reviewCommentService.deleteOrderReviewComment(request);
+        return InssaApiResponse.ok(ResponseCode.DELETED, response);
+    }
+
+
+    @Operation(summary = "시공후기 댓글 삭제 API", tags = "reviewComment")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "삭제 성공",
+                    content = @Content(
+                            examples = @ExampleObject(
+                                    name = "DELETED",
+                                    value = """
+                                            {
+                                                    "message":{
+                                                        "code":203,
+                                                        "message":"DELETED"
+                                                    },
+                                                    "result": {
+                                                        "commentNo": 3
+                                                    }
+                                                }
+                                            """
+                            )
+                    )
+            )
+    })
+    @PreAuthorizeLogInUser
+    @PutMapping("/build/{reviewNo}/comment/{commentNo}")
+    public InssaApiResponse<ReviewCommentResponseDto> deleteBuildReviewComment(
+            @PathVariable Long reviewNo,
+            @PathVariable Long commentNo,
+            @AuthenticationPrincipal AuthUser user
+    ){
+        ReviewCommentRequestDto request = ReviewCommentRequestDto.deleteBuilder()
+                .reviewNo(reviewNo)
+                .commentNo(commentNo)
+                .userNo(user.getUserNo())
+                .build();
+        ReviewCommentResponseDto response = reviewCommentService.deleteBuildReviewComment(request);
+        return InssaApiResponse.ok(ResponseCode.DELETED, response);
+    }
 }

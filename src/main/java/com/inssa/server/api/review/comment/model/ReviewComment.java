@@ -27,7 +27,7 @@ public abstract class ReviewComment<R extends Review, C extends ReviewComment<R,
 
     @ColumnDefault("1")
     @Column(nullable = false)
-    private final boolean deleted = true;
+    private boolean deleted = false;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_no", nullable = false, updatable = false)
@@ -54,5 +54,9 @@ public abstract class ReviewComment<R extends Review, C extends ReviewComment<R,
 
     public Long getUserNo() {
         return Objects.isNull(this.user)? null : this.user.getNo();
+    }
+
+    public void delete() {
+        this.deleted = true;
     }
 }
