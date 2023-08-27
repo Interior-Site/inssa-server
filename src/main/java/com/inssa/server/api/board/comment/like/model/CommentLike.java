@@ -1,19 +1,15 @@
-package com.inssa.server.api.review.like.model;
+package com.inssa.server.api.board.comment.like.model;
 
+import com.inssa.server.api.board.comment.comment.model.Comment;
 import com.inssa.server.api.user.model.User;
 import com.inssa.server.share.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@MappedSuperclass
-public abstract class ReviewLike extends BaseTimeEntity {
+@Entity
+public class CommentLike extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +20,13 @@ public abstract class ReviewLike extends BaseTimeEntity {
     @JoinColumn(name = "user_no", nullable = false)
     private User user;
 
-    protected ReviewLike(User user) {
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "comment_no", updatable = false)
+    private Comment comment;
+
+    @Builder
+    protected CommentLike(User user, Comment comment) {
         this.user = user;
+        this.comment = comment;
     }
 }

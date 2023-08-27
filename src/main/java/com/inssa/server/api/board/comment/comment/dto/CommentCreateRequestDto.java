@@ -1,4 +1,4 @@
-package com.inssa.server.api.review.comment.dto;
+package com.inssa.server.api.board.comment.comment.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class ReviewCommentCreateRequestDto {
+public class CommentCreateRequestDto {
 
     @Schema(description = "댓글 내용")
     @NotBlank(message = "내용은 공백일 수 없습니다.")
