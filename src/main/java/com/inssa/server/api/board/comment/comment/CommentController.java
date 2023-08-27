@@ -40,7 +40,7 @@ public class CommentController {
     @Operation(summary = "댓글 등록 API", tags = "comment")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "201",
                     description = "등록 성공",
                     content = @Content(
                             examples = @ExampleObject(
@@ -109,7 +109,7 @@ public class CommentController {
     @Operation(summary = "댓글 수정 API", tags = "comment")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "202",
                     description = "수정 성공",
                     content = @Content(
                             examples = @ExampleObject(
@@ -150,7 +150,7 @@ public class CommentController {
     @Operation(summary = "댓글 삭제 API", tags = "comment")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
+                    responseCode = "203",
                     description = "삭제 성공",
                     content = @Content(
                             examples = @ExampleObject(
