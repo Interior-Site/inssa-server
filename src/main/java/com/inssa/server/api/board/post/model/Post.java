@@ -1,6 +1,7 @@
 package com.inssa.server.api.board.post.model;
 
 import com.inssa.server.share.board.BoardStatus;
+import com.inssa.server.share.bookmark.BookmarkType;
 import com.inssa.server.share.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 
@@ -11,5 +12,8 @@ public class Post extends BaseTimeEntity {
     private Long no;
 
     @Enumerated(EnumType.STRING)
-    private BoardStatus status;
+    private BoardStatus status = BoardStatus.VISIBLE;
+
+    @Enumerated(EnumType.STRING)
+    private BookmarkType type;
 }
