@@ -5,7 +5,6 @@ import com.inssa.server.api.bookmark.dto.BookmarkRequestDto;
 import com.inssa.server.api.bookmark.service.BookmarkService;
 import com.inssa.server.api.user.model.AuthUser;
 import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
-import com.inssa.server.common.exception.InssaException;
 import com.inssa.server.common.response.InssaApiResponse;
 import com.inssa.server.common.response.ResponseCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,7 +36,7 @@ public class BookmarkController {
 
         Long bookmarkNo = bookmarkService.createBookmark(serviceRequest);
 
-        return InssaApiResponse.ok(ResponseCode.CREATED, Map.of("bookmarkNo", bookmarkNo));
+        return InssaApiResponse.success(ResponseCode.CREATED, Map.of("bookmarkNo", bookmarkNo));
     }
 
     @Operation(summary = "북마크 삭제", tags = "bookmark")
@@ -50,7 +49,7 @@ public class BookmarkController {
                 .build();
 
         Long deleteNo = bookmarkService.deleteBookmark(serviceRequest);
-        return InssaApiResponse.ok(ResponseCode.DELETED, Map.of("bookmarkNo", deleteNo));
+        return InssaApiResponse.success(ResponseCode.DELETED, Map.of("bookmarkNo", deleteNo));
     }
 
 }
