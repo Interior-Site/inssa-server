@@ -1,4 +1,4 @@
-package com.inssa.server.api.review.comment.dto;
+package com.inssa.server.api.board.comment.comment.dto;
 
 import com.inssa.server.api.image.dto.ImageResponseDto;
 import com.inssa.server.api.user.model.UserRole;
@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class ReviewUserResponseDto {
+public class CommentUserResponseDto {
 
     @Schema(description = "작성자 PK")
     private final Long no;

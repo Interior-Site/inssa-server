@@ -1,4 +1,4 @@
-package com.inssa.server.api.review.comment.dto;
+package com.inssa.server.api.board.comment.comment.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @Getter
-public class ReviewCommentUpdateRequestDto {
+public class CommentUpdateRequestDto {
 
     @Schema(description = "댓글 PK")
     @NotNull(message = "댓글 PK가 올바르지 않습니다.")
