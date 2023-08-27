@@ -28,26 +28,26 @@ public class CompanyController {
     @GetMapping("/company/list")
     public InssaApiResponse<List<CompanyResponseDto>> findTestCompanyList() {
         // 페이징 처리 진행해야 함
-        return InssaApiResponse.ok(companyService.findCompanyList());
+        return InssaApiResponse.success(companyService.findCompanyList());
     }
 
     @Operation(summary = "업체 단건 조회 API", tags = "company")
     @GetMapping("/company/{companyNo}")
     public InssaApiResponse<CompanyResponseDto> findCompany(@PathVariable Long companyNo) {
-        return InssaApiResponse.ok(companyService.findCompany(companyNo));
+        return InssaApiResponse.success(companyService.findCompany(companyNo));
     }
 
     @Operation(summary = "업체 수정 API", tags = "company")
     @PutMapping("/company")
     public InssaApiResponse<Map<String, Object>> changeCompanyInfo(@RequestBody CompanyChangeInfoRequestDto request) {
         Company company = companyService.changeCompanyInfo(request);
-        return InssaApiResponse.ok(ResponseCode.UPDATED, Map.of("companyNo", company.getNo()));
+        return InssaApiResponse.success(ResponseCode.UPDATED, Map.of("companyNo", company.getNo()));
     }
 
     @Operation(summary = "업체 삭제 API", tags = "company")
     @DeleteMapping("/company/{companyNo}")
     public InssaApiResponse<Map<String, Object>> deleteCompany(@PathVariable Long companyNo) {
         companyService.deleteCompany(companyNo);
-        return InssaApiResponse.ok(ResponseCode.DELETED, Map.of("companyNo", companyNo));
+        return InssaApiResponse.success(ResponseCode.DELETED, Map.of("companyNo", companyNo));
     }
 }
