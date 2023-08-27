@@ -6,6 +6,7 @@ import com.inssa.server.api.user.model.AuthUser;
 import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
 import com.inssa.server.common.response.InssaApiResponse;
 import com.inssa.server.common.response.ResponseCode;
+import com.inssa.server.share.bookmark.BookmarkType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -70,6 +71,7 @@ public class CommentController {
         CommentRequestDto request = CommentRequestDto.createBuilder()
                 .postNo(postNo)
                 .parentNo(createRequest.getParentNo())
+                .type(BookmarkType.valueOf(createRequest.getType()))
                 .content(createRequest.getContent())
                 .userNo(user.getUserNo())
                 .build();
@@ -98,11 +100,12 @@ public class CommentController {
     @GetMapping
     public InssaApiResponse<Page<CommentListResponseDto>> findComments(
             @PathVariable Long postNo,
+            @RequestParam BookmarkType type,
             @Valid @ParameterObject @PageableDefault(sort = "no", direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal AuthUser user
     ){
         Long userNo = Objects.nonNull(user)? user.getUserNo(): null;
-        return InssaApiResponse.success(commentService.findCommentsByNo(postNo, pageable, userNo));
+        return InssaApiResponse.success(commentService.findCommentsByNo(postNo, type, pageable, userNo));
     }
 
 

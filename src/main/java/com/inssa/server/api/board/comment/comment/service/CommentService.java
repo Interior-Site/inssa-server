@@ -15,6 +15,7 @@ import com.inssa.server.api.user.model.User;
 import com.inssa.server.common.code.ErrorCode;
 import com.inssa.server.common.exception.InssaException;
 import com.inssa.server.share.board.BoardStatus;
+import com.inssa.server.share.bookmark.BookmarkType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -78,6 +79,11 @@ public class CommentService {
                 .orElseThrow(() -> new InssaException(ErrorCode.NOT_FOUND, "게시글을 찾을 수 없습니다."));
     }
 
+    private Post findAndValidatePostByNoAndType(Long postNo, BookmarkType type) {
+        return postRepository.findByStatusAndNoAndType(BoardStatus.VISIBLE, postNo, type)
+                .orElseThrow(() -> new InssaException(ErrorCode.NOT_FOUND, "게시글을 찾을 수 없습니다."));
+    }
+
     private Comment findAndValidateCommentByParentNo(Long parentNo) {
         return commentRepository.findByStatusAndNo(BoardStatus.VISIBLE, parentNo)
                 .orElseThrow(() -> new InssaException(ErrorCode.NOT_FOUND, "상위 댓글을 찾을 수 없습니다."));
@@ -117,12 +123,13 @@ public class CommentService {
     @Transactional
     public CommentNoResponseDto createComment(CommentRequestDto request) {
         User user = findAndValidateUserByNo(request.getUserNo());
-        Post post = findAndValidatePostByNo(request.getPostNo());
+        Post post = findAndValidatePostByNoAndType(request.getPostNo(), request.getType());
         Comment parentComment = (Objects.nonNull(request.getParentNo()))? findAndValidateCommentByParentNo(request.getParentNo()): null;
         Comment comment = commentRepository.save(
                 Comment.builder()
                         .user(user)
                         .post(post)
+                        .type(request.getType())
                         .parent(parentComment)
                         .content(request.getContent())
                         .build());
@@ -137,8 +144,8 @@ public class CommentService {
      * @return 댓글 목록 Page response
      */
     @Transactional(readOnly = true)
-    public Page<CommentListResponseDto> findCommentsByNo(Long postNo, Pageable pageable, Long userNo) {
-        findAndValidatePostByNo(postNo);
+    public Page<CommentListResponseDto> findCommentsByNo(Long postNo, BookmarkType type, Pageable pageable, Long userNo) {
+        findAndValidatePostByNoAndType(postNo, type);
         Page<Comment> comments = commentRepository.findByParentNullAndStatusAndPostNo(BoardStatus.VISIBLE, postNo, pageable);
         List<CommentListResponseDto> result = comments.stream()
                 .map(comment -> getCommentListResponse(comment, userNo)).toList();

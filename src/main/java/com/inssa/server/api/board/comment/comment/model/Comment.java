@@ -4,6 +4,7 @@ import com.inssa.server.api.board.comment.like.model.CommentLike;
 import com.inssa.server.api.board.post.model.Post;
 import com.inssa.server.api.user.model.User;
 import com.inssa.server.share.board.BoardStatus;
+import com.inssa.server.share.bookmark.BookmarkType;
 import com.inssa.server.share.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -37,6 +38,10 @@ public class Comment extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private BoardStatus status = BoardStatus.VISIBLE;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BookmarkType type;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_no", nullable = false, updatable = false)
     private User user;
@@ -56,7 +61,8 @@ public class Comment extends BaseTimeEntity {
     private final List<CommentLike> likes = new ArrayList<>();
 
     @Builder
-    protected Comment(String content, User user, Post post, Comment parent) {
+    protected Comment(BookmarkType type, String content, User user, Post post, Comment parent) {
+        this.type = type;
         this.content = content;
         this.user = user;
         this.post = post;
