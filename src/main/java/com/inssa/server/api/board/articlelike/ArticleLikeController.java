@@ -34,7 +34,7 @@ public class ArticleLikeController {
             @AuthenticationPrincipal AuthUser user
     ) {
         articleLikeService.createLike(articleNo, user.getUserNo());
-        return InssaApiResponse.ok(Map.of("articleNo", articleNo, "liked", true));
+        return InssaApiResponse.success(Map.of("articleNo", articleNo, "liked", true));
     }
 
     @Operation(summary = "게시글 공감 취소", tags = "articleLike")
@@ -45,6 +45,6 @@ public class ArticleLikeController {
         @AuthenticationPrincipal AuthUser user
     ) {
         articleLikeService.deleteLike(articleNo, user.getUserNo());
-        return InssaApiResponse.ok(Map.of("articleNo", articleNo, "liked", false));
+        return InssaApiResponse.success(Map.of("articleNo", articleNo, "liked", false));
     }
 }
