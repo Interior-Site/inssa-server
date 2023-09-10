@@ -8,7 +8,6 @@ import com.inssa.server.api.user.model.AuthUser;
 import com.inssa.server.api.user.model.User;
 import com.inssa.server.api.user.service.UserService;
 import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
-import com.inssa.server.common.exception.InssaException;
 import com.inssa.server.common.response.InssaApiResponse;
 import com.inssa.server.common.response.ResponseCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,7 +19,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @Tag(name = "user", description = "회원 API")
@@ -36,27 +34,27 @@ public class UserController {
     public InssaApiResponse<Map<String, Object>> login(@RequestBody UserRequestDto request) {
         String token = userService.login(request);
 
-        return InssaApiResponse.ok(Map.of("token", token));
+        return InssaApiResponse.success(Map.of("token", token));
     }
 
     @Operation(summary = "사용자 회원가입 API", tags = "user")
     @PostMapping("/register")
     public InssaApiResponse<Map<String, Object>> register(@RequestBody UserRegisterRequestDto request) {
         Long userNo = userService.register(request);
-        return InssaApiResponse.ok(Map.of("userNo", userNo));
+        return InssaApiResponse.success(Map.of("userNo", userNo));
     }
 
     @Operation(summary = "이메일 중복 확인 API", tags = "user")
     @PostMapping("/user/exists/{email}")
     public InssaApiResponse<Boolean> existsEmail(@PathVariable String email) {
-        return InssaApiResponse.ok(userService.existsEmail(email));
+        return InssaApiResponse.success(userService.existsEmail(email));
     }
 
     @Operation(summary = "회원 정보 변경 API", tags = "user")
     @PreAuthorizeLogInUser
     @PutMapping("/user/info")
     public InssaApiResponse<User> changeUserInfo(@RequestBody UserChangeInfoRequestDto request, @AuthenticationPrincipal AuthUser user) {
-        return InssaApiResponse.ok(userService.changeUserInfo(request, user.getUserNo()));
+        return InssaApiResponse.success(userService.changeUserInfo(request, user.getUserNo()));
     }
 
     @Operation(summary = "비밀번호 변경 API", tags = "user")
@@ -64,14 +62,14 @@ public class UserController {
     @PutMapping("/user/password/change")
     public InssaApiResponse<Map<String, Object>> changePassword(@RequestBody UserPasswordRequestDto request, @AuthenticationPrincipal AuthUser user) {
         Long userNo = userService.changePassword(request, user.getUserNo());
-        return InssaApiResponse.ok(Map.of("userNo", userNo));
+        return InssaApiResponse.success(Map.of("userNo", userNo));
     }
 
     @Operation(summary = "비밀번호 확인 API", tags = "user")
     @PreAuthorizeLogInUser
     @PostMapping("/user/password/check")
     public InssaApiResponse<Boolean> checkPassword(@RequestBody UserPasswordRequestDto request, @AuthenticationPrincipal AuthUser user) {
-        return InssaApiResponse.ok(userService.checkPassword(request, user.getUserNo()));
+        return InssaApiResponse.success(userService.checkPassword(request, user.getUserNo()));
     }
 
     @Operation(summary = "회원 탈퇴 API", tags = "user")
@@ -80,6 +78,6 @@ public class UserController {
     public InssaApiResponse<Map<String, Object>> leave(@AuthenticationPrincipal AuthUser user) {
         userService.leave(user.getUserNo());
 
-        return InssaApiResponse.ok(ResponseCode.DELETED, Map.of("userNo", user.getUserNo()));
+        return InssaApiResponse.success(ResponseCode.DELETED, Map.of("userNo", user.getUserNo()));
     }
 }

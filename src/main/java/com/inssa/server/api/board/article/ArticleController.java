@@ -9,7 +9,6 @@ import com.inssa.server.api.board.article.model.ArticleType;
 import com.inssa.server.api.board.article.service.ArticleService;
 import com.inssa.server.api.user.model.AuthUser;
 import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
-import com.inssa.server.common.exception.InssaException;
 import com.inssa.server.common.response.InssaApiResponse;
 import com.inssa.server.common.response.ResponseCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,7 +43,7 @@ public class ArticleController {
 			.build();
 
 		Long articleNo = articleService.createArticle(serviceRequest);
-		return InssaApiResponse.ok(ResponseCode.CREATED, Map.of("articleNo", articleNo));
+		return InssaApiResponse.success(ResponseCode.CREATED, Map.of("articleNo", articleNo));
 	}
 
 	@Operation(summary = "게시글 목록 조회", tags = "article")
@@ -53,13 +52,13 @@ public class ArticleController {
 			@SortDefault(sort = "created_date", direction = Sort.Direction.DESC) Pageable pageable,
 			@RequestParam ArticleType type) {
 
-		return InssaApiResponse.ok(articleService.findArticles(type, pageable));
+		return InssaApiResponse.success(articleService.findArticles(type, pageable));
 	}
 
 	@Operation(summary = "게시글 단건 조회", tags = "article")
 	@GetMapping("/article")
 	public InssaApiResponse<ArticleResponseDto> findArticle(@RequestParam Long articleNo) {
-		return InssaApiResponse.ok(articleService.findArticle(articleNo));
+		return InssaApiResponse.success(articleService.findArticle(articleNo));
 	}
 
 	@Operation(summary = "게시글 수정", tags = "article")
@@ -74,7 +73,7 @@ public class ArticleController {
 			.build();
 
 		Long articleNo = articleService.updateArticle(serviceRequest);
-		return InssaApiResponse.ok(ResponseCode.UPDATED, Map.of("articleNo", articleNo));
+		return InssaApiResponse.success(ResponseCode.UPDATED, Map.of("articleNo", articleNo));
 	}
 
 	@Operation(summary = "게시글 삭제", tags = "article")
@@ -87,6 +86,6 @@ public class ArticleController {
 			.build();
 
 		articleService.deleteArticle(serviceRequest);
-		return InssaApiResponse.ok(ResponseCode.DELETED, Map.of("articleNo", articleNo));
+		return InssaApiResponse.success(ResponseCode.DELETED, Map.of("articleNo", articleNo));
 	}
 }
