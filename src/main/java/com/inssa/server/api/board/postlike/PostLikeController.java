@@ -34,7 +34,7 @@ public class PostLikeController {
             @AuthenticationPrincipal AuthUser user
     ) {
         postLikeService.createLike(postNo, user.getUserNo());
-        return InssaApiResponse.ok(Map.of("postNo", postNo, "liked", true));
+        return InssaApiResponse.success(Map.of("postNo", postNo, "liked", true));
     }
 
     @Operation(summary = "게시글 공감 취소", tags = "postLike")
@@ -45,6 +45,6 @@ public class PostLikeController {
         @AuthenticationPrincipal AuthUser user
     ) {
         postLikeService.deleteLike(postNo, user.getUserNo());
-        return InssaApiResponse.ok(Map.of("postNo", postNo, "liked", false));
+        return InssaApiResponse.success(Map.of("postNo", postNo, "liked", false));
     }
 }

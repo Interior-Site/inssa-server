@@ -1,8 +1,12 @@
 package com.inssa.server.common.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
+
+import java.util.Optional;
 
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
@@ -18,4 +22,10 @@ public enum ResponseCode {
 
     private final int code;
     private final String message;
+
+    @JsonIgnore
+    public HttpStatus getHttpStatus() {
+        return Optional.ofNullable(HttpStatus.valueOf(code))
+                .orElse(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
