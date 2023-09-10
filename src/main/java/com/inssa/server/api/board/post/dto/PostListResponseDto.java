@@ -1,22 +1,22 @@
-package com.inssa.server.api.board.article.dto;
+package com.inssa.server.api.board.post.dto;
 
-import com.inssa.server.api.board.article.model.ArticleType;
+import com.inssa.server.api.board.post.model.PostType;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ArticleListResponseDto {
+public class PostListResponseDto {
     /**
      * 게시글 번호
      */
-    private Long articleNo;
+    private Long postNo;
 
     /**
      * 게시글 타입
      */
-    private ArticleType type;
+    private PostType type;
 
     /**
      * 게시글 제목
@@ -46,8 +46,8 @@ public class ArticleListResponseDto {
     // 추후 댓글 개수 추가해야 함
 
     @QueryProjection
-    public ArticleListResponseDto(Long articleNo, ArticleType type, String title, int viewCount, Long writerNo, String writerNickname, Long likeCount) {
-        this.articleNo = articleNo;
+    public PostListResponseDto(Long postNo, PostType type, String title, int viewCount, Long writerNo, String writerNickname, Long likeCount) {
+        this.postNo = postNo;
         this.type = type;
         this.title = title;
         this.viewCount = viewCount;
