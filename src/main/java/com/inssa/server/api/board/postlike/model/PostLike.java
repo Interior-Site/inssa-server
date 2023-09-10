@@ -1,6 +1,6 @@
-package com.inssa.server.api.board.articlelike.model;
+package com.inssa.server.api.board.postlike.model;
 
-import com.inssa.server.api.board.article.model.Article;
+import com.inssa.server.api.board.post.model.Post;
 import com.inssa.server.api.user.model.User;
 import com.inssa.server.share.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
-public class ArticleLike extends BaseTimeEntity {
+public class PostLike extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,12 +30,12 @@ public class ArticleLike extends BaseTimeEntity {
     private Long userNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "articleNo", insertable = false, updatable = false)
-    private Article article;
-    private Long articleNo;
+    @JoinColumn(name = "postNo", insertable = false, updatable = false)
+    private Post post;
+    private Long postNo;
 
-    public ArticleLike(Long userNo, Long articleNo) {
+    public PostLike(Long userNo, Long postNo) {
         this.userNo = userNo;
-        this.articleNo = articleNo;
+        this.postNo = postNo;
     }
 }
