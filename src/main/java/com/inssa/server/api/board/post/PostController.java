@@ -50,7 +50,7 @@ public class PostController {
 			.build();
 
 		Long postNo = postService.createPost(serviceRequest);
-		return InssaApiResponse.ok(ResponseCode.CREATED, Map.of("postNo", postNo));
+		return InssaApiResponse.success(ResponseCode.CREATED, Map.of("postNo", postNo));
 	}
 
 	@Operation(summary = "게시글 목록 조회", tags = "post")
@@ -59,13 +59,13 @@ public class PostController {
 			@SortDefault(sort = "created_date", direction = Sort.Direction.DESC) Pageable pageable,
 			@RequestParam PostType type) {
 
-		return InssaApiResponse.ok(postService.findPosts(type, pageable));
+		return InssaApiResponse.success(postService.findPosts(type, pageable));
 	}
 
 	@Operation(summary = "게시글 단건 조회", tags = "post")
 	@GetMapping("/post")
 	public InssaApiResponse<PostResponseDto> findPost(@RequestParam Long postNo) {
-		return InssaApiResponse.ok(postService.findPost(postNo));
+		return InssaApiResponse.success(postService.findPost(postNo));
 	}
 
 	@Operation(summary = "게시글 수정", tags = "post")
@@ -80,7 +80,7 @@ public class PostController {
 			.build();
 
 		Long postNo = postService.updatePost(serviceRequest);
-		return InssaApiResponse.ok(ResponseCode.UPDATED, Map.of("postNo", postNo));
+		return InssaApiResponse.success(ResponseCode.UPDATED, Map.of("postNo", postNo));
 	}
 
 	@Operation(summary = "게시글 삭제", tags = "post")
@@ -93,6 +93,6 @@ public class PostController {
 			.build();
 
 		postService.deletePost(serviceRequest);
-		return InssaApiResponse.ok(ResponseCode.DELETED, Map.of("postNo", postNo));
+		return InssaApiResponse.success(ResponseCode.DELETED, Map.of("postNo", postNo));
 	}
 }

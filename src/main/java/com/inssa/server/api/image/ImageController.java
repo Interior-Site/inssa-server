@@ -27,6 +27,6 @@ public class ImageController {
     @Operation(summary = "이미지 업로드 API", tags = "image")
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE) // 들어오는 데이터 타입 지정
     public InssaApiResponse<List<Image>> uploadImage(@RequestPart(name = "file")List<MultipartFile> files) {
-        return InssaApiResponse.ok(imageService.uploadAndSave(files));
+        return InssaApiResponse.success(imageService.uploadAndSave(files));
     }
 }

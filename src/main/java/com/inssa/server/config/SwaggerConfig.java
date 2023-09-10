@@ -79,7 +79,7 @@ public class SwaggerConfig {
 	public GroupedOpenApi bookmarkGroup() {
 		return GroupedOpenApi.builder()
 				.group("Bookmark - 찜")
-				.packagesToScan("com.inssa.server.api.bookmark")
+				.packagesToScan("com.inssa.server.api.board.bookmark")
 				.build();
 	}
 
@@ -87,7 +87,8 @@ public class SwaggerConfig {
 	public GroupedOpenApi commentGroup() {
 		return GroupedOpenApi.builder()
 				.group("Comment - 댓글")
-				.packagesToScan("com.inssa.server.api.comment")
+				.packagesToScan("com.inssa.server.api.board.comment.comment",
+						"com.inssa.server.api.board.comment.like")
 				.build();
 	}
 
@@ -104,14 +105,6 @@ public class SwaggerConfig {
 		return GroupedOpenApi.builder()
 				.group("Image - 이미지")
 				.packagesToScan("com.inssa.server.api.image")
-				.build();
-	}
-
-	@Bean
-	public GroupedOpenApi reviewGroup() {
-		return GroupedOpenApi.builder()
-				.group("Review - 후기")
-				.packagesToScan("com.inssa.server.api.review")
 				.build();
 	}
 
