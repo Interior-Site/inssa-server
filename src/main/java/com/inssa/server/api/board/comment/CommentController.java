@@ -22,7 +22,6 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -135,7 +134,6 @@ public class CommentController {
             @RequestBody @Valid final CommentUpdateRequestDto updateRequest,
             @AuthenticationPrincipal AuthUser user
     ){
-        log.info("user.getNo()= {}", user.getUserNo());
         CommentRequestDto request = CommentRequestDto.updateBuilder()
                 .commentNo(updateRequest.getCommentNo())
                 .content(updateRequest.getContent())
