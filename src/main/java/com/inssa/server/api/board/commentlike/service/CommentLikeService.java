@@ -47,7 +47,7 @@ public class CommentLikeService {
     @Transactional
     public CommentLikeResponseDto deleteLike(Long commentNo, Long userNo) {
         CommentLike commentLike = commentLikeRepository.findByUserNoAndCommentNo(userNo, commentNo)
-                .orElseThrow(() -> new InssaException(ErrorCode.INTERNAL_SERVER_ERROR, "공감하지 않은 댓글은 취소할 수 없습니다."));
+                .orElseThrow(() -> new InssaException(ErrorCode.INVALID, "공감하지 않은 댓글은 취소할 수 없습니다."));
         commentLikeRepository.delete(commentLike);
         long likeCount = countCommentLikeByNo(commentNo);
         return new CommentLikeResponseDto(commentNo, false, likeCount);
