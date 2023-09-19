@@ -1,12 +1,11 @@
-package com.inssa.server.api.board.comment.comment;
+package com.inssa.server.api.board.comment;
 
-import com.inssa.server.api.board.comment.comment.dto.*;
-import com.inssa.server.api.board.comment.comment.service.CommentService;
+import com.inssa.server.api.board.comment.dto.*;
+import com.inssa.server.api.board.comment.service.CommentService;
 import com.inssa.server.api.user.model.AuthUser;
 import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
 import com.inssa.server.common.response.InssaApiResponse;
 import com.inssa.server.common.response.ResponseCode;
-import com.inssa.server.share.bookmark.BookmarkType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -23,7 +22,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +31,7 @@ import java.util.Objects;
 @Slf4j
 @RequiredArgsConstructor
 @Tag(name = "comment", description = "댓글 API")
-@RequestMapping("/api/v1/posts/{postNo}/comments")
+@RequestMapping("/api/v1/board")
 @RestController
 public class CommentController {
 
@@ -62,16 +61,14 @@ public class CommentController {
             )
     })
     @PreAuthorizeLogInUser
-    @PostMapping
+    @PostMapping("/comment")
     public InssaApiResponse<CommentNoResponseDto> createComment(
-            @PathVariable Long postNo,
             @RequestBody @Valid final CommentCreateRequestDto createRequest,
             @AuthenticationPrincipal AuthUser user
     ){
         CommentRequestDto request = CommentRequestDto.createBuilder()
-                .postNo(postNo)
+                .postNo(createRequest.getPostNo())
                 .parentNo(createRequest.getParentNo())
-                .type(BookmarkType.valueOf(createRequest.getType()))
                 .content(createRequest.getContent())
                 .userNo(user.getUserNo())
                 .build();
@@ -97,15 +94,14 @@ public class CommentController {
             , description = "페이지당 데이터 수"
             , name = "size"
             , content = @Content(schema = @Schema(type = "integer", defaultValue = "10")))
-    @GetMapping
+    @GetMapping("/post/{postNo}/comments")
     public InssaApiResponse<Page<CommentListResponseDto>> findComments(
             @PathVariable Long postNo,
-            @RequestParam BookmarkType type,
-            @Valid @ParameterObject @PageableDefault(sort = "no", direction = Sort.Direction.DESC) Pageable pageable,
+            @Valid @ParameterObject @SortDefault(sort = "no", direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal AuthUser user
     ){
         Long userNo = Objects.nonNull(user)? user.getUserNo(): null;
-        return InssaApiResponse.success(commentService.findCommentsByNo(postNo, type, pageable, userNo));
+        return InssaApiResponse.success(commentService.findCommentsByNo(postNo, pageable, userNo));
     }
 
 
@@ -133,14 +129,12 @@ public class CommentController {
             )
     })
     @PreAuthorizeLogInUser
-    @PutMapping
+    @PutMapping("/comment")
     public InssaApiResponse<CommentNoResponseDto> updateComment(
-            @PathVariable Long postNo,
             @RequestBody @Valid final CommentUpdateRequestDto updateRequest,
             @AuthenticationPrincipal AuthUser user
     ){
         CommentRequestDto request = CommentRequestDto.updateBuilder()
-                .postNo(postNo)
                 .commentNo(updateRequest.getCommentNo())
                 .content(updateRequest.getContent())
                 .userNo(user.getUserNo())
@@ -174,14 +168,12 @@ public class CommentController {
             )
     })
     @PreAuthorizeLogInUser
-    @DeleteMapping("/{commentNo}")
+    @PutMapping("/comment/{commentNo}")
     public InssaApiResponse<CommentNoResponseDto> deleteComment(
-            @PathVariable Long postNo,
             @PathVariable Long commentNo,
             @AuthenticationPrincipal AuthUser user
     ){
         CommentRequestDto request = CommentRequestDto.deleteBuilder()
-                .postNo(postNo)
                 .commentNo(commentNo)
                 .userNo(user.getUserNo())
                 .build();
