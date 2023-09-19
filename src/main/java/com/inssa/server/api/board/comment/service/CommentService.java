@@ -9,7 +9,6 @@ import com.inssa.server.api.board.post.data.PostRepository;
 import com.inssa.server.api.image.dto.ImageResponseDto;
 import com.inssa.server.api.image.model.Image;
 import com.inssa.server.api.board.comment.data.CommentRepository;
-import com.inssa.server.api.user.data.UserRepository;
 import com.inssa.server.api.user.model.User;
 import com.inssa.server.common.code.ErrorCode;
 import com.inssa.server.common.exception.InssaException;
@@ -32,7 +31,6 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final CommentLikeRepository commentLikeRepository;
-    private final UserRepository userRepository;
     private final PostRepository postRepository;
 
     private CommentUserResponseDto getUserResponse(User user) {
@@ -112,6 +110,8 @@ public class CommentService {
     public CommentNoResponseDto createComment(CommentRequestDto request) {
         if (Objects.nonNull(request.getParentNo())){
             validateCommentByPostNoAndParentCommentNo(request.getPostNo(), request.getParentNo());
+        } else {
+            validatePostByNo(request.getPostNo());
         }
         Comment comment = commentRepository.save(
                 Comment.builder()

@@ -42,7 +42,7 @@ public class Comment extends BaseTimeEntity {
     private User user;
     private Long userNo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "postNo", nullable = false, insertable = false, updatable = false)
     private Post post;
     private Long postNo;
