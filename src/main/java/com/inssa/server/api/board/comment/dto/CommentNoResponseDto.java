@@ -7,6 +7,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public class CommentNoResponseDto {
-    @Schema(description = "댓글 번호")
+    @Schema(description = "댓글 번호", example = "1")
     private final Long commentNo;
 }

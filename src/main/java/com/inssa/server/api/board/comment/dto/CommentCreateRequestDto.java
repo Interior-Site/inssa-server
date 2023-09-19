@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class CommentCreateRequestDto {
 
-    @Schema(description = "게시글 번호")
+    @Schema(description = "게시글 번호", example = "1")
     @NotNull(message = "게시글 번호는 null일 수 없습니다.")
     @Positive(message = "게시글 번호는 음수일 수 없습니다.")
     private Long postNo;
@@ -23,6 +23,6 @@ public class CommentCreateRequestDto {
     @NotEmpty(message = "내용은 빈 문자열일 수 없습니다.")
     private String content;
 
-    @Schema(description = "상위 댓글")
+    @Schema(description = "상위 댓글(null or 숫자)", example = "1")
     private Long parentNo;
 }
