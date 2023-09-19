@@ -1,6 +1,6 @@
-package com.inssa.server.api.board.comment.comment.dto;
+package com.inssa.server.api.board.comment.dto;
 
-import com.inssa.server.api.board.comment.like.dto.CommentLikeResponseDto;
+import com.inssa.server.api.board.commentlike.dto.CommentLikeResponseDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 

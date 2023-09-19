@@ -84,15 +84,6 @@ public class SwaggerConfig {
 	}
 
 	@Bean
-	public GroupedOpenApi commentGroup() {
-		return GroupedOpenApi.builder()
-				.group("Comment - 댓글")
-				.packagesToScan("com.inssa.server.api.board.comment.comment",
-						"com.inssa.server.api.board.comment.like")
-				.build();
-	}
-
-	@Bean
 	public GroupedOpenApi companyGroup() {
 		return GroupedOpenApi.builder()
 				.group("Company - 기업")

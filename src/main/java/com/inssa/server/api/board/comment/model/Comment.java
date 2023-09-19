@@ -1,10 +1,9 @@
-package com.inssa.server.api.board.comment.comment.model;
+package com.inssa.server.api.board.comment.model;
 
-import com.inssa.server.api.board.comment.like.model.CommentLike;
+import com.inssa.server.api.board.commentlike.model.CommentLike;
 import com.inssa.server.api.board.post.model.Post;
 import com.inssa.server.api.user.model.User;
 import com.inssa.server.share.board.BoardStatus;
-import com.inssa.server.share.bookmark.BookmarkType;
 import com.inssa.server.share.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -38,35 +37,33 @@ public class Comment extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private BoardStatus status = BoardStatus.VISIBLE;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private BookmarkType type;
-
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_no", nullable = false, updatable = false)
+    @JoinColumn(name = "userNo", nullable = false, insertable = false, updatable = false)
     private User user;
+    private Long userNo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_no", nullable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "postNo", nullable = false, insertable = false, updatable = false)
     private Post post;
+    private Long postNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_comment_no", updatable = false)
+    @JoinColumn(name = "parentCommentNo", insertable = false, updatable = false)
     private Comment parent;
+    private Long parentCommentNo;
 
-    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<Comment> children = new ArrayList<>();
 
-    @OneToMany(mappedBy = "comment", orphanRemoval = true)
+    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, orphanRemoval = true)
     private final List<CommentLike> likes = new ArrayList<>();
 
     @Builder
-    protected Comment(BookmarkType type, String content, User user, Post post, Comment parent) {
-        this.type = type;
+    protected Comment(String content, Long userNo, Long postNo, Long parentCommentNo) {
         this.content = content;
-        this.user = user;
-        this.post = post;
-        this.parent = parent;
+        this.userNo = userNo;
+        this.postNo = postNo;
+        this.parentCommentNo = parentCommentNo;
     }
 
     public void updateContent(String content) {
@@ -77,8 +74,13 @@ public class Comment extends BaseTimeEntity {
         return Objects.isNull(this.user)? null : this.user.getNo();
     }
 
-    public int getLikeCount() {
+    public long getLikeCount() {
         return likes.size();
+    }
+
+    public void addCommentLike(CommentLike commentLike) {
+        likes.add(commentLike);
+
     }
 
     public void delete() {

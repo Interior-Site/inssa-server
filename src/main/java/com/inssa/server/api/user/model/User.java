@@ -17,19 +17,25 @@ import java.util.Objects;
 @NoArgsConstructor
 @DynamicInsert
 @DynamicUpdate
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "email", name = "user_uk01"),
+                @UniqueConstraint(columnNames = "nickname", name = "user_uk02")
+        }
+)
 @Entity
 public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_no")
     private Long no;
-    @Column(nullable = false, length = 100, unique = true)
+    @Column(nullable = false, length = 100)
     private String email;
 
     @Column(length = 100)
     private String password;
 
-    @Column(nullable = false, length = 100, unique = true)
+    @Column(nullable = false, length = 100)
     private String nickname;
 
     @Enumerated(EnumType.STRING)

@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long>, PostCustomRepository {
     Optional<Post> findByStatusAndNoAndType(BoardStatus boardStatus, Long postNo, BookmarkType type);
     Optional<Post> findByStatusAndNo(BoardStatus boardStatus, Long postNo);
+
+    boolean existsByStatusAndNo(BoardStatus boardStatus, Long postNo);
 }
