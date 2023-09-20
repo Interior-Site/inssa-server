@@ -1,5 +1,6 @@
 package com.inssa.server.share.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -14,8 +15,10 @@ import java.time.LocalDateTime;
 @Getter
 public abstract class BaseTimeEntity {
 	@CreatedDate
+	@Column(name = "created_date", nullable = false, updatable = false)
 	private LocalDateTime createdDate;
 
 	@LastModifiedDate
+	@Column(name = "modified_date", nullable = false)
 	private LocalDateTime modifiedDate;
 }
