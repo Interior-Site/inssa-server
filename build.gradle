@@ -78,17 +78,10 @@ tasks.named('test') {
 tasks {
     bootJar {
         archiveFileName.set("app.jar")
+        mainClass = 'com.inssa.server.InssaServerApplication'
     }
 
     bootRun {
-        // includes resources in hot reload files as well
-        sourceResources(sourceSets.main)
+        systemProperties System.properties
     }
-
-}
-
-tasks.register('copyDeps', Copy) {
-    from(sourceSets.main.runtimeClasspath)
-    includeEmptyDirs = false
-    into('/usr/app/classes/')
 }

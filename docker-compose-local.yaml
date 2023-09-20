@@ -2,31 +2,44 @@ version: "3"
 
 services:
   db:
-    image: mariadb:10
+    image: mariadb:11
     container_name: inssa-db-local
     ports:
       - 3306:3306
+#    expose:
+#      - 3306
     volumes:
       - ./mariadb/db/conf.d:/etc/mysql/conf.d
-      - ./mariadb/db/initdb.d/init-local.sql:/docker-entrypoint-initdb.d/init.sql
-    env_file: ./mariadb/.env
+    environment:
+      MYSQL_DATABASE: INSSA
+      MYSQL_ROOT_PASSWORD: root!
+      MYSQL_PORT: 3306
+    networks:
+      - db-api
     restart: always
 
   api:
     container_name: inssa-api-local
-    image: amazoncorretto:17-alpine
+    image: amazoncorretto:17
     ports:
-      - 8080:8080
+      - "8080:8080"
+    expose:
+      - 8080
     volumes:
       - ./:/usr/app
     environment:
       SPRING_PROFILES_ACTIVE: local
-      SPRING_DATASOURCE_JDBCURL: jdbc:mariadb://db:3306/inssa
+      SPRING_DATASOURCE_JDBCURL: jdbc:mariadb://inssa-db-local:3306/INSSA?serverTimezone=Asia/Seoul
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root!
-      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.mariadb.jdbc.Driver
+    networks:
+      - db-api
     working_dir: /usr/app
+    command: sh -c "chmod +x ./gradlew && ./gradlew bootRun"
     depends_on:
       db:
         condition: service_started
-    restart: always
+    restart: on-failure
+networks:
+  db-api:
