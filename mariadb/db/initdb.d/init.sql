@@ -1,126 +1,144 @@
-﻿DROP TABLE IF EXISTS IMAGE;
+﻿drop table if exists build_type;
 
-CREATE TABLE IMAGE (
-    IMAGE_NO	INT				NOT NULL	AUTO_INCREMENT PRIMARY KEY	COMMENT '이미지 번호',
-    IMG_URL		VARCHAR(500)	NOT NULL								COMMENT '이미지 url'
+create table build_type
+(
+    build_type_no bigint        auto_increment    primary key,
+    name          varchar(10)   not null          comment '건물 유형 이름 ex) 아파트, 빌라, 오피스텔 등'
 );
 
-DROP TABLE IF EXISTS USER;
+drop table if exists category;
 
-CREATE TABLE USER (
-	USER_NO 		INT 			NOT NULL	AUTO_INCREMENT PRIMARY KEY	COMMENT '사용자고유번호',
-	USER_ID			VARCHAR(50)		NOT NULL								COMMENT '회원아이디',
-	EMAIL			VARCHAR(100)	NOT NULL								COMMENT '이메일',
-	PASSWORD		VARCHAR(100)	NOT NULL								COMMENT '비밀번호',
-	NICKNAME		VARCHAR(100)	NOT NULL								COMMENT '닉네임',
-	PHONE			VARCHAR(100)	NOT NULL								COMMENT '휴대폰번호',
-	STATUS			VARCHAR(50)		NOT NULL	DEFAULT 'Y'					COMMENT '정상: Y / 탈퇴: N',
-	PROFILE_ID		INT					NULL								COMMENT '회원프로필사진',
-	CREATED_DATE	DATE			NOT NULL	DEFAULT SYSDATE()			COMMENT '회원가입일',
-	QUIT_DATE		DATE				NULL								COMMENT '회원탈퇴일',
-	ROLE			VARCHAR(50)			NULL								COMMENT '사용자 권한',
-	CONSTRAINT FK_IMAGE_TO_USER FOREIGN KEY (PROFILE_ID) REFERENCES IMAGE (IMAGE_NO)
+create table category
+(
+    category_no bigint          auto_increment    primary key,
+    name        varchar(50)     not null          comment '카테고리 이름 ex) 아파트, 시공 후기, 베란다 확장 ...'
 );
 
-DROP TABLE IF EXISTS COMPANY;
+drop table if exists bookmark;
 
-CREATE TABLE COMPANY (
-	COMPANY_NO		INT				NOT NULL	AUTO_INCREMENT PRIMARY KEY	COMMENT '업체고유번호',
-	REGISTRATION_NO	VARCHAR(100)	NOT NULL								COMMENT '사업자등록번호',
-	COMPANY_NAME	VARCHAR(100)	NOT NULL								COMMENT '업체명',
-	CONTACT_NUMBER	VARCHAR(100)	NOT NULL								COMMENT '업체전화번호',
-	STATUS			VARCHAR(50)		NOT NULL	DEFAULT 'Y'					COMMENT '운영: Y / 삭제: N',
-	APPROVAL		CHAR(1)			NOT NULL	DEFAULT 'N'					COMMENT '승인: Y / 미승인: N',
-	RATING			CHAR(1)				NULL								COMMENT '평점',
-	USER_NO			INT				NOT NULL								COMMENT '업체 사용자 고유번호',
-	CONSTRAINT FK_USER_TO_COMPANY FOREIGN KEY (USER_NO) REFERENCES USER (USER_NO)
+create table bookmark
+(
+    bookmark_no   bigint                  auto_increment    primary key,
+    target_no     bigint                                    not null,
+    user_no       bigint                                    not null,
+    type          enum ('NORMAL', 'VOTE') default 'NORMAL'  not null,
+    created_date  datetime                default sysdate() not null,
+    modified_date datetime                default sysdate() not null,
+    constraint fk_user_to_bookmark
+        foreign key (user_no) references user (user_no) on delete cascade
 );
 
-DROP TABLE IF EXISTS BOARD_TYPE;
+drop table if exists company;
 
-CREATE TABLE BOARD_TYPE (
-	BOARD_TYPE_NO		INT				NOT NULL	AUTO_INCREMENT PRIMARY KEY	COMMENT '게시판 구분 번호',
-	BOARD_TYPE_NAME		VARCHAR(50)		NOT NULL								COMMENT '게시판 구분명 ex) 후기, 문의, 소통'
+create table company
+(
+    company_no      bigint          auto_increment    primary key,
+    user_no         bigint                            not null,
+    registration_no varchar(255)                      not null,
+    company_name    varchar(255)                      not null,
+    contact_number  varchar(255)                      not null,
+    rating          varchar(255)                      null,
+    status          enum ('Y', 'N') default 'Y'       not null,
+    approval        enum ('Y', 'N') default 'N'       not null,
+    created_date    datetime        default sysdate() not null,
+    modified_date   datetime        default sysdate() not null,
+    constraint fk_user_to_company
+        foreign key (user_no) references user (user_no) on delete cascade
 );
 
-DROP TABLE IF EXISTS CATEGORY;
+drop table if exists comment_like;
 
-CREATE TABLE CATEGORY (
-	CATEGORY_NO			INT			NOT NULL	AUTO_INCREMENT PRIMARY KEY	COMMENT '카테고리 번호',
-	PARENT_CATEGORY		VARCHAR(50)		NULL								COMMENT '상위 카테고리 ex) 집 분류, 시공 분류, 가격 ...', -- 후기 게시판에만 적용됨
-	CATEGORY_NAME		VARCHAR(50)	NOT NULL								COMMENT '카테고리 이름 ex) 아파트, 시공 후기, 베란다 확장 ...',
-	BOARD_TYPE_NO		INT			NOT NULL								COMMENT '게시판 구분 번호',
-	CONSTRAINT FK_BOARD_TYPE_TO_CATEGORY FOREIGN KEY (BOARD_TYPE_NO) REFERENCES BOARD_TYPE (BOARD_TYPE_NO)
+create table comment_like
+(
+    like_no       bigint    auto_increment   primary key,
+    user_no       bigint                     not null,
+    comment_no    bigint                     not null,
+    created_date  datetime default sysdate() not null,
+    modified_date datetime default sysdate() not null,
+    constraint fk_comment_to_commentlike
+        foreign key (comment_no) references comment (comment_no) on delete cascade,
+    constraint fk_user_to_commentlike
+        foreign key (user_no) references user (user_no) on delete cascade
 );
 
-DROP TABLE IF EXISTS BOARD;
+drop table if exists comment;
 
-CREATE TABLE BOARD (
-	BOARD_NO		INT				NOT NULL	AUTO_INCREMENT PRIMARY KEY	COMMENT '게시글번호',
-	BOARD_TYPE_NO	INT				NOT NULL								COMMENT '게시판 구분 번호',
-	CATEGORY_NO		INT				NOT NULL								COMMENT '카테고리 번호',
-	PARENT_BOARD_NO	INT 				NULL								COMMENT '부모 게시글 번호',
-	TITLE			VARCHAR(100)	NOT NULL	DEFAULT 'Y'					COMMENT '게시글 제목',
-	CONTENT			LONGTEXT		NOT NULL								COMMENT '게시글 내용',
-	CREATED_DATE	DATE			NOT NULL	DEFAULT SYSDATE()			COMMENT '게시글 작성일',
-	MODIFIED_DATE	DATE				NULL								COMMENT '게시글 수정일',
-	DELETE_AT		BOOLEAN			NOT NULL	DEFAULT 0					COMMENT '삭제 여부 (0: false, 1: true)',
-	VIEW_COUNT		INT				NOT NULL	DEFAULT 0					COMMENT '조회수',
-	LIKE_COUNT		INT 			NOT NULL	DEFAULT 0					COMMENT '좋아요 수',
-	NOTICE_AT		BOOLEAN			NOT NULL	DEFAULT 0					COMMENT '공지사항 여부 (0: false, 1: true)',
-	USER_NO			INT				NOT NULL								COMMENT '작성자 아이디',
-	CONSTRAINT FK_USER_TO_BOARD FOREIGN KEY (USER_NO) REFERENCES USER (USER_NO),
-	CONSTRAINT FK_BOARD_TYPE_TO_BOARD FOREIGN KEY (BOARD_TYPE_NO) REFERENCES BOARD_TYPE (BOARD_TYPE_NO),
-	CONSTRAINT FK_CATEGORY_TO_BOARD FOREIGN KEY (CATEGORY_NO) REFERENCES CATEGORY (CATEGORY_NO)
+create table comment
+(
+    comment_no        bigint                      auto_increment    primary key,
+    post_no           bigint                                        not null,
+    parent_comment_no bigint                                        null,
+    user_no           bigint                                        not null,
+    content           varchar(1000)                                 not null,
+    status            enum ('VISIBLE', 'DELETED') default 'VISIBLE' not null,
+    created_date      datetime                    default sysdate() not null,
+    modified_date     datetime                    default sysdate() not null,
+    constraint fk_comment_to_comment
+        foreign key (parent_comment_no) references comment (comment_no) on delete cascade,
+    constraint fk_post_to_comment
+        foreign key (post_no) references post (post_no) on delete cascade,
+    constraint fk_user_to_comment
+        foreign key (user_no) references user (user_no) on delete cascade
 );
 
-DROP TABLE IF EXISTS COMMENT;
+drop table if exists post_like;
 
-CREATE TABLE COMMENT (
-	COMMENT_NO			INT				NOT NULL	AUTO_INCREMENT PRIMARY KEY	COMMENT '댓글 번호',
-	PARENT_COMMENT_NO	INT				NOT NULL								COMMENT '부모 댓글 번호',
-	CONTENT				VARCHAR(1000)	NOT NULL								COMMENT '댓글 내용',
-	DELETE_AT			BOOLEAN			NOT NULL	DEFAULT 0					COMMENT '삭제 여부 (0: false, 1: true)',
-	CREATED_DATE		DATE			NOT NULL	DEFAULT SYSDATE()			COMMENT '댓글 작성일',
-	MODIFIED_DATE		DATE				NULL								COMMENT '댓글 수정일',
-	BOARD_NO			INT				NOT NULL								COMMENT '댓글이 달린 게시글번호',
-	USER_NO				INT				NOT NULL								COMMENT '작성자 아이디',
-	CONSTRAINT FK_BOARD_TO_COMMENT FOREIGN KEY (BOARD_NO) REFERENCES BOARD (BOARD_NO),
-	CONSTRAINT FK_USER_TO_COMMENT FOREIGN KEY (USER_NO) REFERENCES USER (USER_NO)
+create table post_like
+(
+    like_no       bigint auto_increment primary key,
+    user_no       bigint                        not null,
+    post_no       bigint                        not null,
+    created_date  datetime(6) default sysdate() not null,
+    modified_date datetime(6) default sysdate() not null,
+    constraint fk_post_to_postlike
+        foreign key (post_no) references post (post_no) on delete cascade,
+    constraint fk_user_to_postlike
+        foreign key (user_no) references user (user_no) on delete cascade
 );
 
-DROP TABLE IF EXISTS BOARD_LIKE;
+drop table if exists post;
 
-CREATE TABLE BOARD_LIKE (
-	LIKE_NO			INT				NOT NULL	AUTO_INCREMENT PRIMARY KEY	COMMENT '좋아요 번호',
-	CREATED_DATE	DATE			NOT NULL	DEFAULT SYSDATE()			COMMENT '좋아요 날짜',
-	BOARD_NO		INT				NOT NULL								COMMENT '좋아요가 눌린 게시글 번호',
-	USER_NO			INT				NOT NULL								COMMENT '좋아요를 누른 회원 아이디',
-	CONSTRAINT FK_BOARD_TO_BOARD_LIKE FOREIGN KEY (BOARD_NO) REFERENCES BOARD (BOARD_NO),
-	CONSTRAINT FK_USER_TO_BOARD_LIKE FOREIGN KEY (USER_NO) REFERENCES USER (USER_NO)
+create table post
+(
+    post_no       bigint                      auto_increment    primary key,
+    user_no       bigint                                        not null,
+    title         varchar(255)                                  not null,
+    content       varchar(255)                                  not null,
+    type          enum ('NORMAL', 'VOTE')     default 'NORMAL'  not null,
+    status        enum ('DELETED', 'VISIBLE') default 'VISIBLE' not null,
+    view_count    int                         default 0         not null,
+    created_date  datetime(6)                 default sysdate() not null,
+    modified_date datetime(6)                 default sysdate() not null,
+    constraint fk_user_to_post
+        foreign key (user_no) references user (user_no) on delete cascade
 );
 
-DROP TABLE IF EXISTS BOOKMARK;
+drop table if exists user;
 
-CREATE TABLE BOOKMARK (
-	BOOKMARK_NO		INT				NOT NULL	AUTO_INCREMENT PRIMARY KEY	COMMENT '게시글 찜번호',
-	CREATED_DATE	DATE			NOT NULL	DEFAULT SYSDATE()			COMMENT '찜하기 눌린 날짜',
-	BOARD_NO		INT				NOT NULL								COMMENT '찜하기 눌린 게시글 번호',
-	USER_NO			INT				NOT NULL								COMMENT '찜하기 누른 회원 아이디',
-	CONSTRAINT FK_BOARD_TO_BOOKMARK FOREIGN KEY (BOARD_NO) REFERENCES BOARD (BOARD_NO),
-	CONSTRAINT FK_USER_TO_BOOKMARK FOREIGN KEY (USER_NO) REFERENCES USER (USER_NO)
+create table user
+(
+    user_no       bigint      auto_increment    primary key,
+    profile_no    bigint                                                    null,
+    nickname      varchar(100)                                              not null,
+    email         varchar(100)                                              not null,
+    password      varchar(100)                                              null,
+    role          enum ('ADMIN', 'ANONYMOUS', 'EMPLOYEE', 'SOCIAL', 'USER') not null,
+    status        enum ('ACTIVATED', 'LEFT', 'NOT_AVAILABLE')               null,
+    quit_date     datetime(6)                                               null,
+    created_date  datetime(6) default sysdate()                             not null,
+    modified_date datetime(6) default sysdate()                             not null,
+    constraint user_uk01
+        unique (email),
+    constraint user_uk02
+        unique (nickname),
+    constraint fk_image_to_user
+        foreign key (profile_no) references image (image_no) on delete cascade
 );
 
+drop table if exists image;
 
-DROP TABLE IF EXISTS FILE;
-
-CREATE TABLE FILE (
-	FILE_NO			INT				NOT NULL	AUTO_INCREMENT PRIMARY KEY	COMMENT '파일번호',
-	FILE_PATH		VARCHAR(500)	NOT NULL								COMMENT '파일저장경로',
-	FILE_TYPE		VARCHAR(100)	NOT NULL 								COMMENT '파일 타입',
-	CHANGE_NAME		VARCHAR(200)	NOT NULL								COMMENT '파일서버에 저장될 파일명',
-	ORIGIN_NAME		VARCHAR(200)	NOT NULL								COMMENT '원본파일명',
-	CREATED_DATE	DATE			NOT NULL	DEFAULT SYSDATE()			COMMENT '파일등록일',
-	BOARD_NO		INT				NOT NULL								COMMENT '게시글번호',
-	CONSTRAINT FK_BOARD_TO_FILE FOREIGN KEY (BOARD_NO) REFERENCES BOARD (BOARD_NO)
+create table image
+(
+    image_no  bigint       auto_increment    primary key,
+    image_url varchar(500) not null comment '이미지 url'
 );
