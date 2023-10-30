@@ -59,4 +59,8 @@ public class PostService {
 		return postRepository.findById(postNo)
 			.orElseThrow(() -> new InssaException("해당하는 게시글이 없습니다."));
 	}
+
+	public String findPostSummaryById(Long id) {
+		return postRepository.findPostSummaryById(id);
+	}
 }

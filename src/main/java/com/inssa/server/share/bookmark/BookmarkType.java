@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum BookmarkType {
-    ARTICLE, REVIEW
+    POST, COMMENT
 
     ;
 

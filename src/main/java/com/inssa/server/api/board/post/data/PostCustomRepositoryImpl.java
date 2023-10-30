@@ -72,4 +72,15 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
             .groupBy(QPost.post.no)
             .fetchOne();
     }
+
+    @Override
+    public String findPostSummaryById(Long id) {
+        return jpaQueryFactory
+            .select(
+                QPost.post.title
+            )
+            .from(QPost.post)
+            .where(QPost.post.no.eq(id))
+            .fetchOne();
+    }
 }

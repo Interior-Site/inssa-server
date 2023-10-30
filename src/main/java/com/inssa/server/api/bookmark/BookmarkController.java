@@ -2,6 +2,7 @@ package com.inssa.server.api.bookmark;
 
 import com.inssa.server.api.bookmark.dto.BookmarkCreateRequestDto;
 import com.inssa.server.api.bookmark.dto.BookmarkRequestDto;
+import com.inssa.server.api.bookmark.dto.BookmarkResponseDto;
 import com.inssa.server.api.bookmark.service.BookmarkService;
 import com.inssa.server.api.user.model.AuthUser;
 import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
@@ -11,6 +12,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +55,12 @@ public class BookmarkController {
 
         Long deleteNo = bookmarkService.deleteBookmark(serviceRequest);
         return InssaApiResponse.success(ResponseCode.DELETED, Map.of("bookmarkNo", deleteNo));
+    }
+
+    public InssaApiResponse<Page<BookmarkResponseDto>> findBookmarks(
+        @SortDefault(sort = "created_date", direction = Sort.Direction.DESC) Pageable pageable,
+        @AuthenticationPrincipal AuthUser user) {
+        return InssaApiResponse.success(bookmarkService.findBookmarks(user.getUserNo(), pageable));
     }
 
 }
