@@ -46,6 +46,7 @@ jobs:
       - name: Docker Save tar
         run: |
           docker save -o inssa-api.tar inssa/inssa-api:latest
+          chmod 777 inssa-api.tar
 
       - name: Copy File
         uses: appleboy/scp-action@master
