@@ -85,3 +85,7 @@ tasks {
         systemProperties System.properties
     }
 }
+
+jar {
+    enabled = false
+}
