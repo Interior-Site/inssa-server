@@ -1,24 +1,24 @@
 spring:
-datasource:
-  jdbc-url: jdbc:mariadb://${{ secrets.INSSA_DATABASE }}?serverTimezone=Asia/Seoul
-  username: ${{ secrets.INSSA_DATABASE_USER }
-  password: ${{ secrets.INSSA_DATABASE_PASSWORD }
-  driver-class-name: org.mariadb.jdbc.Driver
+  datasource:
+    jdbc-url: jdbc:mariadb://${{ secrets.INSSA_DATABASE }}?serverTimezone=Asia/Seoul
+    username: ${{ secrets.INSSA_DATABASE_USER }
+    password: ${{ secrets.INSSA_DATABASE_PASSWORD }
+    driver-class-name: org.mariadb.jdbc.Driver
 
-jpa:
-  open-in-view: false
-  generate-ddl: false
-  show-sql: true
-  hibernate:
-    ddl-auto: none
-  properties:
+  jpa:
+    open-in-view: false
+    generate-ddl: false
+    show-sql: true
     hibernate:
-      show_sql: true
-      format_sql: true
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
 
-mvc:
-  pathmatch:
-    matching-strategy: ant_path_matcher
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 jwt:
   header:
