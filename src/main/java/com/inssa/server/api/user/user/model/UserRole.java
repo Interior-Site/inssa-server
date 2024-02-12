@@ -1,4 +1,4 @@
-package com.inssa.server.api.user.model;
+package com.inssa.server.api.user.user.model;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

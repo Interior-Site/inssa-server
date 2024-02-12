@@ -1,7 +1,7 @@
 package com.inssa.server.api.board.comment.dto;
 
 import com.inssa.server.api.image.dto.ImageResponseDto;
-import com.inssa.server.api.user.model.UserRole;
+import com.inssa.server.api.user.user.model.UserRole;
 import com.inssa.server.share.user.UserStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

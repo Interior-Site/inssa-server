@@ -9,7 +9,7 @@ import com.inssa.server.api.board.post.data.PostRepository;
 import com.inssa.server.api.image.dto.ImageResponseDto;
 import com.inssa.server.api.image.model.Image;
 import com.inssa.server.api.board.comment.data.CommentRepository;
-import com.inssa.server.api.user.model.User;
+import com.inssa.server.api.user.user.model.User;
 import com.inssa.server.common.code.ErrorCode;
 import com.inssa.server.common.exception.InssaException;
 import com.inssa.server.share.board.BoardStatus;

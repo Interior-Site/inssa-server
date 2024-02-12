@@ -2,7 +2,7 @@ package com.inssa.server.api.board.comment;
 
 import com.inssa.server.api.board.comment.dto.*;
 import com.inssa.server.api.board.comment.service.CommentService;
-import com.inssa.server.api.user.model.AuthUser;
+import com.inssa.server.api.user.user.model.AuthUser;
 import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
 import com.inssa.server.common.response.InssaApiResponse;
 import com.inssa.server.common.response.ResponseCode;

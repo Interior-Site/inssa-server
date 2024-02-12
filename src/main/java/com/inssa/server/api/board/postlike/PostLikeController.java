@@ -1,7 +1,7 @@
 package com.inssa.server.api.board.postlike;
 
 import com.inssa.server.api.board.postlike.service.PostLikeService;
-import com.inssa.server.api.user.model.AuthUser;
+import com.inssa.server.api.user.user.model.AuthUser;
 import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
 import com.inssa.server.common.response.InssaApiResponse;
 import io.swagger.v3.oas.annotations.Operation;

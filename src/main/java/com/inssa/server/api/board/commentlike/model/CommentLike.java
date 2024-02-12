@@ -1,7 +1,7 @@
 package com.inssa.server.api.board.commentlike.model;
 
 import com.inssa.server.api.board.comment.model.Comment;
-import com.inssa.server.api.user.model.User;
+import com.inssa.server.api.user.user.model.User;
 import com.inssa.server.share.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;

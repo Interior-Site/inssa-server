@@ -1,6 +1,6 @@
-package com.inssa.server.api.user.data;
+package com.inssa.server.api.user.user.data;
 
-import com.inssa.server.api.user.model.User;
+import com.inssa.server.api.user.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

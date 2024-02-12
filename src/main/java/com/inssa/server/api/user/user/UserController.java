@@ -1,12 +1,12 @@
-package com.inssa.server.api.user;
+package com.inssa.server.api.user.user;
 
-import com.inssa.server.api.user.dto.UserChangeInfoRequestDto;
-import com.inssa.server.api.user.dto.UserPasswordRequestDto;
-import com.inssa.server.api.user.dto.UserRegisterRequestDto;
-import com.inssa.server.api.user.dto.UserRequestDto;
-import com.inssa.server.api.user.model.AuthUser;
-import com.inssa.server.api.user.model.User;
-import com.inssa.server.api.user.service.UserService;
+import com.inssa.server.api.user.user.dto.UserChangeInfoRequestDto;
+import com.inssa.server.api.user.user.dto.UserPasswordRequestDto;
+import com.inssa.server.api.user.user.dto.UserRegisterRequestDto;
+import com.inssa.server.api.user.user.dto.UserRequestDto;
+import com.inssa.server.api.user.user.model.AuthUser;
+import com.inssa.server.api.user.user.model.User;
+import com.inssa.server.api.user.user.service.UserService;
 import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
 import com.inssa.server.common.response.InssaApiResponse;
 import com.inssa.server.common.response.ResponseCode;

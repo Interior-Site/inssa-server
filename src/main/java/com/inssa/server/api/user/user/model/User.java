@@ -1,4 +1,4 @@
-package com.inssa.server.api.user.model;
+package com.inssa.server.api.user.user.model;
 
 import com.inssa.server.api.image.model.Image;
 import com.inssa.server.share.entity.BaseTimeEntity;

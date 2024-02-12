@@ -1,4 +1,4 @@
-package com.inssa.server.api.user.dto;
+package com.inssa.server.api.user.user.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

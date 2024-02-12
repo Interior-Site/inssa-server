@@ -7,7 +7,7 @@ import com.inssa.server.api.board.post.dto.PostResponseDto;
 import com.inssa.server.api.board.post.dto.PostUpdateRequestDto;
 import com.inssa.server.api.board.post.model.PostType;
 import com.inssa.server.api.board.post.service.PostService;
-import com.inssa.server.api.user.model.AuthUser;
+import com.inssa.server.api.user.user.model.AuthUser;
 import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
 import com.inssa.server.common.response.InssaApiResponse;
 import com.inssa.server.common.response.ResponseCode;

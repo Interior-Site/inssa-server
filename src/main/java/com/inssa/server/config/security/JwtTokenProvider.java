@@ -1,6 +1,6 @@
 package com.inssa.server.config.security;
 
-import com.inssa.server.api.user.model.AuthUser;
+import com.inssa.server.api.user.user.model.AuthUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jws;
@@ -15,12 +15,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

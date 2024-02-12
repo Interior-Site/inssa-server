@@ -2,7 +2,7 @@ package com.inssa.server.api.board.commentlike;
 
 import com.inssa.server.api.board.commentlike.dto.CommentLikeResponseDto;
 import com.inssa.server.api.board.commentlike.service.CommentLikeService;
-import com.inssa.server.api.user.model.AuthUser;
+import com.inssa.server.api.user.user.model.AuthUser;
 import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
 import com.inssa.server.common.response.InssaApiResponse;
 import com.inssa.server.common.response.ResponseCode;

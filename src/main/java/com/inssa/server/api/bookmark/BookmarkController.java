@@ -4,7 +4,7 @@ import com.inssa.server.api.bookmark.dto.BookmarkCreateRequestDto;
 import com.inssa.server.api.bookmark.dto.BookmarkRequestDto;
 import com.inssa.server.api.bookmark.dto.BookmarkResponseDto;
 import com.inssa.server.api.bookmark.service.BookmarkService;
-import com.inssa.server.api.user.model.AuthUser;
+import com.inssa.server.api.user.user.model.AuthUser;
 import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
 import com.inssa.server.common.response.InssaApiResponse;
 import com.inssa.server.common.response.ResponseCode;

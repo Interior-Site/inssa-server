@@ -7,7 +7,7 @@ import com.inssa.server.api.board.post.dto.QPostResponseDto;
 import com.inssa.server.api.board.post.model.PostType;
 import com.inssa.server.api.board.post.model.QPost;
 import com.inssa.server.api.board.postlike.model.QPostLike;
-import com.inssa.server.api.user.model.QUser;
+import com.inssa.server.api.user.user.model.QUser;
 import com.inssa.server.share.board.BoardStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
