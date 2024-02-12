@@ -1,5 +1,8 @@
 package com.inssa.server.api.user.user;
 
+import com.inssa.server.api.user.social.dto.SocialUserRegisterRequestDto;
+import com.inssa.server.api.user.social.model.SocialType;
+import com.inssa.server.api.user.social.service.OauthService;
 import com.inssa.server.api.user.user.dto.UserChangeInfoRequestDto;
 import com.inssa.server.api.user.user.dto.UserPasswordRequestDto;
 import com.inssa.server.api.user.user.dto.UserRegisterRequestDto;
@@ -13,6 +16,8 @@ import com.inssa.server.common.response.ResponseCode;
 import io.swagger.v3.oas.annotations.Operation;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,6 +33,8 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final OauthService oauthService;
+    private final HttpServletResponse response;
 
     @Operation(summary = "사용자 로그인 API", tags = "user")
     @PostMapping("/login")
@@ -37,11 +44,35 @@ public class UserController {
         return InssaApiResponse.success(Map.of("token", token));
     }
 
+    @Operation(summary = "소셜 로그인 Redirect URL API", tags = "user")
+    @GetMapping(value = "/auth/social/{socialLoginType}")
+    public void getRedirectUrl(@PathVariable(name = "socialLoginType") SocialType socialType) {
+        String redirectUrl = oauthService.getRedirectUrl(socialType);
+        try {
+            response.sendRedirect(redirectUrl);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Operation(summary = "소셜 로그인 callback API", tags = "user")
+    @GetMapping(value = "/auth/social/{socialLoginType}/callback")
+    public InssaApiResponse<Map<String, Object>> oAuthLogin(@PathVariable(name = "socialLoginType") SocialType socialType, @RequestParam(name = "code") String code) {
+        return InssaApiResponse.success(oauthService.oAuthLogin(socialType, code));
+    }
+
     @Operation(summary = "사용자 회원가입 API", tags = "user")
     @PostMapping("/register")
     public InssaApiResponse<Map<String, Object>> register(@RequestBody UserRegisterRequestDto request) {
         Long userNo = userService.register(request);
         return InssaApiResponse.success(Map.of("userNo", userNo));
+    }
+
+    @Operation(summary = "사용자 소셜 회원가입 API", tags = "user")
+    @PostMapping("/social/register")
+    public InssaApiResponse<Map<String, Object>> socialRegister(@RequestBody SocialUserRegisterRequestDto request) {
+        String token = userService.socialRegister(request);
+        return InssaApiResponse.success(Map.of("token", token));
     }
 
     @Operation(summary = "이메일 중복 확인 API", tags = "user")

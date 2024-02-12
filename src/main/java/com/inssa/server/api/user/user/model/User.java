@@ -1,6 +1,7 @@
 package com.inssa.server.api.user.user.model;
 
 import com.inssa.server.api.image.model.Image;
+import com.inssa.server.api.user.social.model.SocialType;
 import com.inssa.server.share.entity.BaseTimeEntity;
 import com.inssa.server.share.user.UserStatus;
 import jakarta.persistence.*;
@@ -52,17 +53,22 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private UserRole role;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SocialType socialType;
+
     public String getRoleKey() {
         return this.role.getKey();
     }
 
     @Builder
-    public User(String email, String password, UserStatus status, String nickname, UserRole role) {
+    public User(String email, String password, UserStatus status, String nickname, UserRole role, SocialType socialType) {
         this.email = email;
         this.password = password;
         this.status = status;
         this.nickname = nickname;
         this.role = role;
+        this.socialType = socialType;
     }
 
     public void changeInfo(String nickname) {

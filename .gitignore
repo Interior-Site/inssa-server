@@ -36,3 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 /mariadb/db/mysql/
+/logs/inssa.log
+/inssa.tar

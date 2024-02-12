@@ -31,6 +31,9 @@ jobs:
           spring.datasource.username: ${{ secrets.INSSA_DATABASE_USER }}
           spring.datasource.password: ${{ secrets.INSSA_DATABASE_PASSWORD }}
           jwt.secret: ${{ secrets.JWT_SECRET }}
+          sns.google.client.id: ${{ secrets.GOOGLE_CLIENT_ID }}
+          sns.google.client.secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          sns.kakao.client.id: ${{ secrets.KAKAO_CLIENT_ID }}
 
 
 

@@ -1,4 +1,6 @@
 package com.inssa.server.api.user.user.service;
+import com.inssa.server.api.user.social.dto.SocialUserRegisterRequestDto;
+import com.inssa.server.api.user.social.model.SocialType;
 import com.inssa.server.api.user.user.data.UserRepository;
 import com.inssa.server.api.user.user.dto.UserChangeInfoRequestDto;
 import com.inssa.server.api.user.user.dto.UserPasswordRequestDto;
@@ -65,9 +67,27 @@ public class UserService implements UserDetailsService {
                                                     .status(UserStatus.ACTIVATED)
                                                     .nickname(request.getNickname())
                                                     .role(UserRole.USER)
+                                                    .socialType(SocialType.none)
                                                     .build());
 
         return registerUser.getNo();
+    }
+
+    @Transactional
+    public String socialRegister(SocialUserRegisterRequestDto request) {
+        User registerUser = userRepository.save(User.builder()
+                                                    .password(passwordEncoder.encode(request.getSocialType().name()))
+                                                    .email(request.getEmail())
+                                                    .status(UserStatus.ACTIVATED)
+                                                    .nickname(request.getNickname())
+                                                    .role(UserRole.USER)
+                                                    .socialType(request.getSocialType())
+                                                    .build());
+
+        // 소셜 회원가입의 경우 바로 로그인이 되도록 jwt 토큰 발급해야 함
+        ArrayList<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(registerUser.getRoleKey().replaceFirst("ROLE_", "")));
+        return jwtTokenProvider.createToken(new UsernamePasswordAuthenticationToken(registerUser.getNo(), registerUser.getPassword(), authorities), registerUser.getEmail());
     }
 
     public Boolean existsEmail(String email) {
