@@ -1,8 +1,8 @@
 spring:
   datasource:
     jdbc-url: jdbc:mariadb://${{ secrets.INSSA_DATABASE }}?serverTimezone=Asia/Seoul
-    username: ${{ secrets.INSSA_DATABASE_USER }
-    password: ${{ secrets.INSSA_DATABASE_PASSWORD }
+    username: ${{ secrets.INSSA_DATABASE_USER }}
+    password: ${{ secrets.INSSA_DATABASE_PASSWORD }}
     driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
@@ -21,8 +21,7 @@ spring:
       matching-strategy: ant_path_matcher
 
 jwt:
-  header:
-  secret:
+  secret: ${{ secrets.JWT_SECRET }}
   token-validity-in-seconds: 86400
 
 springdoc:

@@ -23,10 +23,16 @@ jobs:
           distribution: 'temurin'
 
       - name: Set yaml
-        run: |
-            mkdir -p src/main/resources
-            echo "${{ secrets.INSSA_APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
-            find src
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: ./src/main/resources/application.yml
+        env:
+          spring.datasource.jdbc-url: jdbc:mariadb://${{ secrets.INSSA_DATABASE }}?serverTimezone=Asia/Seoul
+          spring.datasource.username: ${{ secrets.INSSA_DATABASE_USER }}
+          spring.datasource.password: ${{ secrets.INSSA_DATABASE_PASSWORD }}
+          jwt.secret: ${{ secrets.JWT_SECRET }}
+
+
 
       - name: Revive gradle Caching
         uses: actions/cache@v3

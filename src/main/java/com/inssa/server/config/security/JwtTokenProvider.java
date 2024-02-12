@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -30,16 +31,16 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider {
 
     private final String AUTHORITIES_KEY = "auth";
-    private String secret = "inssasecretkeyqhwrfjlekqiomkxckl";
     private SecretKey secretKey;
 
-    public JwtTokenProvider() {
-        // secretKey 로드
+    @PostConstruct
+    public void init() {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
-
+    @Value("${jwt.secret}")
+    private String secret;
     @Value("${jwt.token-validity-in-seconds}")
-    private String tokenValidityInSeconds = "";
+    private String tokenValidityInSeconds;
 
     public String createToken(Authentication authentication, String email) {
         String authorities = authentication.getAuthorities().stream()
