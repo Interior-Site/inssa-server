@@ -50,8 +50,7 @@ public class KakaoOauth implements SocialOauth {
 		queryParams.set("response_type", "code");
 		queryParams.set("client_id", KAKAO_SNS_CLIENT_ID);
 		queryParams.set("redirect_uri", KAKAO_SNS_CALLBACK_URL);
-//		queryParams.set("scope", "account_email profile_nickname"); // 이메일 필요
-		queryParams.set("scope", "profile_nickname");
+		queryParams.set("scope", "account_email profile_nickname");
 
 		return UriComponentsBuilder
 			.fromUriString(KAKAO_SNS_AUTHORIZATION_URI)
