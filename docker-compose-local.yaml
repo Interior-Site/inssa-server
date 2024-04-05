@@ -27,6 +27,8 @@ services:
       - 8080
     volumes:
       - ./:/usr/app
+    env_file:
+      - .env.local
     environment:
       SPRING_PROFILES_ACTIVE: local
       SPRING_DATASOURCE_JDBCURL: jdbc:mariadb://inssa-db-local:3306/INSSA?serverTimezone=Asia/Seoul

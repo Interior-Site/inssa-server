@@ -17,6 +17,7 @@ spring:
     username: root
     password: root!
     driver-class-name: org.mariadb.jdbc.Driver
+
   jpa:
     open-in-view: false
     generate-ddl: true
@@ -38,8 +39,7 @@ spring:
       matching-strategy: ant_path_matcher
 
 jwt:
-  header:
-  secret:
+  secret: ${JWT_SECRET}
   token-validity-in-seconds: 86400
 
 springdoc:
@@ -54,3 +54,12 @@ springdoc:
 logging:
   level:
     root: debug
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
+
+cors:
+  allow:
+    origins: http://localhost:3000
