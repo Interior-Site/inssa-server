@@ -1,17 +1,8 @@
-# default
 spring:
   profiles:
-    active: main # default
     group:
       local: # local 실행 시 oauth 프로필 함께 실행
         - oauth
-
----
-# main
-spring:
-  config:
-    activate:
-      on-profile: main
 
   datasource:
     jdbc-url: jdbc:mariadb://${{ secrets.INSSA_DATABASE }}?serverTimezone=Asia/Seoul
