@@ -10,6 +10,7 @@ import com.inssa.server.api.user.user.model.AuthUser;
 import com.inssa.server.api.user.user.model.UserRole;
 import com.inssa.server.api.user.user.model.User;
 import com.inssa.server.common.exception.InssaException;
+import com.inssa.server.common.response.ResponseCode;
 import com.inssa.server.config.security.JwtTokenProvider;
 import com.inssa.server.share.user.UserStatus;
 import lombok.RequiredArgsConstructor;
@@ -91,11 +92,19 @@ public class UserService implements UserDetailsService {
     }
 
     public Boolean existsEmail(String email) {
-        if(email == null || email.equals("")) {
+        if(email == null || email.isEmpty()) {
             throw new InssaException("이메일을 입력해 주세요");
         }
 
         return userRepository.existsByEmail(email);
+    }
+
+    public Boolean existsNickname(String nickname) {
+        if(nickname == null || nickname.isEmpty()) {
+            throw new InssaException("닉네임을 입력해 주세요");
+        }
+
+        return userRepository.existsByNickname(nickname);
     }
 
     @Transactional

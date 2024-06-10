@@ -14,16 +14,21 @@ import com.inssa.server.common.annotation.PreAuthorizeLogInUser;
 import com.inssa.server.common.response.InssaApiResponse;
 import com.inssa.server.common.response.ResponseCode;
 import io.swagger.v3.oas.annotations.Operation;
-
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Tag(name = "user", description = "회원 API")
@@ -79,6 +84,12 @@ public class UserController {
     @PostMapping("/user/exists/{email}")
     public InssaApiResponse<Boolean> existsEmail(@PathVariable String email) {
         return InssaApiResponse.success(userService.existsEmail(email));
+    }
+
+    @Operation(summary = "닉네임 중복 확인 API", tags = "user")
+    @PostMapping("/user/exists/nickname/{nickname}")
+    public InssaApiResponse<Boolean> existsNickname(@PathVariable String nickname) {
+        return InssaApiResponse.success(userService.existsNickname(nickname));
     }
 
     @Operation(summary = "회원 정보 변경 API", tags = "user")
